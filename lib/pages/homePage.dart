@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                 textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
               )),
               onPressed: () {
-                //Ação ao pressionar ao botão
+                //Ação ao pressionar o botão
               },
             )),
         Padding(
