@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:gruporoxo20211/pages/homePage.dart';
 
 class GameRulesPage extends StatelessWidget {
   const GameRulesPage({Key? key}) : super(key: key);
