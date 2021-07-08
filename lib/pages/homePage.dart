@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gruporoxo20211/pages/aboutPage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
 import 'Dart:io';
 
@@ -51,11 +52,10 @@ class HomePage extends StatelessWidget {
                 padding: MaterialStateProperty.all(
                     EdgeInsets.fromLTRB(130.0, 15.0, 130.0, 15.0)),
               ),
-              child: Text(
-                'Jogar',
-                style: GoogleFonts.robotoCondensed(
-                textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
-              )),
+              child: Text('Jogar',
+                  style: GoogleFonts.robotoCondensed(
+                    textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
+                  )),
               onPressed: () {
                 //Ação ao pressionar o botão
               },
@@ -71,15 +71,13 @@ class HomePage extends StatelessWidget {
                 padding: MaterialStateProperty.all(
                     EdgeInsets.fromLTRB(122.0, 15.0, 122.0, 15.0)),
               ),
-              child: Text(
-                'Regras',
-                style: GoogleFonts.robotoCondensed(
-                textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
-              )),
+              child: Text('Regras',
+                  style: GoogleFonts.robotoCondensed(
+                    textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
+                  )),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=>GameRulesPage())
-                );
+                    MaterialPageRoute(builder: (context) => GameRulesPage()));
               },
             )),
         Padding(
@@ -93,17 +91,28 @@ class HomePage extends StatelessWidget {
                 padding: MaterialStateProperty.all(
                     EdgeInsets.fromLTRB(140.0, 15.0, 140.0, 15.0)),
               ),
-              child: Text(
-                'Sair',
-                style: GoogleFonts.robotoCondensed(
-                textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
-              )),
+              child: Text('Sair',
+                  style: GoogleFonts.robotoCondensed(
+                    textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
+                  )),
               onPressed: () {
                 Future.delayed(const Duration(milliseconds: 1000), () {
                   exit(0);
                 });
               },
             )),
+        Padding(
+            padding: EdgeInsets.only(top: 100.0, left: 360.0),
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: const Color(0xFF062B06),
+              elevation: 0,
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => AboutPage()));
+              },
+              child: Icon(Icons.info),
+            ))
       ]),
     );
   }
