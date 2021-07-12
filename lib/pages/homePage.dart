@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gruporoxo20211/pages/gameRulesPage.dart';
+import 'Dart:io';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -75,7 +77,9 @@ class HomePage extends StatelessWidget {
                 textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
               )),
               onPressed: () {
-                //Ação ao pressionar ao botão
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context)=>GameRulesPage())
+                );
               },
             )),
         Padding(
@@ -95,7 +99,9 @@ class HomePage extends StatelessWidget {
                 textStyle: TextStyle(fontSize: 30.0, color: Colors.white),
               )),
               onPressed: () {
-                //Ação ao pressionar ao botão
+                Future.delayed(const Duration(milliseconds: 1000), () {
+                  exit(0);
+                });
               },
             )),
       ]),
