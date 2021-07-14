@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "899132744705",
+    "project_id": "roxo20211-5d68d",
+    "storage_bucket": "roxo20211-5d68d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899132744705:android:82f675d65011668fe80c00",
+        "android_client_info": {
+          "package_name": "br.uff.ic.dm.gruporoxo20211"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899132744705-ggno2rc3vvrf7ud321r2pcrtic8t7sh6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe8Gufve12RxTapLddpFx93ngeHhZ8TU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899132744705-ggno2rc3vvrf7ud321r2pcrtic8t7sh6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
