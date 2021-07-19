@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/pages/homePage.dart';
+import 'package:gruporoxo20211/pages/loginPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BlackJack 21',
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
