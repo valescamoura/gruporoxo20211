@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(top: 30.0, bottom: 0.0),
           child: Image.asset(
-            'assets/images/imageFromHomePage.png',
+            'assets/images/homepageimage.png',
             width: 330,
             height: 150,
           ),
