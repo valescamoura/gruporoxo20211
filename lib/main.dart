@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gruporoxo20211/pages/homePage.dart';
+import 'package:gruporoxo20211/pages/LoginPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BlackJack 21',
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
