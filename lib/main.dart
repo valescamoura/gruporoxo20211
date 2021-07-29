@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gruporoxo20211/pages/homePage.dart';
-import 'package:gruporoxo20211/pages/loginPage.dart';
+import 'package:gruporoxo20211/pages/LoginPage.dart';
 
 void main() {
   runApp(MyApp());

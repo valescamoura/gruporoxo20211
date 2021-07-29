@@ -1,45 +1,21 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gruporoxo20211/pages/LoginPage.dart';
+import 'package:gruporoxo20211/pages/forgotPasswordPage.dart';
+import 'package:gruporoxo20211/pages/signUpPage.dart';
 
-class SignUpPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF062B06),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Cadastro',
-          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Color(0xFFAD200C),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-      body: SignUpForm(),
-    );
-  }
-}
-
-class SignUpForm extends StatelessWidget {
-  final GlobalKey<FormState> _signUpKey = GlobalKey<FormState>();
+class LoginForm extends StatelessWidget {
+  final GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
   final _textEmail = TextEditingController();
   final _textPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
+    return Card(
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 55),
-      height: 310,
       color: Color(0xFB126012),
       child: Form(
-        key: _signUpKey,
+        key: _loginKey,
         child: Column(
           children: <Widget>[
             Padding(
@@ -54,7 +30,7 @@ class SignUpForm extends StatelessWidget {
                     hintText: 'example@gmail.com'),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Este campo é obrigatório';
+                    return 'Digite algo';
                   }
                   return null;
                 },
@@ -72,7 +48,7 @@ class SignUpForm extends StatelessWidget {
                 ),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Este campo é obrigatório';
+                    return 'Digite algo';
                   }
                   return null;
                 },
@@ -90,17 +66,58 @@ class SignUpForm extends StatelessWidget {
                   padding: MaterialStateProperty.all(
                       EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0)),
                 ),
-                child: Text('Confirmar',
+                child: Text('Entrar',
                     style: GoogleFonts.robotoCondensed(
                       textStyle: TextStyle(fontSize: 18.0, color: Colors.white),
                     )),
                 onPressed: () {
-                  if (_signUpKey.currentState!.validate()) {
-                    //envia query para cadastro
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  if (_loginKey.currentState!.validate()) {
+                    //envia query para login
+                    /*Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => GamePage()));*/
                   }
                 },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+              child: RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text: "Não possui uma conta?",
+                        ),
+                        TextSpan(
+                          text: "        Cadastre-se\n",
+                          style: TextStyle(color: Colors.blue),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => SignUpPage()));
+                            },
+                        )
+                      ],
+                    ),
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Esqueceu a senha?",
+                        ),
+                        TextSpan(
+                          text: "       Recuperar senha",
+                          style: TextStyle(color: Colors.blue),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordPage()));
+                            },
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
