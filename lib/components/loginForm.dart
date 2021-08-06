@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/pages/forgotPasswordPage.dart';
+import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:gruporoxo20211/pages/signUpPage.dart';
 
 class LoginForm extends StatelessWidget {
@@ -73,8 +74,8 @@ class LoginForm extends StatelessWidget {
                 onPressed: () {
                   if (_loginKey.currentState!.validate()) {
                     //envia query para login
-                    /*Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => GamePage()));*/
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomePage()));
                   }
                 },
               ),
