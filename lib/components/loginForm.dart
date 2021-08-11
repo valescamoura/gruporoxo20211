@@ -1,9 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gruporoxo20211/AuthenticationService.dart';
 import 'package:gruporoxo20211/pages/forgotPasswordPage.dart';
-import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:gruporoxo20211/pages/signUpPage.dart';
+import 'package:provider/provider.dart';
 
 class LoginForm extends StatelessWidget {
   final GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
@@ -73,11 +74,12 @@ class LoginForm extends StatelessWidget {
                     )),
                 onPressed: () {
                   if (_loginKey.currentState!.validate()) {
-                    //envia query para login
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                    context.read<AuthenticationService>().signIn(
+                      _textEmail.text,
+                      _textPassword.text
+                    );
                   }
-                },
+                }
               ),
             ),
             Padding(
