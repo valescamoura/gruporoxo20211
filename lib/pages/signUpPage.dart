@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gruporoxo20211/pages/LoginPage.dart';
+import 'package:gruporoxo20211/AuthenticationService.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPage extends StatelessWidget {
   @override
@@ -96,9 +97,9 @@ class SignUpForm extends StatelessWidget {
                     )),
                 onPressed: () {
                   if (_signUpKey.currentState!.validate()) {
-                    //envia query para cadastro
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                    context.read<AuthenticationService>()
+                        .signUp(_textEmail.text, _textPassword.text)
+                        .then((_) => Navigator.of(context).pop());
                   }
                 },
               ),

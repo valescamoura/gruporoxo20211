@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gruporoxo20211/AuthenticationService.dart';
 import 'package:gruporoxo20211/pages/aboutPage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -147,7 +149,9 @@ class HomePage extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(top: 100.0),
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<AuthenticationService>().signOut();
+                      },
                       child: Text("Sair",
                           style: TextStyle(
                               fontSize: 20.0,
