@@ -60,6 +60,7 @@ flutter:
     - assets/images/imageGoal.png
     - assets/images/imageTwoPeople.png
     - assets/images/cardClubsA.png
+    - assets/images/cardBack.png
 
     # TODO: cards de teste, devem ser excluídos
     - assets/images/buttons.png

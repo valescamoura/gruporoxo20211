@@ -2,20 +2,22 @@ import 'package:flame/game.dart';
 import 'package:flame/gestures.dart'; 
 import 'package:flame/sprite.dart'; 
 import 'package:flutter/material.dart';
+import 'package:flame/flame.dart';
+import 'Carta.dart';
 
 Future<void> main() async {
   final myGame = MyGame();
   runApp(GameWidget(game: myGame));
+  Flame.images.loadAll(<String>['cardClubsA.png',]);
 }
 
 class MyGame extends Game with TapDetector {
-  late SpriteAnimation runningRobot;
   late Sprite pressedButton;
   late Sprite unpressedButton;
-  late Sprite card;
-  
+  late Carta teste = Carta("0", 1,"0", 0, 200);
 
   bool isPressed = false;
+  bool draw = false;
 
   final buttonPosition = Vector2(200, 120);
   final buttonSize = Vector2(120, 30);
@@ -27,14 +29,6 @@ class MyGame extends Game with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    runningRobot = await loadSpriteAnimation(
-      'robot.png',
-      SpriteAnimationData.sequenced(
-        amount: 8,
-        stepTime: 0.1,
-        textureSize: Vector2(16, 18),
-      ),
-    );
 
     unpressedButton = await loadSprite(
       'buttons.png',
@@ -48,9 +42,10 @@ class MyGame extends Game with TapDetector {
       srcSize: Vector2(60, 20),
     );
 
-    card = await loadSprite(
-      'cardClubsA.png',
+    teste.baralho = await loadSprite(
+      'cardBack.png',
     );
+
   }
 
   @override
@@ -73,7 +68,7 @@ class MyGame extends Game with TapDetector {
   @override
   void update(double dt) {
     if (isPressed) {
-      runningRobot.update(dt);
+      draw = true;
     }
   }
 
@@ -81,29 +76,17 @@ class MyGame extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-    runningRobot
-        .getSprite()
-        .render(canvas, position: robotPosition, size: robotSize);
 
     final button = isPressed ? pressedButton : unpressedButton;
+    if (draw){
+      teste.draw();
+    }
     button.render(canvas, position: buttonPosition, size: buttonSize);
-
-    //card.render(canvas, position: Vector2(0, 0), size: Vector2(188, 254));
+    teste.render(canvas);
     canvas.save();
-    //canvas.skew(0.5, 0.5); //ajeitar eixo de inclinação
-    //canvas.translate(100, 100);
-    if (x > 0){
-      x -= 0.02;
-    }
-    else{
-      x = 1; //voltando
-    }
-    canvas.scale(x, 1);
-    //canvas.rotate(.3);
-    card.renderRect(canvas, Rect.fromLTWH(0, 0, 140, 190));
     canvas.restore();
   }
 
   @override
-  Color backgroundColor() => const Color(0xFF222222);
+  Color backgroundColor() => const Color(0xFF062B06);
 }
