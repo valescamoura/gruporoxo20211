@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/blackjack/Example.dart';
 import 'package:flame/sprite.dart';
 
-
 class Carta {
   // Atributos
   String naipe = "ClubsA";
@@ -11,7 +10,7 @@ class Carta {
   String url;
   double x;
   double y;
-  double width = 1;
+  double width = 75;
   bool isTurned = true; // true, quando carta está virada para baixo. false, caso contrário 
   late Sprite baralho;
   late Sprite cardBack;
@@ -31,27 +30,30 @@ class Carta {
   // Virar carta: diminuir largura até 0, depois voltar até 1
   Future<void> turnCard() async {
     if (isTurned && width > 0){
-      width -= 0.05;
+      width -= 8.5;
     }
-    else if (isTurned && width < 0){
+    else if (isTurned && width <= 0){
       isTurned = false;
     }
-    else if (width < 1){
-      width += 0.05;
+    else if (width < 75){
+      width += 8.5;
     }
     else{
       isTurned = false;
+      width = 75;
     }
+    print(width);
+    print(x);
   }
 
   // Renderizando carta
   void render(Canvas c){
     c.save();
-    c.scale(width, 1);
+    //c.scale(width, width);
     if (isTurned){
-      cardBack.renderRect(c, Rect.fromLTWH(x, y, 140, 190));
+      cardBack.renderRect(c, Rect.fromLTWH(x, y, width, 95));
     } else{
-      baralho.renderRect(c, Rect.fromLTWH(x, y, 140, 190));
+      baralho.renderRect(c, Rect.fromLTWH(x, y, width, 95));
     }  
     c.restore();
   }

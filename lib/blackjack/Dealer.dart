@@ -5,7 +5,7 @@ class Dealer {
   // Atributos
   Carta baralho; 
   Jogador jogadores;
-
+ 
   // Construtor
   Dealer(this.baralho, this.jogadores);
 

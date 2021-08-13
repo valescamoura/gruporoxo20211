@@ -8,13 +8,14 @@ import 'Carta.dart';
 Future<void> main() async {
   final myGame = MyGame();
   runApp(GameWidget(game: myGame));
-  Flame.images.loadAll(<String>['cardClubsA.png',]);
 }
 
 class MyGame extends Game with TapDetector {
   late Sprite pressedButton;
   late Sprite unpressedButton;
-  late Carta teste = Carta("0", 1,"0", 0, 200);
+  //late Carta teste = Carta("0", 1,"0", 0, 200);
+  late List <Carta> teste = [Carta("0", 1,"0", 0, 100), Carta("0", 1,"0", 0, 300)];
+  
 
   bool isPressed = false;
   bool draw = false;
@@ -25,6 +26,18 @@ class MyGame extends Game with TapDetector {
 
   @override
   Future<void> onLoad() async {
+
+    for (var i = 2;i < 4;i ++){
+      teste[i-2].baralho = await loadSprite(
+        'cardClubs' + i.toString() + ".png",
+      );
+    }
+
+    for (var i = 2;i < 4;i ++){
+      teste[i-2].cardBack = await loadSprite(
+        'cardBack.png',
+      );
+    }
 
     unpressedButton = await loadSprite(
       'buttons.png',
@@ -38,13 +51,13 @@ class MyGame extends Game with TapDetector {
       srcSize: Vector2(60, 20),
     );
 
-    teste.baralho = await loadSprite(
+    /* teste.baralho = await loadSprite(
       'cardClubsA.png',
     );
 
     teste.cardBack = await loadSprite(
       'cardBack.png',
-    ); 
+    );  */
   }
 
   @override
@@ -86,12 +99,14 @@ class MyGame extends Game with TapDetector {
       //teste.draw();
     }
     
+    for (var i = 0;i < 2; i ++){
+      if (turnCard){
+        teste[i].turnCard();
+      } 
+     teste[i].render(canvas);
+    }
     // Virada da carta
-    if (turnCard){
-      teste.turnCard();
-    } 
     
-    teste.render(canvas);
   }
 
   @override
