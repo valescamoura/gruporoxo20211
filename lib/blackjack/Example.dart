@@ -18,14 +18,10 @@ class MyGame extends Game with TapDetector {
 
   bool isPressed = false;
   bool draw = false;
+  bool turnCard = false;
 
   final buttonPosition = Vector2(200, 120);
   final buttonSize = Vector2(120, 30);
-
-  final robotPosition = Vector2(240, 50);
-  final robotSize = Vector2(48, 60);
-
-  double x = 1;
 
   @override
   Future<void> onLoad() async {
@@ -43,9 +39,12 @@ class MyGame extends Game with TapDetector {
     );
 
     teste.baralho = await loadSprite(
-      'cardBack.png',
+      'cardClubsA.png',
     );
 
+    teste.cardBack = await loadSprite(
+      'cardBack.png',
+    ); 
   }
 
   @override
@@ -53,22 +52,26 @@ class MyGame extends Game with TapDetector {
     final buttonArea = buttonPosition & buttonSize;
 
     isPressed = buttonArea.contains(info.eventPosition.game.toOffset());
+    turnCard = buttonArea.contains(info.eventPosition.game.toOffset());
   }
 
   @override
   void onTapUp(TapUpInfo info) {
     isPressed = false;
+    turnCard = false;
   }
 
   @override
   void onTapCancel() {
     isPressed = false;
+    turnCard = false;
   }
 
   @override
   void update(double dt) {
     if (isPressed) {
       draw = true;
+      turnCard = true;
     }
   }
 
@@ -78,13 +81,17 @@ class MyGame extends Game with TapDetector {
   void render(Canvas canvas) {
 
     final button = isPressed ? pressedButton : unpressedButton;
-    if (draw){
-      teste.draw();
-    }
     button.render(canvas, position: buttonPosition, size: buttonSize);
+    if (draw){
+      //teste.draw();
+    }
+    
+    // Virada da carta
+    if (turnCard){
+      teste.turnCard();
+    } 
+    
     teste.render(canvas);
-    canvas.save();
-    canvas.restore();
   }
 
   @override
