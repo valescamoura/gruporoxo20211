@@ -49,7 +49,7 @@ class ForgotPasswordForm extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(),
-                    labelText: 'Email',
+                    labelText: 'E-mail',
                     hintText: 'example@gmail.com'),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
