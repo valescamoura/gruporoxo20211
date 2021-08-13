@@ -10,12 +10,14 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? nickname = context.read<AuthenticationService>().getNickname();
+
     return Container(
         color: Color(0xFF062B06),
         child: Column(children: <Widget>[
           Padding(
               padding: EdgeInsets.only(top: 40.0),
-              child: Text("Bem-vindo, Fulano",
+              child: Text("Bem-vindo, $nickname",
                   style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontFamily: 'Roboto',

@@ -117,7 +117,7 @@ class SignUpForm extends StatelessWidget {
                 onPressed: () {
                   if (_signUpKey.currentState!.validate()) {
                     context.read<AuthenticationService>()
-                        .signUp(_textEmail.text, _textPassword.text)
+                        .signUp(_textNickname.text, _textEmail.text, _textPassword.text)
                         .then((_) => Navigator.of(context).pop());
                   }
                 },
