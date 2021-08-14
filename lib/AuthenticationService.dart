@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
-  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
   Map? _userData;
 
   AuthenticationService(this._firebaseAuth);
@@ -12,7 +13,8 @@ class AuthenticationService {
 
   Future<String> signIn(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
 
       return 'Signed In';
     } on FirebaseAuthException catch (e) {
@@ -23,7 +25,8 @@ class AuthenticationService {
 
   Future<String> signUp(String nickname, String email, String password) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
       await _firebaseAuth.currentUser!.updateDisplayName(nickname);
       await _users.add({
         'nick': nickname,
@@ -45,16 +48,15 @@ class AuthenticationService {
   }
 
   void setUserData(String nickname, String email, int wins, int losses) {
-    _userData = {
-      'nick': nickname,
-      'email': email,
-      'wins': 0,
-      'losses': 0
-    };
+    _userData = {'nick': nickname, 'email': email, 'wins': 0, 'losses': 0};
   }
 
   String? getNickname() {
     return _firebaseAuth.currentUser!.displayName;
+  }
+
+  String? getEmail() {
+    return _firebaseAuth.currentUser!.email;
   }
 
   int getWins() {

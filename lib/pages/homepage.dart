@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/AuthenticationService.dart';
 import 'package:gruporoxo20211/pages/aboutPage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
+import 'package:gruporoxo20211/pages/profilePage.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -79,7 +80,10 @@ class HomePage extends StatelessWidget {
                         width: 40,
                         height: 40,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProfilePage()));
+                      },
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
