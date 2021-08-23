@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gruporoxo20211/AuthenticationService.dart';
+import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/aboutPage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? nickname = context.read<AuthenticationService>().getNickname();
+    String? nickname = context.read<AppService>().getNickname();
 
     return Container(
         color: Color(0xFF062B06),
@@ -79,7 +79,9 @@ class HomePage extends StatelessWidget {
                         width: 40,
                         height: 40,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<AppService>().searchForGame();
+                      },
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
@@ -96,7 +98,9 @@ class HomePage extends StatelessWidget {
                         width: 40,
                         height: 40,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<AppService>().createGame();
+                      },
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
@@ -152,7 +156,7 @@ class HomePage extends StatelessWidget {
                   padding: EdgeInsets.only(top: 100.0),
                   child: TextButton(
                       onPressed: () {
-                        context.read<AuthenticationService>().signOut();
+                        context.read<AppService>().signOut();
                       },
                       child: Text("Sair",
                           style: TextStyle(
