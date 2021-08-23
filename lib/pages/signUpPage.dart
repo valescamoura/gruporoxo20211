@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gruporoxo20211/AuthenticationService.dart';
+import 'package:gruporoxo20211/AppService.dart';
 import 'package:provider/provider.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -116,7 +116,7 @@ class SignUpForm extends StatelessWidget {
                     )),
                 onPressed: () {
                   if (_signUpKey.currentState!.validate()) {
-                    context.read<AuthenticationService>()
+                    context.read<AppService>()
                         .signUp(_textNickname.text, _textEmail.text, _textPassword.text)
                         .then((_) => Navigator.of(context).pop());
                   }
