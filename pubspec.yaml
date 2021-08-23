@@ -36,6 +36,8 @@ dependencies:
   cloud_firestore: ^2.4.0
   random_string: ^2.3.1
 
+  flame: ^1.0.0-releasecandidate.13
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -61,11 +63,17 @@ flutter:
     - assets/images/imageRules.png
     - assets/images/imageGoal.png
     - assets/images/imageTwoPeople.png
+    - assets/images/cardClubs2.png
+    - assets/images/cardClubs3.png
+    - assets/images/cardClubsA.png
+    - assets/images/cardBack.png
+
+    # TODO: cards de teste, devem ser excluídos
+    - assets/images/buttons.png
     - assets/images/imagePlay.png
     - assets/images/imageAbout.png
     - assets/images/imageNotifications.png
     - assets/images/imageProfile.png
-
      
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
