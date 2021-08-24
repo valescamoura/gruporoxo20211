@@ -9,8 +9,8 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     String? _name = context.read<AppService>().getNickname();
     String? _email = context.read<AppService>().getEmail();
-    //int _wins = context.read<AuthenticationService>().getWins();
-    //int _losses = context.read<AuthenticationService>().getLosses();
+    int _wins = context.read<AppService>().getWins();
+    int _losses = context.read<AppService>().getLosses();
 
     return Scaffold(
         backgroundColor: Color(0xFF062B06),
@@ -82,11 +82,11 @@ class ProfilePage extends StatelessWidget {
                       Padding(
                           padding: EdgeInsets.only(top: 10.0, left: 20.0),
                           child: Text(
-                              "" /*_wins.toString(),
+                              _wins.toString(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20.0,
-                                    )*/
+                                    )
                               )),
                       Padding(
                           padding: EdgeInsets.only(top: 20.0, left: 20.0),
@@ -98,11 +98,11 @@ class ProfilePage extends StatelessWidget {
                       Padding(
                           padding: EdgeInsets.only(top: 10.0, left: 20.0),
                           child: Text(
-                              "" /*_losses.toString(),
+                              _losses.toString(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20.0,
-                                    )*/
+                                    )
                               ))
                     ],
                   )),
