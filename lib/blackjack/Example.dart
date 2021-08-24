@@ -17,9 +17,9 @@ class GetGameWidget extends StatelessWidget {
 class MyGame extends Game with TapDetector {
   late Sprite pressedButton;
   late Sprite unpressedButton;
-  //late Carta teste = Carta("0", 1,"0", 0, 200);
-  late List <Carta> teste = [Carta("0", 1,"0", 0, 100), Carta("0", 1,"0", 0, 300)];
-
+  // late Sprite baralho;
+  late List <Carta> teste = [Carta("0", 1,"0", 0, 360), Carta("0", 1,"0", 0, 360), Carta("0", 1,"0", 0, 360), Carta("0", 1,"0", 0, 360)];
+  int quant = 0;
   BuildContext? context;
 
   MyGame(BuildContext context) {
@@ -30,19 +30,20 @@ class MyGame extends Game with TapDetector {
   bool draw = false;
   bool turnCard = false;
 
+
   final buttonPosition = Vector2(200, 120);
   final buttonSize = Vector2(120, 30);
 
   @override
   Future<void> onLoad() async {
 
-    for (var i = 2;i < 4;i ++){
+    for (var i = 2;i < 6;i ++){
       teste[i-2].baralho = await loadSprite(
         'cardClubs' + i.toString() + ".png",
       );
     }
 
-    for (var i = 2;i < 4;i ++){
+    for (var i = 2;i < 6;i ++){
       teste[i-2].cardBack = await loadSprite(
         'cardBack.png',
       );
@@ -60,21 +61,16 @@ class MyGame extends Game with TapDetector {
       srcSize: Vector2(60, 20),
     );
 
-    /* teste.baralho = await loadSprite(
-      'cardClubsA.png',
-    );
-
-    teste.cardBack = await loadSprite(
-      'cardBack.png',
-    );  */
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     final buttonArea = buttonPosition & buttonSize;
 
-    isPressed = buttonArea.contains(info.eventPosition.game.toOffset());
-    turnCard = buttonArea.contains(info.eventPosition.game.toOffset());
+    if (buttonArea.contains(info.eventPosition.game.toOffset())) {
+      isPressed = true;
+      turnCard = true;
+    }
   }
 
   @override
@@ -89,11 +85,14 @@ class MyGame extends Game with TapDetector {
     turnCard = false;
   }
 
+
   @override
   void update(double dt) {
     if (isPressed) {
+      if(!draw) {
+        quant += 1;
+      }
       draw = true;
-      turnCard = true;
     }
   }
 
@@ -102,20 +101,29 @@ class MyGame extends Game with TapDetector {
   @override
   void render(Canvas canvas) {
 
+    print(quant);
     final button = isPressed ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
     if (draw){
       print("Teste: ${this.context!.read<AppService>().getNickname()}");
-      //teste.draw();
+      for (int i = 0; i < quant; i++){
+        if (i != quant - 1)
+          teste[i].move(quant);
+        else
+          if(!teste[i].draw(quant) && !isPressed)
+            draw = false;
+      }
     }
     
-    for (var i = 0;i < 2; i ++){
+    for (var i = 0;i < 4; i ++){
       if (turnCard){
         teste[i].turnCard();
       } 
      teste[i].render(canvas);
     }
     // Virada da carta
+
+    // baralho.render(canvas, position: )
     
   }
 

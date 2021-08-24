@@ -20,10 +20,34 @@ class Carta {
 
   // Métodos
 
-  void draw(){
-    if (x <= 150){
-      x += 1;
-      y += 1;
+  // Comprar a carta: Mudar a posição dos eixos x e y da carta
+  bool draw(int quant){
+    if (x <= (165 + (20 * (quant - 1)))){
+      x += 3 + (20 * (quant - 1) / 165/3);
+      y += 4;
+      if (y >= 576)
+        y = 576;
+      return true;
+    }
+    return false;
+  }
+
+  // Comprar a carta oponente: Mudar a posição dos eixos x e y da carta
+  bool drawOp(int quant){
+    if (x <= (165 + (20 * (quant - 1)))){
+      x += 3 + (20 * (quant - 1) / 55);
+      y -= 4;
+      if (y <= 140)
+        y = 140;
+      return true;
+    }
+    return false;
+  }
+
+  // Movimentar no eixo X as cartas que já foram compradas
+  void move(int quant) {
+    {
+      x -= 0.36;
     }
   }
 
@@ -42,8 +66,6 @@ class Carta {
       isTurned = false;
       width = 75;
     }
-    print(width);
-    print(x);
   }
 
   // Renderizando carta
