@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gruporoxo20211/AuthenticationService.dart';
+import 'package:gruporoxo20211/AppService.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -7,8 +7,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? _name = context.read<AuthenticationService>().getNickname();
-    String? _email = context.read<AuthenticationService>().getEmail();
+    String? _name = context.read<AppService>().getNickname();
+    String? _email = context.read<AppService>().getEmail();
     //int _wins = context.read<AuthenticationService>().getWins();
     //int _losses = context.read<AuthenticationService>().getLosses();
 
