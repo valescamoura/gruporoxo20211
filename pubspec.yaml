@@ -65,22 +65,69 @@ flutter:
     - assets/images/imageRules.png
     - assets/images/imageGoal.png
     - assets/images/imageTwoPeople.png
-    - assets/images/cardClubs2.png
-    - assets/images/cardClubs3.png
-    - assets/images/cardClubs4.png
-    - assets/images/cardClubs5.png
-    - assets/images/cardClubsA.png
+     
+    # cards
     - assets/images/cardBack.png
+    - assets/images/2C.png
+    - assets/images/2E.png
+    - assets/images/2O.png
+    - assets/images/2P.png
+    - assets/images/3C.png
+    - assets/images/3E.png
+    - assets/images/3O.png
+    - assets/images/3P.png
+    - assets/images/4C.png
+    - assets/images/4E.png
+    - assets/images/4O.png
+    - assets/images/4P.png
+    - assets/images/5C.png
+    - assets/images/5E.png
+    - assets/images/5O.png
+    - assets/images/5P.png
+    - assets/images/6C.png
+    - assets/images/6E.png
+    - assets/images/6O.png
+    - assets/images/6P.png
+    - assets/images/7C.png
+    - assets/images/7E.png
+    - assets/images/7O.png
+    - assets/images/7P.png
+    - assets/images/8C.png
+    - assets/images/8E.png
+    - assets/images/8O.png
+    - assets/images/8P.png
+    - assets/images/9C.png
+    - assets/images/9E.png
+    - assets/images/9O.png
+    - assets/images/9P.png
+    - assets/images/DC.png
+    - assets/images/DE.png
+    - assets/images/DO.png
+    - assets/images/DP.png
+    - assets/images/AC.png
     - assets/images/AE.png
+    - assets/images/AO.png
+    - assets/images/AP.png
+    - assets/images/JC.png
+    - assets/images/JE.png
+    - assets/images/JO.png
+    - assets/images/JP.png
+    - assets/images/QC.png
+    - assets/images/QE.png
+    - assets/images/QO.png
+    - assets/images/QP.png
+    - assets/images/KC.png
+    - assets/images/KE.png
+    - assets/images/KO.png
+    - assets/images/KP.png
 
-    #Imagens dos botões do jogo
+    # Imagens dos botões do jogo
     - assets/images/muteButton.png
     - assets/images/soundButton.png
     - assets/images/zoomInButton.png
     - assets/images/zoomOutButton.png
     - assets/images/exitButton.png
 
-    # TODO: cards de teste, devem ser excluídos
     - assets/images/buttons.png
     - assets/images/imagePlay.png
     - assets/images/imageAbout.png

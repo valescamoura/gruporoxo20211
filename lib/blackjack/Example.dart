@@ -39,10 +39,9 @@ class MyGame extends Game with TapDetector {
   Future<void> onLoad() async {
 
     var listaDeNaipes = generateDeck();
-
-    for (var i = 0; i < sprites.length; i ++){
-      sprites[sprites[i]] = await loadSprite(
-        sprites[i] + ".png",
+    for (var i = 0; i < listaDeNaipes.length; i ++){
+      sprites[listaDeNaipes[i]] = await loadSprite(
+        listaDeNaipes[i] + ".png",
       );
     }
     

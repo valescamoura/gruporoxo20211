@@ -1,7 +1,6 @@
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/blackjack/Example.dart';
-import 'package:flame/sprite.dart';
 
 class Carta {
   // Atributos
