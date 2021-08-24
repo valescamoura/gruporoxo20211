@@ -2,12 +2,16 @@ import 'package:flame/game.dart';
 import 'package:flame/gestures.dart'; 
 import 'package:flame/sprite.dart'; 
 import 'package:flutter/material.dart';
-import 'package:flame/flame.dart';
+import 'package:provider/provider.dart';
+import 'package:gruporoxo20211/AppService.dart';
 import 'Carta.dart';
 
-Future<void> main() async {
-  final myGame = MyGame();
-  runApp(GameWidget(game: myGame));
+class GetGameWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final myGame = MyGame(context);
+    return GameWidget(game: myGame);
+  }
 }
 
 class MyGame extends Game with TapDetector {
@@ -15,7 +19,12 @@ class MyGame extends Game with TapDetector {
   late Sprite unpressedButton;
   //late Carta teste = Carta("0", 1,"0", 0, 200);
   late List <Carta> teste = [Carta("0", 1,"0", 0, 100), Carta("0", 1,"0", 0, 300)];
-  
+
+  BuildContext? context;
+
+  MyGame(BuildContext context) {
+    this.context = context;
+  }
 
   bool isPressed = false;
   bool draw = false;
@@ -96,6 +105,7 @@ class MyGame extends Game with TapDetector {
     final button = isPressed ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
     if (draw){
+      print("Teste: ${this.context!.read<AppService>().getNickname()}");
       //teste.draw();
     }
     
