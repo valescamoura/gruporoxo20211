@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gruporoxo20211/AuthenticationService.dart';
+import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/forgotPasswordPage.dart';
 import 'package:gruporoxo20211/pages/signUpPage.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +74,7 @@ class LoginForm extends StatelessWidget {
                     )),
                 onPressed: () {
                   if (_loginKey.currentState!.validate()) {
-                    context.read<AuthenticationService>().signIn(
+                    context.read<AppService>().signIn(
                       _textEmail.text,
                       _textPassword.text
                     );
