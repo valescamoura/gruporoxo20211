@@ -160,6 +160,8 @@ class AppService {
       'handsDown': _gameState!['handsDown'],
       'timeCreated': FieldValue.serverTimestamp()
     });
+
+    return await waitForPlayer();
   }
 
   // Pega uma carta aleatória do deck localmente e retorna a String dela
@@ -172,7 +174,7 @@ class AppService {
 
   // Espera por um jogador e a cada 2 segundos busca no Firestore para ver se
   // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
-  Future<String> waitForPlayer() async {
+  Future<void> waitForPlayer() async {
     while (true) {
       QuerySnapshot query = await _games
           .where('gameId', isEqualTo: _gameState!['gameId'])
@@ -180,7 +182,8 @@ class AppService {
       int gameState = query.docs[0]['gameState'];
 
       if (gameState == 1) {
-        return query.docs[0]['player2'];
+        setGameState(query.docs[0], _gameState);
+        return;
 
       } else {
         await Future.delayed(const Duration(seconds: 2));
@@ -215,7 +218,7 @@ class AppService {
 
   // Retorna verdadeira caso o oponente tenha pedido uma carta e atualiza o
   // estado local da mão do oponente
-  Future<bool> checkOpponentCard() async {
+  Future<List<String>> checkOpponentCard() async {
     if (_gameHost) {
       return isHandBigger(_futureGameState!['p2Hand'], 'p2Hand');
 
@@ -226,13 +229,19 @@ class AppService {
 
   // Checa se a mão do oponente está maior do que a do estado atual, caso sim,
   // atualizar o estado e retornar verdadeiro
-  bool isHandBigger(List<String> playerHand, String player) {
+  List<String> isHandBigger(List<String> playerHand, String player) {
+    List<String> newCards = [];
+
     if (playerHand.length > _gameState![player].length) {
+      playerHand.forEach((element) {
+        if (!_gameState![player].contains(element)) {
+          newCards.add(element);
+        }
+      });
       _gameState![player] = playerHand;
-      return true;
     }
 
-    return false;
+    return newCards;
   }
 
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou
