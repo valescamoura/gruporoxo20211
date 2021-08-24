@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+    
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,6 +38,7 @@ dependencies:
   random_string: ^2.3.1
 
   flame: ^1.0.0-releasecandidate.13
+ 
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +69,8 @@ flutter:
     - assets/images/cardClubs3.png
     - assets/images/cardClubsA.png
     - assets/images/cardBack.png
+
+    #Imagens dos botões do jogo
     - assets/images/muteButton.png
     - assets/images/soundButton.png
     - assets/images/zoomInButton.png

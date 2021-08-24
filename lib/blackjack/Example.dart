@@ -65,7 +65,6 @@ class MyGame extends Game with TapDetector {
     /* teste.baralho = await loadSprite(
       'cardClubsA.png',
     );
-
     teste.cardBack = await loadSprite(
       'cardBack.png',
     );  */
