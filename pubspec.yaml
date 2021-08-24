@@ -71,6 +71,7 @@ flutter:
     - assets/images/cardClubs5.png
     - assets/images/cardClubsA.png
     - assets/images/cardBack.png
+    - assets/images/AE.png
 
     #Imagens dos botões do jogo
     - assets/images/muteButton.png

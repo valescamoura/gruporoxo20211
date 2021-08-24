@@ -7,7 +7,6 @@ class Carta {
   // Atributos
   String naipe = "ClubsA";
   int valor;
-  String url;
   double x;
   double y;
   double width = 75;
@@ -16,7 +15,7 @@ class Carta {
   late Sprite cardBack;
 
   // Construtor
-  Carta(this.naipe, this.valor,this.url, this.x, this.y);
+  Carta(this.naipe, this.valor, this.x, this.y);
 
   // Métodos
 
@@ -78,5 +77,52 @@ class Carta {
       baralho.renderRect(c, Rect.fromLTWH(x, y, width, 95));
     }  
     c.restore();
+  }
+
+  static Carta comprarCarta() {
+    // alguma comunicação com BD para comprar carta
+
+    var naipe = 'AE';
+    var valor;
+
+    // Descobrir valor numérico da carta através dos últimos dígitos do naipe
+    var variavelAux = naipe[0];
+    switch(variavelAux) { 
+      case 'A': { 
+          valor = 1; 
+      } 
+      break; 
+      
+      case 'J': { 
+          valor = 10;
+      } 
+      break;
+
+      case 'Q': { 
+          valor = 10;
+      } 
+      break; 
+
+      case 'K': { 
+          valor = 10;
+      } 
+      break; 
+
+      case 'D': { 
+          valor = 10;
+      } 
+      break;  
+          
+      default: { 
+         valor = int.parse(variavelAux);
+      }
+      break; 
+    }
+
+    var carta = Carta(naipe, valor, 0, 360);
+    carta.baralho = MyGame.sprites[naipe];
+    carta.cardBack = MyGame.sprites['cardBack'];
+
+    return carta;
   }
 }

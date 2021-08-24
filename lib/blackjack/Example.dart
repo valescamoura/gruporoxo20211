@@ -18,7 +18,8 @@ class MyGame extends Game with TapDetector {
   late Sprite pressedButton;
   late Sprite unpressedButton;
   // late Sprite baralho;
-  late List <Carta> teste = [Carta("0", 1,"0", 0, 360), Carta("0", 1,"0", 0, 360), Carta("0", 1,"0", 0, 360), Carta("0", 1,"0", 0, 360)];
+  late List <Carta> teste = [Carta("0", 1, 0, 360), Carta("0", 1, 0, 360), Carta("0", 1, 0, 360), Carta("0", 1, 0, 360)];
+  static late Map sprites = {};
   int quant = 0;
   BuildContext? context;
 
@@ -37,7 +38,19 @@ class MyGame extends Game with TapDetector {
   @override
   Future<void> onLoad() async {
 
-    for (var i = 2;i < 6;i ++){
+    var listaDeNaipes = generateDeck();
+
+    for (var i = 0; i < sprites.length; i ++){
+      sprites[sprites[i]] = await loadSprite(
+        sprites[i] + ".png",
+      );
+    }
+    
+    sprites["cardBack"] = await loadSprite(
+         "cardBack.png",
+    );
+
+    /* for (var i = 2; i < 6; i ++){
       teste[i-2].baralho = await loadSprite(
         'cardClubs' + i.toString() + ".png",
       );
@@ -47,7 +60,7 @@ class MyGame extends Game with TapDetector {
       teste[i-2].cardBack = await loadSprite(
         'cardBack.png',
       );
-    }
+    } */
 
     unpressedButton = await loadSprite(
       'buttons.png',
@@ -76,13 +89,11 @@ class MyGame extends Game with TapDetector {
   @override
   void onTapUp(TapUpInfo info) {
     isPressed = false;
-    turnCard = false;
   }
 
   @override
   void onTapCancel() {
     isPressed = false;
-    turnCard = false;
   }
 
 
@@ -115,14 +126,15 @@ class MyGame extends Game with TapDetector {
       }
     }
     
+    // Virada da carta
     for (var i = 0;i < 4; i ++){
       if (turnCard){
-        teste[i].turnCard();
+        Carta.comprarCarta();
+        //teste[i].turnCard();
       } 
      teste[i].render(canvas);
     }
-    // Virada da carta
-
+    
     // baralho.render(canvas, position: )
     
   }
