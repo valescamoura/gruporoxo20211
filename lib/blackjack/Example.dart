@@ -1,24 +1,27 @@
-import 'package:flame/game.dart'; 
-import 'package:flame/gestures.dart'; 
-import 'package:flame/sprite.dart'; 
+import 'package:flame/game.dart';
+import 'package:flame/gestures.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:gruporoxo20211/AppService.dart';
 import 'Carta.dart';
 
-class GetGameWidget extends StatelessWidget {
+/*class GetGameWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final myGame = MyGame(context);
     return GameWidget(game: myGame);
   }
-}
+}*/
 
 class MyGame extends Game with TapDetector {
   late Sprite pressedButton;
   late Sprite unpressedButton;
   //late Carta teste = Carta("0", 1,"0", 0, 200);
-  late List <Carta> teste = [Carta("0", 1,"0", 0, 100), Carta("0", 1,"0", 0, 300)];
+  late List<Carta> teste = [
+    Carta("0", 1, "0", 0, 100),
+    Carta("0", 1, "0", 0, 300)
+  ];
 
   BuildContext? context;
 
@@ -35,15 +38,14 @@ class MyGame extends Game with TapDetector {
 
   @override
   Future<void> onLoad() async {
-
-    for (var i = 2;i < 4;i ++){
-      teste[i-2].baralho = await loadSprite(
+    for (var i = 2; i < 4; i++) {
+      teste[i - 2].baralho = await loadSprite(
         'cardClubs' + i.toString() + ".png",
       );
     }
 
-    for (var i = 2;i < 4;i ++){
-      teste[i-2].cardBack = await loadSprite(
+    for (var i = 2; i < 4; i++) {
+      teste[i - 2].cardBack = await loadSprite(
         'cardBack.png',
       );
     }
@@ -97,26 +99,23 @@ class MyGame extends Game with TapDetector {
     }
   }
 
-
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-
     final button = isPressed ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
-    if (draw){
+    if (draw) {
       print("Teste: ${this.context!.read<AppService>().getNickname()}");
       //teste.draw();
     }
-    
-    for (var i = 0;i < 2; i ++){
-      if (turnCard){
+
+    for (var i = 0; i < 2; i++) {
+      if (turnCard) {
         teste[i].turnCard();
-      } 
-     teste[i].render(canvas);
+      }
+      teste[i].render(canvas);
     }
     // Virada da carta
-    
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/aboutPage.dart';
+import 'package:gruporoxo20211/pages/gamePage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
 import 'package:gruporoxo20211/blackjack/Example.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,8 @@ class HomePage extends StatelessWidget {
                       height: 40,
                     ),
                     onPressed: () async {
-                      String nome = await context.read<AppService>().searchForGame();
+                      String nome =
+                          await context.read<AppService>().searchForGame();
 
                       if (nome.isEmpty) {
                         // TODO: Mostrar talvez um widget com a seguinte mensagem:
@@ -71,8 +73,8 @@ class HomePage extends StatelessWidget {
                         await context.read<AppService>().createGame();
                       }
 
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => GetGameWidget()));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => GamePage()));
                     },
                     style: ButtonStyle(
                         backgroundColor:
@@ -91,9 +93,7 @@ class HomePage extends StatelessWidget {
                         width: 40,
                         height: 40,
                       ),
-                      onPressed: () {
-
-                      },
+                      onPressed: () {},
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),

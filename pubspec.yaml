@@ -67,6 +67,11 @@ flutter:
     - assets/images/cardClubs3.png
     - assets/images/cardClubsA.png
     - assets/images/cardBack.png
+    - assets/images/muteButton.png
+    - assets/images/soundButton.png
+    - assets/images/zoomInButton.png
+    - assets/images/zoomOutButton.png
+    - assets/images/exitButton.png
 
     # TODO: cards de teste, devem ser excluídos
     - assets/images/buttons.png
