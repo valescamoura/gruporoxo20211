@@ -191,22 +191,32 @@ class AppService {
     }
   }
 
+  void getListOfStrings(List<String> localDeck, List<dynamic> fireBaseDeck) {
+    fireBaseDeck.forEach((element) {
+      localDeck.add(element);
+    });
+  }
+
   // Pega uma carta do deck no Firestore e atualiza o registro
   Future<void> askForCard() async {
     QuerySnapshot query = await _games
         .where('gameId', isEqualTo: _gameState!['gameId'])
         .get();
-    List<String> deck = query.docs[0]['deck'];
-    String docId = query.docs[0].id;
 
+    List<String> deck = [];
+    getListOfStrings(deck, query.docs[0]['deck']);
+
+    String docId = query.docs[0].id;
     String card = getCard(deck);
 
     if (_gameHost) {
       await updateDeckHand(card, 'p1Hand', docId);
-      return;
+
+    } else {
+      await updateDeckHand(card, 'p2Hand', docId);
     }
 
-    await updateDeckHand(card, 'p2Hand', docId);
+    await _games.doc(docId).update({'deck': deck});
   }
 
   // Atualiza a mão de um jogador no Firestore
