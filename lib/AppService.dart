@@ -22,12 +22,7 @@ class AppService {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
 
-      QuerySnapshot query = await _users
-          .where('email', isEqualTo: email)
-          .get();
-      QueryDocumentSnapshot doc = query.docs[0];
-
-      setUserData(doc['nick'], email, doc['wins'], doc['losses']);
+      await fetchUserData();
 
       return 'Signed In';
     } on FirebaseAuthException catch (e) {
@@ -58,6 +53,15 @@ class AppService {
     await _firebaseAuth.signOut();
   }
 
+  Future<void> fetchUserData() async {
+    QuerySnapshot query = await _users
+        .where('email', isEqualTo: _firebaseAuth.currentUser!.email)
+        .get();
+    QueryDocumentSnapshot doc = query.docs[0];
+
+    setUserData(doc['nick'], doc['email'], doc['wins'], doc['losses']);
+  }
+
   void setUserData(String nickname, String email, int wins, int losses) {
     _userData = {
       'nick': nickname,
@@ -69,6 +73,10 @@ class AppService {
 
   String? getNickname() {
     return _firebaseAuth.currentUser!.displayName;
+  }
+
+  String? getEmail() {
+    return _firebaseAuth.currentUser!.email;
   }
 
   int getWins() {
