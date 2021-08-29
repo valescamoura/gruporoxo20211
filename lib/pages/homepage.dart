@@ -4,7 +4,7 @@ import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/aboutPage.dart';
 import 'package:gruporoxo20211/pages/gamePage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
-import 'package:gruporoxo20211/blackjack/Example.dart';
+import 'package:gruporoxo20211/blackjack/BlackJack.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {

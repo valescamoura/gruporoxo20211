@@ -2,7 +2,7 @@ import 'package:gruporoxo20211/blackjack/Carta.dart';
 
 class Jogador {
   // Atributos
-  Carta mao;
+  List<Carta> mao; 
   int pontos;
 
   // Construtor
