@@ -24,10 +24,15 @@ class Carta {
     if (x <= (165 + (20 * (quant - 1)))){
       x += 3 + (20 * (quant - 1) / 165/3);
       y += 4;
-      if (y >= 576)
+      if (y >= 576) {
         y = 576;
+        BlackJack.isPressed = true;
+        BlackJack.turnCard = true;
+        print("entrou");
+      }
       return true;
     }
+    print("saiu");
     return false;
   }
 
@@ -44,10 +49,8 @@ class Carta {
   }
 
   // Movimentar no eixo X as cartas que já foram compradas
-  void move(int quant) {
-    {
-      x -= 0.36;
-    }
+  void move() {
+    x -= 0.36;
   }
 
   // Virar carta: diminuir largura até 0, depois voltar até 1
@@ -64,6 +67,7 @@ class Carta {
     else{
       isTurned = false;
       width = BlackJack.cardWidth;
+      BlackJack.turnCard = false;
     }
   }
 
@@ -81,8 +85,6 @@ class Carta {
 
   // Comprar cartas
   static Carta comprarCarta() {
-    // alguma comunicação com BD para comprar carta
-
     var naipe = 'AE';
     var valor;
 

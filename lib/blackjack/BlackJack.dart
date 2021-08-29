@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart'; 
 import 'package:flame/gestures.dart'; 
 import 'package:flame/sprite.dart'; 
@@ -29,13 +30,23 @@ class BlackJack extends Game with TapDetector {
   late Sprite deck;
   static late Vector2 deckPosition;
 
-  final Vector2 buttonSize = Vector2(120, 30);
+  final Vector2 buttonSize = Vector2(190, 49);
   late final Vector2 buttonPosition;
   
+  late final Vector2 lineSize;
+  late Sprite lineJogador;
+  late Vector2 lineJogadorPos;
+  late Sprite lineAdversario;
+  late Vector2 lineAdversarioPos;
+
+  late TextPaint nickJogador;
+  late TextPaint nickAdversario;
+  
   int quant = 0;
-  bool isPressed = false;
-  bool draw = false;
-  bool turnCard = false;
+  static bool isPressed = false;
+  static bool draw = false;
+  static bool drawUp = false;
+  static bool turnCard = false;
   BuildContext? context;
 
   BlackJack(BuildContext context) {
@@ -62,27 +73,53 @@ class BlackJack extends Game with TapDetector {
     );
 
     unpressedButton = await loadSprite(
-      'buttons.png',
+      'buttonUp.png',
       srcPosition: Vector2.zero(),
-      srcSize: Vector2(60, 20),
+      srcSize: Vector2(190, 49),
     );
 
     pressedButton = await loadSprite(
-      'buttons.png',
-      srcPosition: Vector2(0, 20),
-      srcSize: Vector2(60, 20),
+      'buttonDown.png',
+      srcPosition: Vector2.zero(),
+      srcSize: Vector2(190, 49),
     );
 
     deckPosition = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.blockSizeVertical*50)-(cardHeight/2));
     buttonPosition = Vector2((SizeConfig.blockSizeHorizontal*50)-(buttonSize.x/2), SizeConfig.screenHeight-5*SizeConfig.blockSizeVertical-(buttonSize.y/2));
+
+    lineJogador = await loadSprite(
+      'sliderHorizontal.png',
+    );
+
+    lineAdversario = await loadSprite(
+      'sliderHorizontal.png',
+    );
+
+    lineSize = Vector2(SizeConfig.blockSizeHorizontal*90, SizeConfig.blockSizeVertical*0.5);
+    lineJogadorPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) + (cardHeight/2) + (SizeConfig.blockSizeVertical)*8);
+    lineAdversarioPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) - (cardHeight/2) - (SizeConfig.blockSizeVertical)*8);
+  
+    nickJogador = TextPaint(
+      config: TextPaintConfig(
+        fontSize: 20.0,
+        fontFamily: 'Arial',
+        color: Color(0xFFFFFFFF),
+      ),
+    );
+  
+    nickAdversario = TextPaint(
+      config: TextPaintConfig(
+        fontSize: 20.0,
+        fontFamily: 'Arial',
+        color: Color(0xFFFFFFFF),
+      ),
+    );
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     final buttonArea = buttonPosition & buttonSize;
     if (buttonArea.contains(info.eventPosition.game.toOffset())) {
-      isPressed = true;
-      turnCard = true;
       print('botão abaixar clicado');
     }
 
@@ -95,18 +132,19 @@ class BlackJack extends Game with TapDetector {
       for (var i = 0; i < jogador.mao.length; i++){
         //print(jogador.mao[i].valor);
       }
+      
       Carta.comprarCarta();
     }
   }
 
   @override
   void onTapUp(TapUpInfo info) {
-    isPressed = false; 
+    //isPressed = false; 
   }
 
   @override
   void onTapCancel() {
-    isPressed = false;
+    //isPressed = false;
   }
 
 
@@ -124,32 +162,45 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-
-    //print(quant);
+    // Renderizar botão de "abaixar a mão"
     final button = isPressed ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
 
+    // Renderizar baralho de cartas
     deck.render(canvas, position: deckPosition, size: Vector2(cardWidth, cardHeight));
 
+    // Renderar linha e nickname dos players
+    lineJogador.render(canvas, position: lineJogadorPos, size: lineSize);
+    lineAdversario.render(canvas, position: lineAdversarioPos, size: lineSize);
+
+    nickJogador.render(canvas, 'Nickname do jogador', Vector2(lineJogadorPos.x+lineSize.x, lineJogadorPos.y), anchor: Anchor.bottomRight);
+    nickAdversario.render(canvas, 'Nickname do adversário', Vector2(lineAdversarioPos.x, lineAdversarioPos.y), anchor: Anchor.bottomLeft);
+
+    // Movimentação das cartas após a compra
     if (draw){
-      print("Teste: ${this.context!.read<AppService>().getNickname()}");
+      //print("Teste: ${this.context!.read<AppService>().getNickname()}");
       for (int i = 0; i < jogador.mao.length; i++){
         if (i != quant - 1)
-          jogador.mao[i].move(quant);
+          jogador.mao[i].move();
         else
           if(!jogador.mao[i].draw(quant) && !isPressed)
             draw = false;
-
-        print(jogador.mao[i].x);
-        print(jogador.mao[i].y);
+        
+        /* print("x= ${quant.toString()}");
+        print("x= ${jogador.mao[i].x}");
+        print("y= ${jogador.mao[i].y}"); */
       } 
     }
     
     // Virada da carta
-    for (var i = 0; i < jogador.mao.length; i ++){
-      if (turnCard){
-        //jogador.mao[i].turnCard();
-      } 
+    if (turnCard){
+      for (var i = 0; i < jogador.mao.length; i++){
+        jogador.mao[i].turnCard();
+      }
+    }
+
+    // Renderizar cartas na tela
+    for (var i = 0; i < jogador.mao.length; i++){
       jogador.mao[i].render(canvas);
     } 
   }
