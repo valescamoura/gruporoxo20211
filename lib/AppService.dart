@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
 import 'dart:math';
 
 class AppService {
   final FirebaseAuth _firebaseAuth;
-  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
-  final CollectionReference _games = FirebaseFirestore.instance.collection('games');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
+  final CollectionReference _games =
+      FirebaseFirestore.instance.collection('games');
   Map? _userData;
   Map? _gameState;
   Map? _futureGameState;
@@ -20,7 +23,8 @@ class AppService {
 
   Future<String> signIn(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
 
       await fetchUserData();
 
@@ -32,7 +36,8 @@ class AppService {
 
   Future<String> signUp(String nickname, String email, String password) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
       await _firebaseAuth.currentUser!.updateDisplayName(nickname);
       await _users.add({
         'nick': nickname,
@@ -62,13 +67,13 @@ class AppService {
     setUserData(doc['nick'], doc['email'], doc['wins'], doc['losses']);
   }
 
+  //resetar senha
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
   void setUserData(String nickname, String email, int wins, int losses) {
-    _userData = {
-      'nick': nickname,
-      'email': email,
-      'wins': 0,
-      'losses': 0
-    };
+    _userData = {'nick': nickname, 'email': email, 'wins': 0, 'losses': 0};
   }
 
   String? getNickname() {
@@ -90,9 +95,8 @@ class AppService {
   // *******************************
   // SERVIÇO DE JOGO
   Future<void> fetchGameState() async {
-    QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
-        .get();
+    QuerySnapshot query =
+        await _games.where('gameId', isEqualTo: _gameState!['gameId']).get();
 
     setGameState(query.docs[0], _futureGameState);
   }
@@ -127,7 +131,8 @@ class AppService {
         .get();
 
     if (query.docs.isNotEmpty) {
-      await _games.doc(query.docs[0].id)
+      await _games
+          .doc(query.docs[0].id)
           .update({'player2': getNickname(), 'gameState': 1});
 
       setGameState(query.docs[0], _gameState);
@@ -156,7 +161,7 @@ class AppService {
       'timeCreated': FieldValue.serverTimestamp()
     };
     _gameHost = true;
-    
+
     await _games.add({
       'gameId': _gameState!['gameId'],
       'player1': _gameState!['player1'],
@@ -182,14 +187,12 @@ class AppService {
   // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
   Future<String> waitForPlayer() async {
     while (true) {
-      QuerySnapshot query = await _games
-          .where('gameId', isEqualTo: _gameState!['gameId'])
-          .get();
+      QuerySnapshot query =
+          await _games.where('gameId', isEqualTo: _gameState!['gameId']).get();
       int gameState = query.docs[0]['gameState'];
 
       if (gameState == 1) {
         return query.docs[0]['player2'];
-
       } else {
         await Future.delayed(const Duration(seconds: 2));
       }
@@ -198,9 +201,8 @@ class AppService {
 
   // Pega uma carta do deck no Firestore e atualiza o registro
   Future<void> askForCard() async {
-    QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
-        .get();
+    QuerySnapshot query =
+        await _games.where('gameId', isEqualTo: _gameState!['gameId']).get();
     List<String> deck = query.docs[0]['deck'];
     String docId = query.docs[0].id;
 
@@ -226,7 +228,6 @@ class AppService {
   Future<bool> checkOpponentCard() async {
     if (_gameHost) {
       return isHandBigger(_futureGameState!['p2Hand'], 'p2Hand');
-
     } else {
       return isHandBigger(_futureGameState!['p1Hand'], 'p1Hand');
     }
@@ -263,9 +264,57 @@ class AppService {
 
 List<String> generateDeck() {
   return [
-    'AE', '2E', '3E', '4E', '5E', '6E', '7E', '8E', '9E', 'DE', 'JE', 'QE', 'KE',
-    'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'DC', 'JC', 'QC', 'KC',
-    'AO', '2O', '3O', '4O', '5O', '6O', '7O', '8O', '9O', 'DO', 'JO', 'QO', 'KO',
-    'AP', '2P', '3P', '4P', '5P', '6P', '7P', '8P', '9P', 'DP', 'JP', 'QP', 'KP'
+    'AE',
+    '2E',
+    '3E',
+    '4E',
+    '5E',
+    '6E',
+    '7E',
+    '8E',
+    '9E',
+    'DE',
+    'JE',
+    'QE',
+    'KE',
+    'AC',
+    '2C',
+    '3C',
+    '4C',
+    '5C',
+    '6C',
+    '7C',
+    '8C',
+    '9C',
+    'DC',
+    'JC',
+    'QC',
+    'KC',
+    'AO',
+    '2O',
+    '3O',
+    '4O',
+    '5O',
+    '6O',
+    '7O',
+    '8O',
+    '9O',
+    'DO',
+    'JO',
+    'QO',
+    'KO',
+    'AP',
+    '2P',
+    '3P',
+    '4P',
+    '5P',
+    '6P',
+    '7P',
+    '8P',
+    '9P',
+    'DP',
+    'JP',
+    'QP',
+    'KP'
   ];
 }

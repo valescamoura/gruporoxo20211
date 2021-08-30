@@ -32,7 +32,7 @@ class LoginForm extends StatelessWidget {
                     hintText: 'example@gmail.com'),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Digite algo';
+                    return 'Este campo é obrigatório';
                   }
                   return null;
                 },
@@ -50,7 +50,7 @@ class LoginForm extends StatelessWidget {
                 ),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Digite algo';
+                    return 'Este campo é obrigatório';
                   }
                   return null;
                 },
@@ -60,27 +60,27 @@ class LoginForm extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
               child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0))),
-                  backgroundColor: MaterialStateProperty.all(Color(0xFFAD200C)),
-                  padding: MaterialStateProperty.all(
-                      EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0)),
-                ),
-                child: Text('Entrar',
-                    style: GoogleFonts.robotoCondensed(
-                      textStyle: TextStyle(fontSize: 18.0, color: Colors.white),
-                    )),
-                onPressed: () {
-                  if (_loginKey.currentState!.validate()) {
-                    context.read<AppService>().signIn(
-                      _textEmail.text,
-                      _textPassword.text
-                    );
-                  }
-                }
-              ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0))),
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xFFAD200C)),
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0)),
+                  ),
+                  child: Text('Entrar',
+                      style: GoogleFonts.robotoCondensed(
+                        textStyle:
+                            TextStyle(fontSize: 18.0, color: Colors.white),
+                      )),
+                  onPressed: () {
+                    if (_loginKey.currentState!.validate()) {
+                      context
+                          .read<AppService>()
+                          .signIn(_textEmail.text, _textPassword.text);
+                    }
+                  }),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),

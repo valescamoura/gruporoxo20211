@@ -39,7 +39,6 @@ class SignUpForm extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 55),
       height: 372,
-      color: Color(0xFB126012),
       child: Form(
         key: _signUpKey,
         child: Column(
@@ -116,9 +115,9 @@ class SignUpForm extends StatelessWidget {
                     )),
                 onPressed: () {
                   if (_signUpKey.currentState!.validate()) {
-                    context.read<AppService>()
-                        .signUp(_textNickname.text, _textEmail.text, _textPassword.text)
-                        .then((_) => Navigator.of(context).pop());
+                    context.read<AppService>().signUp(_textNickname.text,
+                        _textEmail.text, _textPassword.text);
+                    showRegistrationAlert(context);
                   }
                 },
               ),
@@ -128,4 +127,35 @@ class SignUpForm extends StatelessWidget {
       ),
     );
   }
+}
+
+showRegistrationAlert(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    title: Text("Cadastro realizado com sucesso!"),
+    content: Text(
+      "Volte para a página de Login e efetue o login para entrar no jogo!",
+      style: TextStyle(fontSize: 17.0),
+    ),
+    actions: [
+      Center(
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.blue),
+          ),
+          child: Text(
+            "OK",
+            style: TextStyle(fontSize: 18.0),
+          ),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      )
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
