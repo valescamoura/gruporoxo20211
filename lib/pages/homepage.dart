@@ -52,27 +52,27 @@ class HomePage extends StatelessWidget {
                       fontSize: 50.0,
                       decoration: TextDecoration.none)),
             ),
+            Padding(padding: EdgeInsets.only(bottom: 20.0)),
             //Botões
             Column(children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 20.0),
+              Center(
                   child: ElevatedButton(
-                    child: Image.asset(
-                      "assets/images/imagePlay.png",
-                      width: 40,
-                      height: 40,
-                    ),
-                    onPressed: () {
-                      context.read<AppService>().searchForGame();
-                    },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFFAD200C)),
-                        padding: MaterialStateProperty.all(EdgeInsets.only(
-                            top: 30, bottom: 30, left: 125.0, right: 125.0)),
-                        textStyle:
-                            MaterialStateProperty.all(TextStyle(fontSize: 30))),
-                  )),
+                child: Image.asset(
+                  "assets/images/imagePlay.png",
+                  width: 40,
+                  height: 40,
+                ),
+                onPressed: () {
+                  context.read<AppService>().searchForGame();
+                },
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xFFAD200C)),
+                    padding: MaterialStateProperty.all(EdgeInsets.only(
+                        top: 30, bottom: 30, left: 125.0, right: 125.0)),
+                    textStyle:
+                        MaterialStateProperty.all(TextStyle(fontSize: 30))),
+              )),
               Row(children: [
                 Padding(
                     padding: EdgeInsets.only(top: 11.0, left: 70.0),
