@@ -172,6 +172,14 @@ class AppService {
     return deck.removeAt(rndCardNum);
   }
 
+  String getOpponentNick() {
+    if (_gameHost) {
+      return _gameState!['player2'];
+    }
+
+    return _gameState!['player1'];
+  }
+
   // Espera por um jogador e a cada 2 segundos busca no Firestore para ver se
   // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
   Future<void> waitForPlayer() async {
