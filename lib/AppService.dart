@@ -255,6 +255,11 @@ class AppService {
     return newCards;
   }
 
+  Future<void> putHandDown() async {
+    _gameState!['handsDown'] += 1;
+    await _games.doc(_gameState!['gameId']).update({'handsDown': _gameState!['handsDown']});
+  }
+
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou
   bool isGameOver() {
     if (_gameState!['handsDown'] == 2) {
