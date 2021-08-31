@@ -22,15 +22,15 @@ class BlackJack extends Game with TapDetector {
   static late Jogador adversario = Jogador([],0);
   static late Map sprites = {};
 
-  static final double cardWidth = 87.5; //140 / 1.6
-  static final double cardHeight = 118.75; //190 / 1.6
+  static final double cardWidth = 87.5; //140 (largura do sprite) / 1.6
+  static final double cardHeight = 118.75; //190 (altura do sprite)/ 1.6
 
   late Sprite pressedButton;
   late Sprite unpressedButton;
   late Sprite deck;
   static late Vector2 deckPosition;
 
-  final Vector2 buttonSize = Vector2(190, 49);
+  final Vector2 buttonSize = Vector2(127, 46);
   late final Vector2 buttonPosition;
   
   late final Vector2 lineSize;
@@ -38,9 +38,6 @@ class BlackJack extends Game with TapDetector {
   late Vector2 lineJogadorPos;
   late Sprite lineAdversario;
   late Vector2 lineAdversarioPos;
-
-  late TextPaint nickJogador;
-  late TextPaint nickAdversario;
   
   int quant = 0;
   static bool isPressed = false;
@@ -48,6 +45,11 @@ class BlackJack extends Game with TapDetector {
   static bool drawUp = false;
   static bool turnCard = false;
   BuildContext? context;
+
+  String nicknameJogador = 'Nickname do jogador';
+  String nicknameAdversario = 'Nickname do adversário';
+  late TextPaint nickJogador;
+  late TextPaint nickAdversario;
 
   BlackJack(BuildContext context) {
     this.context = context;
@@ -73,15 +75,15 @@ class BlackJack extends Game with TapDetector {
     );
 
     unpressedButton = await loadSprite(
-      'buttonUp.png',
+      'btn_out.png',
       srcPosition: Vector2.zero(),
-      srcSize: Vector2(190, 49),
+      srcSize: Vector2(381, 138),
     );
 
     pressedButton = await loadSprite(
-      'buttonDown.png',
+      'btn_in.png',
       srcPosition: Vector2.zero(),
-      srcSize: Vector2(190, 49),
+      srcSize: Vector2(381, 138),
     );
 
     deckPosition = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.blockSizeVertical*50)-(cardHeight/2));
@@ -151,7 +153,7 @@ class BlackJack extends Game with TapDetector {
   @override
   void update(double dt) {
     if (isPressed) {
-      // quando botão é clicado, somar em 1 a quantidade de cartas se draw é 
+      // quando botão é clicado, somar em 1 a quantidade de cartas se draw não estiver setado com true
       if(!draw) {
         quant += 1;
       }
@@ -174,8 +176,8 @@ class BlackJack extends Game with TapDetector {
     lineJogador.render(canvas, position: lineJogadorPos, size: lineSize);
     lineAdversario.render(canvas, position: lineAdversarioPos, size: lineSize);
 
-    nickJogador.render(canvas, 'Nickname do jogador', Vector2(lineJogadorPos.x+lineSize.x, lineJogadorPos.y), anchor: Anchor.bottomRight);
-    nickAdversario.render(canvas, 'Nickname do adversário', Vector2(lineAdversarioPos.x, lineAdversarioPos.y), anchor: Anchor.bottomLeft);
+    nickJogador.render(canvas, nicknameJogador, Vector2(lineJogadorPos.x+lineSize.x, lineJogadorPos.y), anchor: Anchor.bottomRight);
+    nickAdversario.render(canvas, nicknameAdversario, Vector2(lineAdversarioPos.x, lineAdversarioPos.y), anchor: Anchor.bottomLeft);
 
     // Movimentação das cartas após a compra
     if (draw){
