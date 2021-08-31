@@ -11,69 +11,79 @@ class Carta {
   double y;
   double width = BlackJack.cardWidth;
   double height = BlackJack.cardHeight;
+  bool isTurning = false;
   bool isTurned = true; // true, quando carta está virada para baixo. false, caso contrário 
   late Sprite baralho;
   late Sprite cardBack;
+  var metadeDaTela = ((SizeConfig.screenWidth/2)-(BlackJack.cardWidth/2));
+  var cardDivSeis= BlackJack.cardWidth/6;
 
   // Construtor
   Carta(this.naipe, this.valor, this.x, this.y);
 
   // Métodos
 
-  // Comprar a carta: Mudar a posição dos eixos x e y da carta
-  bool draw(int quant){
-    var metadeDaTela = ((SizeConfig.screenWidth/2)-(BlackJack.cardWidth/2));
-    var umQuartoCard = BlackJack.cardWidth/4;
-    var yFinal = (SizeConfig.screenHeight/2) + (BlackJack.cardHeight/2) + (SizeConfig.blockSizeVertical*9);
-    print("metade= ${metadeDaTela}");
-    print("1/4= ${umQuartoCard}");
-    if (x <= (metadeDaTela + (umQuartoCard * (quant - 1)))){
+  bool moveX(int quant){
+    if (x <= (metadeDaTela + (cardDivSeis * (quant - 1)))) {
       // x foi velocidade escolhida na carta, quão mais rápido a carta se move
-      x += ((metadeDaTela-(SizeConfig.blockSizeHorizontal*5)-BlackJack.cardWidth)/55) + (umQuartoCard * (quant - 1) / 55);
-      print("xFinal= ${(metadeDaTela + (umQuartoCard * (quant - 1)))}");
-      
-      // y é a velocidade escolhida para movimento da carta
-      y += yFinal/55;
-      print("x= ${x}");
-      print("y= ${y}");
-      if (y >= yFinal) {
-        y = yFinal;
-        BlackJack.isPressed = false;
-        BlackJack.turnCard = true;
-        print("entrou");
-      }
+      x += ((metadeDaTela - (SizeConfig.blockSizeHorizontal * 5)) / 55) +
+          (cardDivSeis * (quant - 1) / 55);
       return true;
     }
-    print("saiu");
+    return false;
+  }
+
+  // Comprar a carta: Mudar a posição dos eixos x e y da carta
+  bool draw(int quant){
+
+    var yFinal = (SizeConfig.screenHeight/2) + (BlackJack.cardHeight/2) + (SizeConfig.blockSizeVertical*12);
+
+    // y é a velocidade escolhida para movimento da carta
+    y += (yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55;
+
+    if(!moveX(quant) && y >= yFinal -  ((SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55) {
+      y = yFinal;
+      BlackJack.isPressed = false;
+      return false;
+
+    }
+    return true;
+  }
+
+  bool drawA(){
+    if (x <= (metadeDaTela + cardDivSeis )){
+      // x foi velocidade escolhida na carta, quão mais rápido a carta se move
+      x += ((metadeDaTela - (SizeConfig.blockSizeHorizontal*5))/55);
+      return true;
+    }
     return false;
   }
 
   // Comprar a carta oponente: Mudar a posição dos eixos x e y da carta
   bool drawOp(int quant){
-    var metadeDaTela = ((SizeConfig.screenHeight/2)-(BlackJack.cardHeight/2));
-    var umQuartoCard = BlackJack.cardWidth/4;
-    var yFinal = (SizeConfig.screenHeight/2) - (BlackJack.cardHeight/2) - (SizeConfig.blockSizeVertical*9);
 
-    if (x <= (metadeDaTela + (umQuartoCard * (quant - 1)))){
+    var yFinal = (SizeConfig.screenHeight/2) - (BlackJack.cardHeight/2) - (SizeConfig.blockSizeVertical*27);
+
+    if (x <= (metadeDaTela + (cardDivSeis * (quant - 1)))){
       // x foi velocidade escolhida na carta, quão mais rápido a carta se move
-      x += (umQuartoCard/55) + (umQuartoCard * (quant - 1) / metadeDaTela/(umQuartoCard/55));
+      x += ((metadeDaTela - (SizeConfig.blockSizeHorizontal*5))/55) + (cardDivSeis * (quant - 1) / 55);
+
       // y é a velocidade escolhida para movimento da carta
-      y -= yFinal/55;
-      if (y <= yFinal) {
+      print((yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55);
+      y += (yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55;
+
+      if (y <= yFinal +  ((SizeConfig.blockSizeVertical*50) - (BlackJack.cardHeight/2))/55) {
         y = yFinal;
         BlackJack.isPressed = false;
-        BlackJack.turnCard = true;
-        print("entrou");
       }
       return true;
     }
-    print("saiu");
     return false;
   }
 
   // Movimentar no eixo X as cartas que já foram compradas
   void move() {
-    //x -= 0.36;
+    x -= cardDivSeis/57;
   }
 
   // Virar carta: diminuir largura até 0, depois voltar até 1
@@ -90,7 +100,6 @@ class Carta {
     else{
       isTurned = false;
       width = BlackJack.cardWidth;
-      BlackJack.turnCard = false;
     }
   }
 

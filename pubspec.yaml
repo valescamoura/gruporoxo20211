@@ -127,6 +127,7 @@ flutter:
     - assets/images/btn_in.png
     - assets/images/btn_out.png
     - assets/images/sliderHorizontal.png
+    - assets/images/botão.png
 
     - assets/images/muteButton.png
     - assets/images/soundButton.png

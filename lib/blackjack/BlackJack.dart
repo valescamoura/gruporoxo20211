@@ -28,10 +28,17 @@ class BlackJack extends Game with TapDetector {
   late Sprite pressedButton;
   late Sprite unpressedButton;
   late Sprite deck;
+  late Sprite button1;
+  late Sprite button2;
   static late Vector2 deckPosition;
 
   final Vector2 buttonSize = Vector2(127, 46);
   late final Vector2 buttonPosition;
+
+  final Vector2 button1Size = Vector2(50, 50);
+  final Vector2 button2Size = Vector2(50, 50);
+  late final Vector2 button1Position;
+  late final Vector2 button2Position;
   
   late final Vector2 lineSize;
   late Sprite lineJogador;
@@ -40,10 +47,12 @@ class BlackJack extends Game with TapDetector {
   late Vector2 lineAdversarioPos;
   
   int quant = 0;
+  int pos = 0;
   static bool isPressed = false;
   static bool draw = false;
   static bool drawUp = false;
-  static bool turnCard = false;
+  static bool chooseValue = false;
+  static bool valueChosen = false;
   BuildContext? context;
 
   String nicknameJogador = 'Nickname do jogador';
@@ -74,6 +83,14 @@ class BlackJack extends Game with TapDetector {
       'cardBack.png'
     );
 
+    button1 = await loadSprite(
+        'botão.png'
+    );
+
+    button2 = await loadSprite(
+        'botão.png'
+    );
+
     unpressedButton = await loadSprite(
       'btn_out.png',
       srcPosition: Vector2.zero(),
@@ -85,7 +102,9 @@ class BlackJack extends Game with TapDetector {
       srcPosition: Vector2.zero(),
       srcSize: Vector2(381, 138),
     );
-
+    
+    button1Position = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.blockSizeVertical*90));
+    button2Position = Vector2(SizeConfig.blockSizeHorizontal*90, (SizeConfig.blockSizeVertical*90));
     deckPosition = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.blockSizeVertical*50)-(cardHeight/2));
     buttonPosition = Vector2((SizeConfig.blockSizeHorizontal*50)-(buttonSize.x/2), SizeConfig.screenHeight-5*SizeConfig.blockSizeVertical-(buttonSize.y/2));
 
@@ -126,16 +145,26 @@ class BlackJack extends Game with TapDetector {
     }
 
     final deckArea = deckPosition & Vector2(cardWidth, cardHeight);
-    if (deckArea.contains(info.eventPosition.game.toOffset())) {
-      isPressed = true;
-      turnCard = true;
-      print('botão comprar clicado');
-    
-      for (var i = 0; i < jogador.mao.length; i++){
-        //print(jogador.mao[i].valor);
+    if (!draw){
+      if (deckArea.contains(info.eventPosition.game.toOffset())) {
+        isPressed = true;
+        print('botão comprar clicado');
+        Carta.comprarCarta();
       }
-      
-      Carta.comprarCarta();
+    }
+
+    final button1Area = button1Position & button1Size;
+    if (button1Area.contains(info.eventPosition.game.toOffset()) && chooseValue) {
+      jogador.mao[pos].valor = 1;
+      chooseValue = false;
+      valueChosen = true;
+    }
+
+    final button2Area = button2Position & button2Size;
+    if (button2Area.contains(info.eventPosition.game.toOffset()) && chooseValue) {
+      jogador.mao[pos].valor = 11;
+      chooseValue = false;
+      valueChosen = true;
     }
   }
 
@@ -155,6 +184,7 @@ class BlackJack extends Game with TapDetector {
     if (isPressed) {
       // quando botão é clicado, somar em 1 a quantidade de cartas se draw não estiver setado com true
       if(!draw) {
+        valueChosen = false;
         quant += 1;
       }
       draw = true;
@@ -165,6 +195,12 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
+
+    if (chooseValue) {
+      button1.render(canvas, position: button1Position, size: button1Size);
+      button2.render(canvas, position: button2Position, size: button2Size);
+    }
+
     // Renderizar botão de "abaixar a mão"
     final button = isPressed ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
@@ -181,25 +217,31 @@ class BlackJack extends Game with TapDetector {
 
     // Movimentação das cartas após a compra
     if (draw){
+
       //print("Teste: ${this.context!.read<AppService>().getNickname()}");
-      for (int i = 0; i < jogador.mao.length; i++){
-        if (i != quant - 1)
-          jogador.mao[i].move();
-        else
-          if(!jogador.mao[i].draw(quant) && !isPressed)
+        if (jogador.mao[quant - 1].naipe[0] == "A" && !valueChosen){
+          if (!jogador.mao[quant - 1].drawA()) {
+            jogador.mao[quant - 1].isTurning = true;
+            pos = quant - 1;
+            chooseValue = true;
+          }
+        }
+      else{
+        for (int i = 0; i < jogador.mao.length; i++) {
+          if (i != quant - 1)
+            jogador.mao[i].move();
+          else if (!jogador.mao[i].draw(quant) && !isPressed) {
+            jogador.mao[i].isTurning = true;
             draw = false;
-        
-        /* print("x= ${quant.toString()}");
-        print("x= ${jogador.mao[i].x}");
-        print("y= ${jogador.mao[i].y}"); */
+          }
+        }
       } 
     }
     
     // Virada da carta
-    if (turnCard){
-      for (var i = 0; i < jogador.mao.length; i++){
+    for (var i = 0; i < jogador.mao.length; i++){
+      if (jogador.mao[i].isTurning)
         jogador.mao[i].turnCard();
-      }
     }
 
     // Renderizar cartas na tela
