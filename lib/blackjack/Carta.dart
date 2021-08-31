@@ -1,6 +1,7 @@
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/blackjack/BlackJack.dart';
+import 'package:gruporoxo20211/blackjack/SizeConfig.dart';
 
 class Carta {
   // Atributos
@@ -21,12 +22,23 @@ class Carta {
 
   // Comprar a carta: Mudar a posição dos eixos x e y da carta
   bool draw(int quant){
-    if (x <= (165 + (20 * (quant - 1)))){
-      x += 3 + (20 * (quant - 1) / 165/3);
-      y += 4;
-      if (y >= 576) {
-        y = 576;
-        BlackJack.isPressed = true;
+    var metadeDaTela = ((SizeConfig.screenWidth/2)-(BlackJack.cardWidth/2));
+    var umQuartoCard = BlackJack.cardWidth/4;
+    var yFinal = (SizeConfig.screenHeight/2) + (BlackJack.cardHeight/2) + (SizeConfig.blockSizeVertical*9);
+    print("metade= ${metadeDaTela}");
+    print("1/4= ${umQuartoCard}");
+    if (x <= (metadeDaTela + (umQuartoCard * (quant - 1)))){
+      // x foi velocidade escolhida na carta, quão mais rápido a carta se move
+      x += ((metadeDaTela-(SizeConfig.blockSizeHorizontal*5)-BlackJack.cardWidth)/55) + (umQuartoCard * (quant - 1) / 55);
+      print("xFinal= ${(metadeDaTela + (umQuartoCard * (quant - 1)))}");
+      
+      // y é a velocidade escolhida para movimento da carta
+      y += yFinal/55;
+      print("x= ${x}");
+      print("y= ${y}");
+      if (y >= yFinal) {
+        y = yFinal;
+        BlackJack.isPressed = false;
         BlackJack.turnCard = true;
         print("entrou");
       }
@@ -38,19 +50,30 @@ class Carta {
 
   // Comprar a carta oponente: Mudar a posição dos eixos x e y da carta
   bool drawOp(int quant){
-    if (x <= (165 + (20 * (quant - 1)))){
-      x += 3 + (20 * (quant - 1) / 55);
-      y -= 4;
-      if (y <= 140)
-        y = 140;
+    var metadeDaTela = ((SizeConfig.screenHeight/2)-(BlackJack.cardHeight/2));
+    var umQuartoCard = BlackJack.cardWidth/4;
+    var yFinal = (SizeConfig.screenHeight/2) - (BlackJack.cardHeight/2) - (SizeConfig.blockSizeVertical*9);
+
+    if (x <= (metadeDaTela + (umQuartoCard * (quant - 1)))){
+      // x foi velocidade escolhida na carta, quão mais rápido a carta se move
+      x += (umQuartoCard/55) + (umQuartoCard * (quant - 1) / metadeDaTela/(umQuartoCard/55));
+      // y é a velocidade escolhida para movimento da carta
+      y -= yFinal/55;
+      if (y <= yFinal) {
+        y = yFinal;
+        BlackJack.isPressed = false;
+        BlackJack.turnCard = true;
+        print("entrou");
+      }
       return true;
     }
+    print("saiu");
     return false;
   }
 
   // Movimentar no eixo X as cartas que já foram compradas
   void move() {
-    x -= 0.36;
+    //x -= 0.36;
   }
 
   // Virar carta: diminuir largura até 0, depois voltar até 1

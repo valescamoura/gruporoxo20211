@@ -151,6 +151,7 @@ class BlackJack extends Game with TapDetector {
   @override
   void update(double dt) {
     if (isPressed) {
+      // quando botão é clicado, somar em 1 a quantidade de cartas se draw é 
       if(!draw) {
         quant += 1;
       }
