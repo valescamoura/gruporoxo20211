@@ -17,6 +17,7 @@ class ProfilePage extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: const Text(
+            /* Título da Page */
             'Perfil',
             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
@@ -38,6 +39,7 @@ class ProfilePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   color: Color(0xFB126012),
+                  /* Dados do jogador (nickname, e-mail, número de vitórias e derrotas) */
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -81,13 +83,11 @@ class ProfilePage extends StatelessWidget {
                           ])),
                       Padding(
                           padding: EdgeInsets.only(top: 10.0, left: 20.0),
-                          child: Text(
-                              _wins.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                    )
-                              )),
+                          child: Text(_wins.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                              ))),
                       Padding(
                           padding: EdgeInsets.only(top: 20.0, left: 20.0),
                           child: Text("Derrotas:",
@@ -97,13 +97,11 @@ class ProfilePage extends StatelessWidget {
                                   fontWeight: FontWeight.bold))),
                       Padding(
                           padding: EdgeInsets.only(top: 10.0, left: 20.0),
-                          child: Text(
-                              _losses.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                    )
-                              ))
+                          child: Text(_losses.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                              )))
                     ],
                   )),
             )));

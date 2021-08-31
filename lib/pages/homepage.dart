@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
     return Container(
         color: Color(0xFF062B06),
         child: Column(children: <Widget>[
+          /* Mensagem de boas-vindas */
           Padding(
               padding: EdgeInsets.only(top: 40.0),
               child: Text("Bem-vindo, $nickname",
@@ -25,7 +26,7 @@ class HomePage extends StatelessWidget {
                       fontSize: 20.0,
                       color: Colors.white,
                       decoration: TextDecoration.none))),
-          //Imagem
+          /* Imagem representativa do jogo */
           Container(
             margin: EdgeInsets.only(top: 30.0, bottom: 0.0),
             child: Image.asset(
@@ -34,7 +35,7 @@ class HomePage extends StatelessWidget {
               height: 80,
             ),
           ),
-          //Título
+          /* Nome do jogo */
           Column(children: <Widget>[
             Text(
               'BlackJack',
@@ -53,8 +54,8 @@ class HomePage extends StatelessWidget {
                       decoration: TextDecoration.none)),
             ),
             Padding(padding: EdgeInsets.only(bottom: 20.0)),
-            //Botões
             Column(children: [
+              /* Button que redireciona o usuário para jogar uma partida */
               Center(
                   child: ElevatedButton(
                 child: Image.asset(
@@ -74,6 +75,7 @@ class HomePage extends StatelessWidget {
                         MaterialStateProperty.all(TextStyle(fontSize: 30))),
               )),
               Row(children: [
+                /* Button que redireciona para a page 'Perfil' */
                 Padding(
                     padding: EdgeInsets.only(top: 11.0, left: 70.0),
                     child: ElevatedButton(
@@ -94,6 +96,7 @@ class HomePage extends StatelessWidget {
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
                     )),
+                /* Button que redireciona para a page 'Notificações' */
                 Padding(
                     padding: EdgeInsets.only(top: 11.0, left: 10.0),
                     child: ElevatedButton(
@@ -115,6 +118,7 @@ class HomePage extends StatelessWidget {
                     )),
               ]),
               Row(children: [
+                /* Button que redireciona para a page 'Regras' */
                 Padding(
                     padding: EdgeInsets.only(top: 11.0, left: 70.0),
                     child: ElevatedButton(
@@ -135,6 +139,7 @@ class HomePage extends StatelessWidget {
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
                     )),
+                /* Button que redireciona para a page 'Sobre' */
                 Padding(
                     padding: EdgeInsets.only(top: 11.0, left: 10.0),
                     child: ElevatedButton(
@@ -156,6 +161,7 @@ class HomePage extends StatelessWidget {
                               TextStyle(fontSize: 30))),
                     ))
               ]),
+              /* Button que desloga o usuário do jogo */
               Padding(
                   padding: EdgeInsets.only(top: 100.0),
                   child: TextButton(

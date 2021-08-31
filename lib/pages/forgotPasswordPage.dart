@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/AppService.dart';
-import 'package:gruporoxo20211/pages/LoginPage.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
@@ -15,6 +14,7 @@ class ForgotPasswordPage extends StatelessWidget {
         backgroundColor: Color(0xFF062B06),
         appBar: AppBar(
           centerTitle: true,
+          /* Título da Page */
           title: const Text(
             'Recuperar senha',
             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
@@ -28,6 +28,7 @@ class ForgotPasswordPage extends StatelessWidget {
           ),
         ),
         body: Column(children: [
+          /* Formulário com o campo 'e-mail' para o usuário preencher */
           Form(
             key: _signUpKey,
             child: Column(
@@ -50,6 +51,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     },
                   ),
                 ),
+                /* Button responsável por enviar para o firebase o e-mail do usuário que deseja redefinir a senha */
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
@@ -84,6 +86,7 @@ class ForgotPasswordPage extends StatelessWidget {
   }
 }
 
+/* Função com um alert que informará ao usuário que um e-mail com um link de redefinição de senha foi enviado */
 showRessetPasswordSentAlert(BuildContext context) {
   AlertDialog alert = AlertDialog(
     title: Text("E-mail enviado!"),
@@ -107,6 +110,7 @@ showRessetPasswordSentAlert(BuildContext context) {
     ],
   );
 
+  /* Função que retorna o alert 'showRessetPasswordSentAlert' na screen */
   showDialog(
     context: context,
     builder: (BuildContext context) {

@@ -10,6 +10,7 @@ class SignUpPage extends StatelessWidget {
       backgroundColor: Color(0xFF062B06),
       appBar: AppBar(
         centerTitle: true,
+        /* Título da Page */
         title: const Text(
           'Cadastro',
           style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
@@ -39,6 +40,7 @@ class SignUpForm extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 55),
       height: 372,
+      /* Formulário com os campos Nickname, e-mail e senha para efetuar o cadastro */
       child: Form(
         key: _signUpKey,
         child: Column(
@@ -98,6 +100,7 @@ class SignUpForm extends StatelessWidget {
                 obscureText: true,
               ),
             ),
+            /* Button que confirma o cadastro do usuário */
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: ElevatedButton(
@@ -129,6 +132,7 @@ class SignUpForm extends StatelessWidget {
   }
 }
 
+/* Função com um alert que informará ao usuário se o cadastro foi efetuado com sucesso */
 showRegistrationAlert(BuildContext context) {
   AlertDialog alert = AlertDialog(
     title: Text("Cadastro realizado com sucesso!"),
@@ -152,6 +156,7 @@ showRegistrationAlert(BuildContext context) {
     ],
   );
 
+  /* Função que retorna o alert 'showRegistrationAlert' na screen */
   showDialog(
     context: context,
     builder: (BuildContext context) {
