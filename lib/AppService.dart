@@ -198,7 +198,7 @@ class AppService {
   }
 
   // Pega uma carta do deck no Firestore e atualiza o registro
-  Future<void> askForCard() async {
+  Future<String> askForCard() async {
     QuerySnapshot query = await _games
         .where('gameId', isEqualTo: _gameState!['gameId'])
         .get();
@@ -217,6 +217,7 @@ class AppService {
     }
 
     await _games.doc(docId).update({'deck': deck});
+    return card;
   }
 
   // Atualiza a mão de um jogador no Firestore
