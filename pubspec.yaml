@@ -122,12 +122,10 @@ flutter:
     - assets/images/KP.png
 
     # Imagens dos botões do jogo
-    - assets/images/buttonUp.png
-    - assets/images/buttonDown.png
+    - assets/images/btn_a.png
     - assets/images/btn_in.png
     - assets/images/btn_out.png
     - assets/images/sliderHorizontal.png
-    - assets/images/botão.png
 
     - assets/images/muteButton.png
     - assets/images/soundButton.png

@@ -21,24 +21,27 @@ class BlackJack extends Game with TapDetector {
   static late Jogador jogador = Jogador([],0);
   static late Jogador adversario = Jogador([],0);
   static late Map sprites = {};
+  
+  late Sprite deck;
+  late Sprite pressedButton;
+  late Sprite unpressedButton;
+  late Sprite button1;
+  late Sprite button2;
 
   static final double cardWidth = 87.5; //140 (largura do sprite) / 1.6
   static final double cardHeight = 118.75; //190 (altura do sprite)/ 1.6
-
-  late Sprite pressedButton;
-  late Sprite unpressedButton;
-  late Sprite deck;
-  late Sprite button1;
-  late Sprite button2;
   static late Vector2 deckPosition;
 
-  final Vector2 buttonSize = Vector2(127, 46);
+  final Vector2 buttonSize = Vector2(138, 50);
   late final Vector2 buttonPosition;
+  late TextPaint labelBtn;
 
   final Vector2 button1Size = Vector2(50, 50);
   final Vector2 button2Size = Vector2(50, 50);
   late final Vector2 button1Position;
   late final Vector2 button2Position;
+  late TextPaint labelBtn1;
+  late TextPaint labelBtn2;
   
   late final Vector2 lineSize;
   late Sprite lineJogador;
@@ -49,6 +52,7 @@ class BlackJack extends Game with TapDetector {
   int quant = 0;
   int pos = 0;
   static bool isPressed = false;
+  static bool abaixar = false;
   static bool draw = false;
   static bool drawUp = false;
   static bool chooseValue = false;
@@ -59,6 +63,10 @@ class BlackJack extends Game with TapDetector {
   String nicknameAdversario = 'Nickname do adversário';
   late TextPaint nickJogador;
   late TextPaint nickAdversario;
+
+  static String message = "";
+  static bool hasMessage = false;
+  late TextPaint labelMessage;
 
   BlackJack(BuildContext context) {
     this.context = context;
@@ -84,11 +92,11 @@ class BlackJack extends Game with TapDetector {
     );
 
     button1 = await loadSprite(
-        'botão.png'
+        'btn_a.png'
     );
 
     button2 = await loadSprite(
-        'botão.png'
+        'btn_a.png'
     );
 
     unpressedButton = await loadSprite(
@@ -103,10 +111,10 @@ class BlackJack extends Game with TapDetector {
       srcSize: Vector2(381, 138),
     );
     
-    button1Position = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.blockSizeVertical*90));
-    button2Position = Vector2(SizeConfig.blockSizeHorizontal*90, (SizeConfig.blockSizeVertical*90));
     deckPosition = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.blockSizeVertical*50)-(cardHeight/2));
-    buttonPosition = Vector2((SizeConfig.blockSizeHorizontal*50)-(buttonSize.x/2), SizeConfig.screenHeight-5*SizeConfig.blockSizeVertical-(buttonSize.y/2));
+    buttonPosition = Vector2((SizeConfig.blockSizeHorizontal*50)-(buttonSize.x/2), (SizeConfig.screenHeight) - buttonSize.y - (SizeConfig.blockSizeVertical*3));
+    button1Position = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight) - buttonSize.y - (SizeConfig.blockSizeVertical*3));
+    button2Position = Vector2((SizeConfig.blockSizeHorizontal*95)-button2Size.x, (SizeConfig.screenHeight) - buttonSize.y - (SizeConfig.blockSizeVertical*3));
 
     lineJogador = await loadSprite(
       'sliderHorizontal.png',
@@ -135,6 +143,38 @@ class BlackJack extends Game with TapDetector {
         color: Color(0xFFFFFFFF),
       ),
     );
+
+    labelBtn = TextPaint(
+      config: TextPaintConfig(
+        fontSize: 20.0,
+        fontFamily: 'Arial',
+        color: Color(0xFFFFFFFF),
+      ),
+    );
+
+    labelBtn1 = TextPaint(
+      config: TextPaintConfig(
+        fontSize: 20.0,
+        fontFamily: 'Arial',
+        color: Color(0xFFFFFFFF),
+      ),
+    );
+
+    labelBtn2 = TextPaint(
+      config: TextPaintConfig(
+        fontSize: 20.0,
+        fontFamily: 'Arial',
+        color: Color(0xFFFFFFFF),
+      ),
+    );
+
+    labelMessage = TextPaint(
+      config: TextPaintConfig(
+        fontSize: 14.0,
+        fontFamily: 'Arial',
+        color: Color(0xFFFDFD96),
+      ),
+    );
   }
 
   @override
@@ -142,6 +182,7 @@ class BlackJack extends Game with TapDetector {
     final buttonArea = buttonPosition & buttonSize;
     if (buttonArea.contains(info.eventPosition.game.toOffset())) {
       print('botão abaixar clicado');
+      abaixar = true;
     }
 
     final deckArea = deckPosition & Vector2(cardWidth, cardHeight);
@@ -170,14 +211,17 @@ class BlackJack extends Game with TapDetector {
 
   @override
   void onTapUp(TapUpInfo info) {
-    //isPressed = false; 
+    final buttonArea = buttonPosition & buttonSize;
+    if (buttonArea.contains(info.eventPosition.game.toOffset())) {
+      print("soltar botão abaixar");
+      abaixar = false;
+    }
   }
 
   @override
   void onTapCancel() {
     //isPressed = false;
   }
-
 
   @override
   void update(double dt) {
@@ -191,19 +235,23 @@ class BlackJack extends Game with TapDetector {
     }
   }
 
-
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
 
+    // Renderizar botões para escolher valor do Às.
     if (chooseValue) {
       button1.render(canvas, position: button1Position, size: button1Size);
       button2.render(canvas, position: button2Position, size: button2Size);
+      labelBtn1.render(canvas, "1", Vector2(button1Position.x+button1Size.x/2, button1Position.y+35), anchor: Anchor.bottomCenter);
+      labelBtn2.render(canvas, "11", Vector2(button2Position.x+button2Size.x/2, button2Position.y+35), anchor: Anchor.bottomCenter);
     }
 
     // Renderizar botão de "abaixar a mão"
-    final button = isPressed ? pressedButton : unpressedButton;
+    final button = abaixar ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
+    labelBtn.render(canvas, "Abaixar", Vector2(buttonPosition.x+buttonSize.x/2, buttonPosition.y+35), anchor: Anchor.bottomCenter);
+    
 
     // Renderizar baralho de cartas
     deck.render(canvas, position: deckPosition, size: Vector2(cardWidth, cardHeight));
@@ -218,7 +266,7 @@ class BlackJack extends Game with TapDetector {
     // Movimentação das cartas após a compra
     if (draw){
 
-      //print("Teste: ${this.context!.read<AppService>().getNickname()}");
+      print("Teste: ${this.context!.read<AppService>().getNickname()}");
         if (jogador.mao[quant - 1].naipe[0] == "A" && !valueChosen){
           if (!jogador.mao[quant - 1].drawA()) {
             jogador.mao[quant - 1].isTurning = true;

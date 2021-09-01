@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/blackjack/BlackJack.dart';
 import 'package:gruporoxo20211/blackjack/SizeConfig.dart';
 
+import '../AppService.dart';
+
 class Carta {
   // Atributos
-  String naipe = "ClubsA";
+  late String naipe;
   int valor;
   double x;
   double y;
@@ -15,6 +17,8 @@ class Carta {
   bool isTurned = true; // true, quando carta está virada para baixo. false, caso contrário 
   late Sprite baralho;
   late Sprite cardBack;
+
+  // Atributos auxiliares
   var metadeDaTela = ((SizeConfig.screenWidth/2)-(BlackJack.cardWidth/2));
   var cardDivSeis= BlackJack.cardWidth/6;
 
@@ -86,16 +90,16 @@ class Carta {
     x -= cardDivSeis/57;
   }
 
-  // Virar carta: diminuir largura até 0, depois voltar até 1
+  // Virar carta: diminuir largura até 0, depois voltar até tamanho original da carta
   Future<void> turnCard() async {
     if (isTurned && width > 0){
-      width -= 8.5;
+      width -= 9;
     }
     else if (isTurned && width <= 0){
       isTurned = false;
     }
     else if (width < BlackJack.cardWidth){
-      width += 8.5;
+      width += 9;
     }
     else{
       isTurned = false;
@@ -115,9 +119,7 @@ class Carta {
     c.restore();
   }
 
-  // Comprar cartas
-  static Carta comprarCarta() {
-    var naipe = 'AE';
+  static Carta toCard(String naipe) {
     var valor;
 
     // Descobrir valor numérico da carta através dos últimos dígitos do naipe
@@ -157,7 +159,32 @@ class Carta {
     var carta = Carta(naipe, valor, BlackJack.deckPosition.x, BlackJack.deckPosition.y);
     carta.baralho = BlackJack.sprites[naipe];
     carta.cardBack = BlackJack.sprites['cardBack'];
-    BlackJack.jogador.mao.add(carta);
+
     return carta;
+  }
+
+  // Comprar cartas
+  static comprarCarta() {
+    if (BlackJack.jogador.pontos >= 21) {
+      BlackJack.jogador.estourou = true;
+    }
+    else{
+      var naipe = 'DE';
+      var carta  = toCard(naipe);
+      BlackJack.jogador.mao.add(carta);
+
+      //TODO: somar diferente quando for ás
+      BlackJack.jogador.pontos += carta.valor;
+    }
+  }
+
+  // Animar cartas compradas pelo adversário
+  static animarCartasAdv() {
+    // alguma comunicação com BD para saber se é necessário animar
+  }
+
+  // Virar cartas do adversário
+  static virarCartasAdv() {
+
   }
 }

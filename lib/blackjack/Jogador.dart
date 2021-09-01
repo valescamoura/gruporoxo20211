@@ -5,6 +5,9 @@ class Jogador {
   List<Carta> mao; 
   int pontos;
 
+  bool abaixou = false;
+  bool estourou = false;
+
   // Construtor
   Jogador(this.mao, this.pontos);
 

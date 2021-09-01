@@ -10,8 +10,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  bool controller = true;
-  String textButtonSound = 'assets/images/soundButton.png';
 
   @override
   Widget build(BuildContext context) {
@@ -24,90 +22,23 @@ class _GamePageState extends State<GamePage> {
           ),
         ),
         Padding(
-            padding: EdgeInsets.only(top: 30.0),
+            padding: EdgeInsets.only(top: 20.0),
             child: Row(
               children: [
                 Padding(
-                    padding: EdgeInsets.only(left: 130.0),
+                    padding: EdgeInsets.only(left: 330.0),
                     child: ElevatedButton(
                       style: ButtonStyle(
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0))),
+                                    borderRadius: BorderRadius.circular(20.0))),
                         backgroundColor:
                             MaterialStateProperty.all(Color(0xFFC0C0C0)),
                         padding: MaterialStateProperty.all(
-                            EdgeInsets.fromLTRB(5, 7, 5, 7)),
+                            EdgeInsets.fromLTRB(5, 5, 5, 5)),
                       ),
                       onPressed: () {
-                        if (controller == true) {
-                          setState(() {
-                            //TODO: Ver outra maneira de atualizar o estado do botão sem utilizar o setState
-                            textButtonSound = 'assets/images/muteButton.png';
-                          });
-                          /*TODO: Colocar função de parar sons do jogo*/
-                          controller = false;
-                        } else {
-                          setState(() {
-                            textButtonSound = 'assets/images/soundButton.png';
-                          });
-                          /*TODO: Colocar função de tocar sons do jogo*/
-                          controller = true;
-                        }
-                      },
-                      child:
-                          Image.asset(textButtonSound, height: 30.0, width: 28),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0))),
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFFC0C0C0)),
-                        padding: MaterialStateProperty.all(
-                            EdgeInsets.fromLTRB(5, 7, 5, 7)),
-                      ),
-                      onPressed: () {},
-                      child: Image.asset("assets/images/zoomOutButton.png",
-                          height: 30.0, width: 28),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0))),
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFFC0C0C0)),
-                        padding: MaterialStateProperty.all(
-                            EdgeInsets.fromLTRB(5, 7, 5, 7)),
-                      ),
-                      onPressed: () {},
-                      child: Image.asset("assets/images/zoomInButton.png",
-                          height: 30.0, width: 28),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0))),
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFFC0C0C0)),
-                        padding: MaterialStateProperty.all(
-                            EdgeInsets.fromLTRB(5, 7, 5, 7)),
-                      ),
-                      onPressed: () {
-                        print("apertei!");
                         showAlertDialog1(context);
                       },
                       child: Image.asset("assets/images/exitButton.png",
