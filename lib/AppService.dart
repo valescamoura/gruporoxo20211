@@ -71,6 +71,15 @@ class AppService {
     return _firebaseAuth.currentUser!.displayName;
   }
 
+  Future<void> incrementWinsLosses(String result) async {
+    _userData![result] += 1;
+    QuerySnapshot query = await _users
+        .where('email', isEqualTo: _firebaseAuth.currentUser!.email)
+        .get();
+
+    _users.doc(query.docs[0].id).update({'result': _userData![result]});
+  }
+
   int getWins() {
     return _userData!['wins'];
   }
@@ -270,7 +279,7 @@ class AppService {
 
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou
   bool isGameOver() {
-    if (_gameState!['handsDown'] == 2) {
+    if (_futureGameState!['handsDown'] == 2) {
       // Jogo terminado! Computar vencedor
       return true;
     }
