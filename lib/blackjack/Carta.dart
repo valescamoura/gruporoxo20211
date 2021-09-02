@@ -31,8 +31,6 @@ class Carta {
 
   void zoomIn(){
 
-    width = 2 * width;
-    height = 2 * height;
     xAnt = x;
     x = ((SizeConfig.screenWidth/2) - (width/2));
     y = ((SizeConfig.screenHeight/2) - (height/2));

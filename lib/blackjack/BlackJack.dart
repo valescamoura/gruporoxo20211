@@ -192,6 +192,7 @@ class BlackJack extends Game with TapDetector {
       if (deckArea.contains(info.eventPosition.game.toOffset())) {
         isPressed = true;
         print('botão comprar clicado');
+        click = true;
         Carta.comprarCarta();
       }
     }
@@ -211,22 +212,26 @@ class BlackJack extends Game with TapDetector {
     }
 
     if (!zoom && !draw && !click) {
+      print("a");
       if (jogador.mao.length > 0){
-        for (int i = jogador.mao.length - 1; i <= 0; i ++) {
-          final cardArea = Vector2(
-              jogador.mao[i].x, jogador.mao[i].y) & Vector2(
-              jogador.mao[i].width, jogador.mao[i].height);
+        print("b");
+        for (int i = jogador.mao.length - 1; i >= 0; i --) {
+          print("c");
+          Rect cardArea = Vector2(jogador.mao[i].x, jogador.mao[i].y) & Vector2(jogador.mao[i].width, jogador.mao[i].height);
           if (cardArea.contains(info.eventPosition.game.toOffset())) {
+            jogador.mao[i].width = 175;
+            jogador.mao[i].height = 237.75;
             jogador.mao[i].zoomIn();
             zoom = true;
             click = true;
+            break;
           }
         }
       }
     }
 
     if (zoom && !click){
-      for (int i = jogador.mao.length - 1; i <= 0; i ++) {
+      for (int i = jogador.mao.length - 1; i >= 0; i --) {
         if (jogador.mao[i].zoom){
           final cardArea = Vector2(jogador.mao[i].x, jogador.mao[i].y) & Vector2(
               jogador.mao[i].width, jogador.mao[i].height);
@@ -234,6 +239,7 @@ class BlackJack extends Game with TapDetector {
             jogador.mao[i].zoomOut();
             zoom = false;
             click = true;
+            break;
           }
         }
       }
@@ -267,13 +273,15 @@ class BlackJack extends Game with TapDetector {
         quant += 1;
       }
       draw = true;
-      click = true;
     }
   }
 
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
+    print("zoom $zoom");
+    print("click $click");
+    print("draw $draw");
 
     // Renderizar botões para escolher valor do Às.
     if (chooseValue) {
@@ -325,8 +333,17 @@ class BlackJack extends Game with TapDetector {
     
     // Virada da carta
     for (var i = 0; i < jogador.mao.length; i++){
-      if (jogador.mao[i].isTurning)
+      if (jogador.mao[i].isTurning) {
         jogador.mao[i].turnCard();
+      }
+    }
+
+    // Zoom da carta
+    for (var i = 0; i < jogador.mao.length; i++){
+      if (jogador.mao[i].zoom) {
+        jogador.mao[i].width = 175;
+        jogador.mao[i].height = 237.75;
+      }
     }
 
     // Renderizar cartas na tela
