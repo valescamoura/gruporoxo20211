@@ -212,11 +212,8 @@ class BlackJack extends Game with TapDetector {
     }
 
     if (!zoom && !draw && !click) {
-      print("a");
       if (jogador.mao.length > 0){
-        print("b");
         for (int i = jogador.mao.length - 1; i >= 0; i --) {
-          print("c");
           Rect cardArea = Vector2(jogador.mao[i].x, jogador.mao[i].y) & Vector2(jogador.mao[i].width, jogador.mao[i].height);
           if (cardArea.contains(info.eventPosition.game.toOffset())) {
             jogador.mao[i].width = 175;
