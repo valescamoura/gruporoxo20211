@@ -55,6 +55,8 @@ class BlackJack extends Game with TapDetector {
   static bool abaixar = false;
   static bool draw = false;
   static bool drawUp = false;
+  static bool zoom = false;
+  static bool click = false;
   static bool chooseValue = false;
   static bool valueChosen = false;
   BuildContext? context;
@@ -186,7 +188,7 @@ class BlackJack extends Game with TapDetector {
     }
 
     final deckArea = deckPosition & Vector2(cardWidth, cardHeight);
-    if (!draw){
+    if (!draw && !zoom){
       if (deckArea.contains(info.eventPosition.game.toOffset())) {
         isPressed = true;
         print('botão comprar clicado');
@@ -207,6 +209,35 @@ class BlackJack extends Game with TapDetector {
       chooseValue = false;
       valueChosen = true;
     }
+
+    if (!zoom && !draw && !click) {
+      if (jogador.mao.length > 0){
+        for (int i = jogador.mao.length - 1; i <= 0; i ++) {
+          final cardArea = Vector2(
+              jogador.mao[i].x, jogador.mao[i].y) & Vector2(
+              jogador.mao[i].width, jogador.mao[i].height);
+          if (cardArea.contains(info.eventPosition.game.toOffset())) {
+            jogador.mao[i].zoomIn();
+            zoom = true;
+            click = true;
+          }
+        }
+      }
+    }
+
+    if (zoom && !click){
+      for (int i = jogador.mao.length - 1; i <= 0; i ++) {
+        if (jogador.mao[i].zoom){
+          final cardArea = Vector2(jogador.mao[i].x, jogador.mao[i].y) & Vector2(
+              jogador.mao[i].width, jogador.mao[i].height);
+          if (!cardArea.contains(info.eventPosition.game.toOffset()) && !draw) {
+            jogador.mao[i].zoomOut();
+            zoom = false;
+            click = true;
+          }
+        }
+      }
+    }
   }
 
   @override
@@ -216,11 +247,15 @@ class BlackJack extends Game with TapDetector {
       print("soltar botão abaixar");
       abaixar = false;
     }
+    final tela = Vector2(0, 0) & Vector2(SizeConfig.screenWidth, SizeConfig.screenHeight);
+    if (tela.contains(info.eventPosition.game.toOffset())){
+      click = false;
+    }
   }
 
   @override
   void onTapCancel() {
-    //isPressed = false;
+    // zoomUp = false;
   }
 
   @override
@@ -232,6 +267,7 @@ class BlackJack extends Game with TapDetector {
         quant += 1;
       }
       draw = true;
+      click = true;
     }
   }
 
@@ -274,6 +310,7 @@ class BlackJack extends Game with TapDetector {
             chooseValue = true;
           }
         }
+
       else{
         for (int i = 0; i < jogador.mao.length; i++) {
           if (i != quant - 1)

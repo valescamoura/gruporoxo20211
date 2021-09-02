@@ -10,11 +10,13 @@ class Carta {
   late String naipe;
   int valor;
   double x;
+  double xAnt = 0;
   double y;
   double width = BlackJack.cardWidth;
   double height = BlackJack.cardHeight;
-  bool isTurning = false;
-  bool isTurned = true; // true, quando carta está virada para baixo. false, caso contrário 
+  bool isTurning = false; // true, quando a carta está virando. false, caso contrário
+  bool isTurned = true; // true, quando carta está virada para baixo. false, caso contrário
+  bool zoom = false;
   late Sprite baralho;
   late Sprite cardBack;
 
@@ -27,6 +29,28 @@ class Carta {
 
   // Métodos
 
+  void zoomIn(){
+
+    width = 2 * width;
+    height = 2 * height;
+    xAnt = x;
+    x = ((SizeConfig.screenWidth/2) - (width/2));
+    y = ((SizeConfig.screenHeight/2) - (height/2));
+    zoom = true;
+
+  }
+
+  void zoomOut(){
+
+    width = width / 2;
+    height = height / 2;
+    x = xAnt;
+    y = (SizeConfig.screenHeight/2) + (BlackJack.cardHeight/2) + (SizeConfig.blockSizeVertical*12);
+    zoom = false;
+
+  }
+
+  // Movimentar as cartas na mão no eixo x ao comprar uma nova carta
   bool moveX(int quant){
     if (x <= (metadeDaTela + (cardDivSeis * (quant - 1)))) {
       // x foi velocidade escolhida na carta, quão mais rápido a carta se move
@@ -54,6 +78,7 @@ class Carta {
     return true;
   }
 
+  // Compra de carta única para a escolha de valor do A
   bool drawA(){
     if (x <= (metadeDaTela + cardDivSeis )){
       // x foi velocidade escolhida na carta, quão mais rápido a carta se move
