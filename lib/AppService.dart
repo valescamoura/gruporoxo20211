@@ -72,7 +72,6 @@ class AppService {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
       return 'Sent';
     } on FirebaseAuthException catch (e) {
-      print(e.message);
       return '${e.message}';
     }
   }
