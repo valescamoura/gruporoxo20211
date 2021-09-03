@@ -3,14 +3,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/AppService.dart';
 import 'package:provider/provider.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
+class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
 
   @override
+  _State createState() => _State();
+}
+
+class _State extends State<ForgotPasswordPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _resetPasswordKey = GlobalKey<FormState>();
+  final _textEmail = TextEditingController();
+  String message = "";
+  String alertMessage = "";
+
+  @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _signUpKey = GlobalKey<FormState>();
-    final _textEmail = TextEditingController();
     return Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Color(0xFF062B06),
         appBar: AppBar(
           centerTitle: true,
@@ -30,7 +40,7 @@ class ForgotPasswordPage extends StatelessWidget {
         body: Column(children: [
           /* Formulário com o campo 'e-mail' para o usuário preencher */
           Form(
-            key: _signUpKey,
+            key: _resetPasswordKey,
             child: Column(
               children: <Widget>[
                 Padding(
@@ -55,66 +65,80 @@ class ForgotPasswordPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0))),
-                      backgroundColor:
-                          MaterialStateProperty.all(Color(0xFFAD200C)),
-                      padding: MaterialStateProperty.all(
-                          EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0)),
-                    ),
-                    child: Text('Enviar',
-                        style: GoogleFonts.robotoCondensed(
-                          textStyle:
-                              TextStyle(fontSize: 18.0, color: Colors.white),
-                        )),
-                    onPressed: () {
-                      if (_signUpKey.currentState!.validate()) {
-                        context
-                            .read<AppService>()
-                            .resetPassword(_textEmail.text);
-                        showRessetPasswordSentAlert(context);
-                      }
-                    },
-                  ),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0))),
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0xFFAD200C)),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0)),
+                      ),
+                      child: Text('Enviar',
+                          style: GoogleFonts.robotoCondensed(
+                            textStyle:
+                                TextStyle(fontSize: 18.0, color: Colors.white),
+                          )),
+                      onPressed: () {
+                        if (_resetPasswordKey.currentState!.validate()) {
+                          context
+                              .read<AppService>()
+                              .resetPassword(_textEmail.text)
+                              .then((value) {
+                            alertMessage = value;
+                            print(alertMessage);
+                            if (alertMessage == "Sent") {
+                              setState(() {
+                                message = "E-mail enviado!";
+                              });
+                            } else {
+                              setState(() {
+                                message = "Erro ao enviar e-mail";
+                              });
+                            }
+                            return "";
+                          });
+                        }
+                      }),
                 ),
               ],
             ),
           ),
+          SizedBox(height: 20.0),
+          if (message == "E-mail enviado!")
+            Container(
+              color: Colors.blue,
+              child: ListTile(
+                  title: Text(message,
+                      style: TextStyle(color: Colors.black, fontSize: 18.0)),
+                  subtitle: Text(
+                      "Click no link enviado e faça a alteração da senha",
+                      style: TextStyle(color: Colors.black, fontSize: 16.0)),
+                  leading: Icon(Icons.error),
+                  trailing: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        setState(() {
+                          message = "";
+                        });
+                      })),
+            ),
+          if (message == "Erro ao enviar e-mail")
+            Container(
+              color: Colors.amber,
+              child: ListTile(
+                  title: Text(message,
+                      style: TextStyle(color: Colors.black, fontSize: 18.0)),
+                  leading: Icon(Icons.error),
+                  trailing: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        setState(() {
+                          message = "";
+                        });
+                      })),
+            )
         ]));
   }
-}
-
-/* Função com um alert que informará ao usuário que um e-mail com um link de redefinição de senha foi enviado */
-showRessetPasswordSentAlert(BuildContext context) {
-  AlertDialog alert = AlertDialog(
-    title: Text("E-mail enviado!"),
-    content: Text(
-      "Verifique seu e-mail e click no link recebido para então resetar sua senha do jogo.",
-      style: TextStyle(fontSize: 17.0),
-    ),
-    actions: [
-      Center(
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-          ),
-          child: Text(
-            "OK",
-            style: TextStyle(fontSize: 18.0),
-          ),
-          onPressed: () => Navigator.pop(context, true),
-        ),
-      )
-    ],
-  );
-
-  /* Função que retorna o alert 'showRessetPasswordSentAlert' na screen */
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

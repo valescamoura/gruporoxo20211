@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
 import 'dart:math';
 
@@ -68,8 +67,14 @@ class AppService {
   }
 
   //resetar senha
-  Future<void> resetPassword(String email) async {
-    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  Future<String> resetPassword(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return 'Sent';
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      return '${e.message}';
+    }
   }
 
   void setUserData(String nickname, String email, int wins, int losses) {
