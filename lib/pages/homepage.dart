@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/AppService.dart';
+import 'package:gruporoxo20211/pages/SalaDeEspera.dart';
 import 'package:gruporoxo20211/pages/aboutPage.dart';
 import 'package:gruporoxo20211/pages/gamePage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
-import 'package:gruporoxo20211/blackjack/BlackJack.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -66,15 +66,20 @@ class HomePage extends StatelessWidget {
                     onPressed: () async {
                       String nome =
                           await context.read<AppService>().searchForGame();
-
+                      
                       if (nome.isEmpty) {
-                        // TODO: Mostrar talvez um widget com a seguinte mensagem:
-                        // "Esperando por um jogador..."
+                        // Criar jogo
                         await context.read<AppService>().createGame();
-                      }
 
-                      Navigator.of(context).push(
+                        // Redirecionar para sala de espera
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => SalaDeEspera(context: context,)));
+                      }
+                      else{
+                        // Redirecionar para tela de jogo
+                        Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => GamePage()));
+                      }
                     },
                     style: ButtonStyle(
                         backgroundColor:

@@ -49,7 +49,6 @@ class BlackJack extends Game with TapDetector {
   late Sprite lineAdversario;
   late Vector2 lineAdversarioPos;
   
-  int quant = 0;
   int pos = 0;
   static bool isPressed = false;
   static bool abaixar = false;
@@ -61,8 +60,8 @@ class BlackJack extends Game with TapDetector {
   static bool valueChosen = false;
   BuildContext? context;
 
-  String nicknameJogador = 'Nickname do jogador';
-  String nicknameAdversario = 'Nickname do adversário';
+  late String nicknameJogador;
+  late String nicknameAdversario;
   late TextPaint nickJogador;
   late TextPaint nickAdversario;
 
@@ -75,6 +74,8 @@ class BlackJack extends Game with TapDetector {
     SizeConfig().init(context);
   }
 
+  // Função executada ao iniciar a classe e o game loop para carregamento de sprites
+  // e inicialização de atributos do jogo
   @override
   Future<void> onLoad() async {
 
@@ -130,6 +131,9 @@ class BlackJack extends Game with TapDetector {
     lineJogadorPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) + (cardHeight/2) + (SizeConfig.blockSizeVertical)*8);
     lineAdversarioPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) - (cardHeight/2) - (SizeConfig.blockSizeVertical)*8);
   
+    nicknameJogador = this.context!.read<AppService>().getNickname() as String;
+    nicknameAdversario = this.context!.read<AppService>().getOpponentNick();
+
     nickJogador = TextPaint(
       config: TextPaintConfig(
         fontSize: 20.0,
@@ -264,10 +268,8 @@ class BlackJack extends Game with TapDetector {
   @override
   void update(double dt) {
     if (isPressed) {
-      // quando botão é clicado, somar em 1 a quantidade de cartas se draw não estiver setado com true
       if(!draw) {
         valueChosen = false;
-        quant += 1;
       }
       draw = true;
     }
@@ -276,9 +278,9 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-    print("zoom $zoom");
-    print("click $click");
-    print("draw $draw");
+    //print("zoom $zoom");
+    //print("click $click");
+    //print("draw $draw");
 
     // Renderizar botões para escolher valor do Às.
     if (chooseValue) {
@@ -306,21 +308,20 @@ class BlackJack extends Game with TapDetector {
 
     // Movimentação das cartas após a compra
     if (draw){
-
-      print("Teste: ${this.context!.read<AppService>().getNickname()}");
-        if (jogador.mao[quant - 1].naipe[0] == "A" && !valueChosen){
-          if (!jogador.mao[quant - 1].drawA()) {
-            jogador.mao[quant - 1].isTurning = true;
-            pos = quant - 1;
+      //print("Teste: ${this.context!.read<AppService>().getNickname()}");
+        if (jogador.mao[jogador.mao.length - 1].naipe[0] == "A" && !valueChosen){
+          if (!jogador.mao[jogador.mao.length - 1].drawA()) {
+            jogador.mao[jogador.mao.length - 1].isTurning = true;
+            pos = jogador.mao.length - 1;
             chooseValue = true;
           }
         }
 
       else{
         for (int i = 0; i < jogador.mao.length; i++) {
-          if (i != quant - 1)
+          if (i != jogador.mao.length - 1)
             jogador.mao[i].move();
-          else if (!jogador.mao[i].draw(quant) && !isPressed) {
+          else if (!jogador.mao[i].draw(jogador.mao.length) && !isPressed) {
             jogador.mao[i].isTurning = true;
             draw = false;
           }

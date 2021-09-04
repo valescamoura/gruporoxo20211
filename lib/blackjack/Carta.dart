@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/blackjack/BlackJack.dart';
 import 'package:gruporoxo20211/blackjack/SizeConfig.dart';
 
-import '../AppService.dart';
-
 class Carta {
   // Atributos
   late String naipe;
