@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                       decoration: TextDecoration.none))),
           /* Imagem representativa do jogo */
           Container(
-            margin: EdgeInsets.only(top: 30.0, bottom: 0.0),
+            margin: EdgeInsets.only(top: 20.0),
             child: Image.asset(
               'assets/images/imageFromHomePage.png',
               width: 250,
@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
               style: GoogleFonts.bungee(
                   textStyle: TextStyle(
                       color: Color(0xFFddb512),
-                      fontSize: 50.0,
+                      fontSize: 45.0,
                       decoration: TextDecoration.none)),
             ),
             Padding(padding: EdgeInsets.only(bottom: 20.0)),
@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
                 child: Image.asset(
                   "assets/images/imagePlay.png",
                   width: 40,
-                  height: 40,
+                  height: 30,
                 ),
                 onPressed: () {
                   context.read<AppService>().searchForGame();
@@ -70,19 +70,19 @@ class HomePage extends StatelessWidget {
                     backgroundColor:
                         MaterialStateProperty.all(Color(0xFFAD200C)),
                     padding: MaterialStateProperty.all(EdgeInsets.only(
-                        top: 30, bottom: 30, left: 125.0, right: 125.0)),
+                        top: 20, bottom: 20, left: 115.0, right: 115.0)),
                     textStyle:
                         MaterialStateProperty.all(TextStyle(fontSize: 30))),
               )),
               Row(children: [
                 /* Button que redireciona para a page 'Perfil' */
                 Padding(
-                    padding: EdgeInsets.only(top: 11.0, left: 70.0),
+                    padding: EdgeInsets.only(top: 10.0, left: 70.0),
                     child: ElevatedButton(
                       child: Image.asset(
                         "assets/images/imageProfile.png",
                         width: 40,
-                        height: 40,
+                        height: 30,
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
@@ -92,18 +92,18 @@ class HomePage extends StatelessWidget {
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
                           padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 30, bottom: 30, left: 50.0, right: 50.0)),
+                              top: 20, bottom: 20, left: 45.0, right: 45.0)),
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
                     )),
                 /* Button que redireciona para a page 'Notificações' */
                 Padding(
-                    padding: EdgeInsets.only(top: 11.0, left: 10.0),
+                    padding: EdgeInsets.only(top: 10.0, left: 10.0),
                     child: ElevatedButton(
                       child: Image.asset(
                         "assets/images/imageNotifications.png",
                         width: 40,
-                        height: 40,
+                        height: 30,
                       ),
                       onPressed: () {
                         context.read<AppService>().createGame();
@@ -112,7 +112,7 @@ class HomePage extends StatelessWidget {
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
                           padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 30, bottom: 30, left: 50.0, right: 50.0)),
+                              top: 20, bottom: 20, left: 45.0, right: 45.0)),
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
                     )),
@@ -125,7 +125,7 @@ class HomePage extends StatelessWidget {
                       child: Image.asset(
                         "assets/images/imageRules.png",
                         width: 40,
-                        height: 40,
+                        height: 30,
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
@@ -135,7 +135,7 @@ class HomePage extends StatelessWidget {
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
                           padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 30, bottom: 30, left: 50.0, right: 50.0)),
+                              top: 20, bottom: 20, left: 45.0, right: 45.0)),
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
                     )),
@@ -146,7 +146,7 @@ class HomePage extends StatelessWidget {
                       child: Image.asset(
                         "assets/images/imageAbout.png",
                         width: 40,
-                        height: 40,
+                        height: 30,
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
@@ -156,14 +156,14 @@ class HomePage extends StatelessWidget {
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
                           padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 30, bottom: 30, left: 50.0, right: 50.0)),
+                              top: 20, bottom: 20, left: 45.0, right: 45.0)),
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
                     ))
               ]),
               /* Button que desloga o usuário do jogo */
               Padding(
-                  padding: EdgeInsets.only(top: 100.0),
+                  padding: EdgeInsets.only(top: 50.0),
                   child: TextButton(
                       onPressed: () {
                         context.read<AppService>().signOut();
@@ -176,7 +176,7 @@ class HomePage extends StatelessWidget {
                               fontFamily: 'Roboto')),
                       style: ButtonStyle(
                           padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 15, bottom: 15, left: 50.0, right: 50.0)),
+                              top: 10, bottom: 10, left: 40.0, right: 40.0)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(

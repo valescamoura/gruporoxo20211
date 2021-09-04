@@ -29,11 +29,11 @@ class ProfilePage extends StatelessWidget {
             },
           ),
         ),
-        body: Container(
-            width: 400,
-            height: 400,
-            child: Padding(
-              padding: EdgeInsets.only(top: 30.0, left: 30.0),
+        body: Padding(
+          padding: EdgeInsets.only(top: 30.0, left: 5.0),
+          child: Container(
+              width: 400,
+              height: 400,
               child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
@@ -103,7 +103,7 @@ class ProfilePage extends StatelessWidget {
                                 fontSize: 20.0,
                               )))
                     ],
-                  )),
-            )));
+                  ))),
+        ));
   }
 }

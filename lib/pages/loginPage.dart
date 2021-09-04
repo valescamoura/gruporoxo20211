@@ -30,16 +30,16 @@ class _State extends State<LoginPage> {
         body: SingleChildScrollView(
             child: Container(
           child: Column(children: <Widget>[
-            //Imagem
+            /* Imagem representativa do jogo */
             Container(
               margin: EdgeInsets.only(top: 30.0, bottom: 0.0),
               child: Image.asset(
                 'assets/images/imageFromHomePage.png',
-                width: 300,
-                height: 100,
+                width: 250,
+                height: 80,
               ),
             ),
-            //Título
+            /* Nome do jogo */
             Column(children: <Widget>[
               Text(
                 'BlackJack',
@@ -54,13 +54,14 @@ class _State extends State<LoginPage> {
                 style: GoogleFonts.bungee(
                     textStyle: TextStyle(
                         color: Color(0xFFddb512),
-                        fontSize: 60.0,
+                        fontSize: 48.0,
                         decoration: TextDecoration.none)),
               ),
             ]),
             Card(
               margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 55),
               color: Color(0xFB126012),
+              /* Formulário com os campos e-mail e senha para o usuário preencher */
               child: Form(
                 key: _loginKey,
                 child: Column(
@@ -73,7 +74,7 @@ class _State extends State<LoginPage> {
                             filled: true,
                             fillColor: Colors.white,
                             border: OutlineInputBorder(),
-                            labelText: 'Email',
+                            labelText: 'E-mail',
                             hintText: 'example@gmail.com'),
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -104,6 +105,7 @@ class _State extends State<LoginPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                      /*Button que efetuará o login do usuário no jogo */
                       child: ElevatedButton(
                         style: ButtonStyle(
                           shape:
@@ -204,6 +206,7 @@ class _State extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 20.0),
+            /* Um alerta será mostrado na tela caso o usuário tenha preenchido o e-mail ou senha incorretamente, não podendo consequentemente efetuar o login corretamente */
             if (message == "Senha ou e-mail inválidos!" ||
                 message == "Erro ao efetuar login!")
               Container(

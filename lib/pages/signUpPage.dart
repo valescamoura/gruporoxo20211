@@ -182,6 +182,7 @@ class _State extends State<SignUpPage> {
                   ],
                 ),
               )),
+          /* Um alerta será mostrado na tela caso algum campo do cadastro tenha sido preenchido incorretamente */
           if (message == "O endereço de e-mail não é válido" ||
               message ==
                   "O endereço de e-mail já está sendo usado por outra conta" ||
@@ -201,6 +202,7 @@ class _State extends State<SignUpPage> {
                         });
                       })),
             ),
+          /* Um alerta será mostrado na tela caso o cadastro tenha sido feito com sucesso */
           if (message == "Cadastro realizado com sucesso!")
             Container(
               color: Colors.blue,

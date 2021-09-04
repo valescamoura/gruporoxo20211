@@ -106,6 +106,7 @@ class _State extends State<ForgotPasswordPage> {
             ),
           ),
           SizedBox(height: 20.0),
+          /* Um alerta será mostrado na tela caso a solicitação de redefinição de senha tenha sido feita corretamente e o e-mail com o link de redefinição de senha enviado com sucesso para o usuário */
           if (message == "E-mail enviado!")
             Container(
               color: Colors.blue,
@@ -124,6 +125,7 @@ class _State extends State<ForgotPasswordPage> {
                         });
                       })),
             ),
+          /* Um alerta será mostrado na tela caso a solicitação de redefinição de senha tenha dado algum erro */
           if (message == "Erro ao enviar e-mail")
             Container(
               color: Colors.amber,
