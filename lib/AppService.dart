@@ -161,7 +161,7 @@ class AppService {
       'timeCreated': FieldValue.serverTimestamp()
     };
     _gameHost = true;
-    
+
     await _games.add({
       'gameId': _gameState!['gameId'],
       'player1': _gameState!['player1'],
@@ -175,6 +175,15 @@ class AppService {
     });
 
     return await waitForPlayer();
+  }
+
+  // Deleta o jogo com o gameId que está atualmente no _gameState
+  Future<void> deleteGame() async {
+    QuerySnapshot query = await _games
+        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .get();
+
+    await _users.doc(query.docs[0].id).delete();
   }
 
   // Pega uma carta aleatória do deck localmente e retorna a String dela
