@@ -132,6 +132,10 @@ class AppService {
           .update({'player2': getNickname(), 'gameState': 1});
 
       setGameState(query.docs[0], _gameState);
+      print(_gameState);
+      print(_gameHost);
+      print(query.docs);
+      print(query.docs[0]);
 
       return query.docs[0]['player1'];
     }
@@ -182,11 +186,13 @@ class AppService {
   }
 
   String getOpponentNick() {
+    print('Entrou na funcão getOpponentNick');
+    print(_gameState);
     if (_gameHost) {
-      return _gameState!['player2'];
+      return _gameState?['player2'];
     }
 
-    return _gameState!['player1'];
+    return _gameState?['player1'];
   }
 
   // Espera por um jogador e a cada 2 segundos busca no Firestore para ver se

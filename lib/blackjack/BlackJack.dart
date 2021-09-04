@@ -78,7 +78,7 @@ class BlackJack extends Game with TapDetector {
   // e inicialização de atributos do jogo
   @override
   Future<void> onLoad() async {
-
+    print('entrou no onload');
     var listaDeNaipes = generateDeck();
     for (var i = 0; i < listaDeNaipes.length; i ++){
       sprites[listaDeNaipes[i]] = await loadSprite(
@@ -131,9 +131,10 @@ class BlackJack extends Game with TapDetector {
     lineJogadorPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) + (cardHeight/2) + (SizeConfig.blockSizeVertical)*8);
     lineAdversarioPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) - (cardHeight/2) - (SizeConfig.blockSizeVertical)*8);
   
-    nicknameJogador = this.context!.read<AppService>().getNickname() as String;
-    nicknameAdversario = this.context!.read<AppService>().getOpponentNick();
-
+    nicknameJogador = this.context?.read<AppService>().getNickname() as String;
+    print('erro aqui');
+    nicknameAdversario = 'Oponente';//this.context?.read<AppService>().getOpponentNick() as String;
+    
     nickJogador = TextPaint(
       config: TextPaintConfig(
         fontSize: 20.0,

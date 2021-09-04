@@ -13,12 +13,11 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    final myGame = BlackJack(context);
     return Stack(
       children: [
         Positioned.fill(
           child: GestureDetector(
-            child: GameWidget(game: myGame),
+            child: GameWidget(game: BlackJack(context)),
           ),
         ),
         Padding(
