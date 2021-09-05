@@ -201,6 +201,23 @@ class AppService {
     await _users.doc(query.docs[0].id).delete();
   }
 
+  // Desiste do jogo
+  Future<void> giveUp() async {
+    QuerySnapshot query = await _games
+        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .get();
+
+    if (_gameHost) {
+      await _games.doc(query.docs[0].id)
+          .update({'p1Hand': ['WO'], 'gameState': 2});
+    } else {
+      await _games.doc(query.docs[0].id)
+          .update({'p2Hand': ['WO'], 'gameState': 2});
+    }
+
+    await incrementWinsLosses('losses');
+  }
+
   // Pega uma carta aleatória do deck localmente e retorna a String dela
   String getCard(List<String> deck) {
     Random rnd = new Random();
@@ -309,7 +326,7 @@ class AppService {
 
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou
   bool isGameOver() {
-    if (_futureGameState!['handsDown'] == 2) {
+    if (_futureGameState!['handsDown'] >= 2 || _futureGameState!['gameState'] == 2) {
       // Jogo terminado! Computar vencedor
       return true;
     }
