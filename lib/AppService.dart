@@ -95,12 +95,27 @@ class AppService {
         .where('gameId', isEqualTo: _gameState!['gameId'])
         .get();
 
-    setGameState(query.docs[0], _futureGameState);
+    setFutureGameState(query.docs[0]);
   }
 
   // Faz o set do estado do jogo
-  void setGameState(QueryDocumentSnapshot doc, Map? gameState) {
-    gameState = {
+  void setGameState(QueryDocumentSnapshot doc) {
+    this._gameState = {
+      'gameId': doc['gameId'],
+      'player1': doc['player1'],
+      'player2': doc['player2'],
+      'deck': doc['deck'],
+      'p1Hand': doc['p1Hand'],
+      'p2Hand': doc['p2Hand'],
+      'gameState': doc['gameState'],
+      'handsDown': doc['handsDown'],
+      'timeCreated': doc['timeCreated']
+    };
+  }
+
+  // Faz o set do _futureGameState
+  void setFutureGameState(QueryDocumentSnapshot doc) {
+    this._futureGameState = {
       'gameId': doc['gameId'],
       'player1': doc['player1'],
       'player2': doc['player2'],
@@ -131,7 +146,7 @@ class AppService {
       await _games.doc(query.docs[0].id)
           .update({'player2': getNickname(), 'gameState': 1});
 
-      setGameState(query.docs[0], _gameState);
+      setGameState(query.docs[0]);
       print(_gameState);
       print(_gameHost);
       print(query.docs);
@@ -214,7 +229,7 @@ class AppService {
       int gameState = query.docs[0]['gameState'];
 
       if (gameState == 1) {
-        setGameState(query.docs[0], _gameState);
+        setGameState(query.docs[0]);
         return;
 
       } else {
