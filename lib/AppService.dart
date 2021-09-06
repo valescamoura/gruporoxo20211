@@ -92,7 +92,7 @@ class AppService {
   // SERVIÇO DE JOGO
   Future<void> fetchGameState() async {
     QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
 
     setFutureGameState(query.docs[0]);
@@ -129,8 +129,8 @@ class AppService {
   }
 
   void passGameState() {
-    for (String key in _futureGameState!.keys) {
-      _gameState![key] = _futureGameState![key];
+    for (String key in this._futureGameState!.keys) {
+      this._gameState![key] = this._futureGameState![key];
     }
   }
 
@@ -164,7 +164,7 @@ class AppService {
     List<String> p1Hand = [getCard(deck), getCard(deck)];
     List<String> p2Hand = [getCard(deck), getCard(deck)];
 
-    _gameState = {
+    this._gameState = {
       'gameId': randomString(6, from: 48, to: 90),
       'player1': _firebaseAuth.currentUser!.displayName,
       'player2': '',
@@ -178,14 +178,14 @@ class AppService {
     _gameHost = true;
 
     await _games.add({
-      'gameId': _gameState!['gameId'],
-      'player1': _gameState!['player1'],
-      'player2': _gameState!['player2'],
-      'deck': _gameState!['deck'],
-      'p1Hand': _gameState!['p1Hand'],
-      'p2Hand': _gameState!['p2Hand'],
-      'gameState': _gameState!['gameState'],
-      'handsDown': _gameState!['handsDown'],
+      'gameId': this._gameState!['gameId'],
+      'player1': this._gameState!['player1'],
+      'player2': this._gameState!['player2'],
+      'deck': this._gameState!['deck'],
+      'p1Hand': this._gameState!['p1Hand'],
+      'p2Hand': this._gameState!['p2Hand'],
+      'gameState': this._gameState!['gameState'],
+      'handsDown': this._gameState!['handsDown'],
       'timeCreated': FieldValue.serverTimestamp()
     });
 
@@ -195,7 +195,7 @@ class AppService {
   // Deleta o jogo com o gameId que está atualmente no _gameState
   Future<void> deleteGame() async {
     QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
 
     await _users.doc(query.docs[0].id).delete();
@@ -204,7 +204,7 @@ class AppService {
   // Desiste do jogo
   Future<void> giveUp() async {
     QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
 
     if (_gameHost) {
@@ -230,10 +230,10 @@ class AppService {
     print('Entrou na funcão getOpponentNick');
     print(_gameState);
     if (_gameHost) {
-      return _gameState?['player2'];
+      return this._gameState?['player2'];
     }
 
-    return _gameState?['player1'];
+    return this._gameState?['player1'];
   }
 
   // Espera por um jogador e a cada 2 segundos busca no Firestore para ver se
@@ -241,7 +241,7 @@ class AppService {
   Future<bool> waitForPlayer() async {
     //while (true) {
     QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
     int gameState = query.docs[0]['gameState'];
 
@@ -249,7 +249,7 @@ class AppService {
       setGameState(query.docs[0]);
       return true;
     }
-    
+
     return false;
     //}
   }
@@ -263,7 +263,7 @@ class AppService {
   // Pega uma carta do deck no Firestore e atualiza o registro
   Future<String> askForCard() async {
     QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
 
     List<String> deck = [];
@@ -285,9 +285,9 @@ class AppService {
 
   // Atualiza a mão de um jogador no Firestore
   Future<void> updateDeckHand(String card, String player, String docId) async {
-    _gameState![player].add(card);
+    this._gameState![player].add(card);
 
-    await _games.doc(docId).update({player: _gameState![player]});
+    await _games.doc(docId).update({player: this._gameState![player]});
   }
 
   // Retorna verdadeira caso o oponente tenha pedido uma carta e atualiza o
@@ -306,36 +306,86 @@ class AppService {
   List<String> isHandBigger(List<String> playerHand, String player) {
     List<String> newCards = [];
 
-    if (playerHand.length > _gameState![player].length) {
+    if (playerHand.length > this._gameState![player].length) {
       playerHand.forEach((element) {
-        if (!_gameState![player].contains(element)) {
+        if (!this._gameState![player].contains(element)) {
           newCards.add(element);
         }
       });
-      _gameState![player] = playerHand;
+      this._gameState![player] = playerHand;
     }
 
     return newCards;
   }
 
   Future<void> putHandDown() async {
-    _gameState!['handsDown'] += 1;
-    await _games.doc(_gameState!['gameId']).update({'handsDown': _gameState!['handsDown']});
+    this._gameState!['handsDown'] += 1;
+    await _games.doc(this._gameState!['gameId']).update({'handsDown': this._gameState!['handsDown']});
   }
 
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou
   bool isGameOver() {
     if (_futureGameState!['handsDown'] >= 2 || _futureGameState!['gameState'] == 2) {
-      // Jogo terminado! Computar vencedor
       return true;
     }
 
     return false;
   }
 
+  // Retorna uma String dizendo qual jogador venceu ou se foi empate [player1|player2|empate]
+  String whoWon() {
+    int p1Points = getPlayerPoints('p1Hand');
+    int p2Points = getPlayerPoints('p2Hand');
+
+    Map p1Hand = this._futureGameState!['p1Hand'];
+    Map p2Hand = this._futureGameState!['p2Hand'];
+
+    // Checagem de WO
+    if (this._gameHost && p2Hand[0] == 'WO') {
+      return 'player1';
+
+    } else if(!this._gameHost && p1Hand[0] == 'WO') {
+      return 'player2';
+    }
+
+    // Checagem por pontos
+    if ((p1Points > 21 && p2Points > 21) || (p1Points == p2Points)) {
+      return 'empate';
+
+    } else if (p1Points > p2Points) {
+      return 'player1';
+
+    } else {
+      return 'player2';
+    }
+  }
+
+  // Retorna o valor de pontos correspondente à mão de um jogador
+  int getPlayerPoints(String playerHand) {
+    int points = 0;
+
+    // Faz o loop dentro do array de cartas da mão de um jogador
+    for (int i = 0; i < this._futureGameState![playerHand].length; i++) {
+      // Checa se a carta começa com J, Q ou K
+      if (this._futureGameState![playerHand][i].startsWith(RegExp(r'^[JQK]'))) {
+        points += 10;
+
+      // Checa se a carta começa com A
+      } else if (this._futureGameState![playerHand][i].startsWith('A')) {
+        points += 11;
+
+      // O restante das cartas tem o
+      } else {
+        points += int.parse(this._futureGameState![playerHand][i]![0]);
+      }
+    }
+
+    return points;
+  }
+
   // Limpa os dados do jogo que acabou
   void cleanGameState() {
-    _gameState!.clear();
+    this._gameState!.clear();
     _futureGameState!.clear();
     _gameHost = false;
   }
