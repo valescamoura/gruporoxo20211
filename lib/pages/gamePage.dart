@@ -21,23 +21,15 @@ class _GamePageState extends State<GamePage> {
           ),
         ),
         Padding(
-            padding: EdgeInsets.only(top: 20.0),
+            padding: EdgeInsets.only(top: 30.0),
             child: Row(
               children: [
                 Padding(
-                    padding: EdgeInsets.only(left: 330.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0))),
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFFC0C0C0)),
-                        padding: MaterialStateProperty.all(
-                            EdgeInsets.fromLTRB(5, 5, 5, 5)),
-                      ),
+                    padding: EdgeInsets.only(left: 345.0),
+                    child: TextButton(
+
                       onPressed: () {
+                        print("alert");
                         showAlertDialog1(context);
                       },
                       child: Image.asset("assets/images/exitButton.png",

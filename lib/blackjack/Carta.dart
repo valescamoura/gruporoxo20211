@@ -190,7 +190,7 @@ class Carta {
       BlackJack.jogador.estourou = true;
     }
     else{
-      var naipe = 'DE';
+      var naipe = 'AE';
       var carta  = toCard(naipe);
       BlackJack.jogador.mao.add(carta);
 

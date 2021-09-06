@@ -189,7 +189,7 @@ class AppService {
       'timeCreated': FieldValue.serverTimestamp()
     });
 
-    return await waitForPlayer();
+    //return await waitForPlayer();
   }
 
   // Deleta o jogo com o gameId que está atualmente no _gameState
@@ -238,21 +238,20 @@ class AppService {
 
   // Espera por um jogador e a cada 2 segundos busca no Firestore para ver se
   // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
-  Future<void> waitForPlayer() async {
-    while (true) {
-      QuerySnapshot query = await _games
-          .where('gameId', isEqualTo: _gameState!['gameId'])
-          .get();
-      int gameState = query.docs[0]['gameState'];
+  Future<bool> waitForPlayer() async {
+    //while (true) {
+    QuerySnapshot query = await _games
+        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .get();
+    int gameState = query.docs[0]['gameState'];
 
-      if (gameState == 1) {
-        setGameState(query.docs[0]);
-        return;
-
-      } else {
-        await Future.delayed(const Duration(seconds: 2));
-      }
+    if (gameState == 1) {
+      setGameState(query.docs[0]);
+      return true;
     }
+    
+    return false;
+    //}
   }
 
   void getListOfStrings(List<String> localDeck, List<dynamic> fireBaseDeck) {

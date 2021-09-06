@@ -74,10 +74,15 @@ class HomePage extends StatelessWidget {
                         // Criar jogo
                         print("entrou no if");
                         await context.read<AppService>().createGame();
+                        print('criou o jogo');
 
+                        // TODO: Enviar notificação convidando para jogar
+
+                        
                         // Redirecionar para sala de espera
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => SalaDeEspera()));
+                        print('sala de espera');
                       }
                       else{
                         print('entrou no else');
@@ -85,6 +90,7 @@ class HomePage extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => GamePage()));
                       }
+                      print('saiu do if');
                     },
                     style: ButtonStyle(
                         backgroundColor:

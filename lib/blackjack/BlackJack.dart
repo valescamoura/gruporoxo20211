@@ -132,8 +132,8 @@ class BlackJack extends Game with TapDetector {
     lineAdversarioPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) - (cardHeight/2) - (SizeConfig.blockSizeVertical)*8);
   
     nicknameJogador = this.context?.read<AppService>().getNickname() as String;
-    print('erro aqui');
-    nicknameAdversario = 'Oponente';//this.context?.read<AppService>().getOpponentNick() as String;
+    nicknameAdversario = this.context?.read<AppService>().getOpponentNick() as String;
+    print('nick adversário ${nicknameAdversario}');
     
     nickJogador = TextPaint(
       config: TextPaintConfig(
