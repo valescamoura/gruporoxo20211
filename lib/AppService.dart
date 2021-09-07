@@ -16,7 +16,7 @@ class AppService {
   Map? _userData;
   Map? _gameState;
   Map? _futureGameState;
-  bool _gameHost = false;
+  bool gameHost = false;
 
   AppService(this._firebaseAuth);
 
@@ -193,7 +193,7 @@ class AppService {
       'handsDown': 0,
       'timeCreated': FieldValue.serverTimestamp()
     };
-    _gameHost = true;
+    this.gameHost = true;
 
     await _games.add({
       'gameId': this._gameState!['gameId'],
@@ -225,7 +225,7 @@ class AppService {
         .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
 
-    if (_gameHost) {
+    if (this.gameHost) {
       await _games.doc(query.docs[0].id)
           .update({'p1Hand': ['WO'], 'gameState': 2});
     } else {
@@ -248,7 +248,7 @@ class AppService {
   String getOpponentNick() {
     print('Entrou na funcão getOpponentNick');
     print(_gameState);
-    if (_gameHost) {
+    if (this.gameHost) {
       return this._gameState?['player2'];
     }
 
@@ -291,7 +291,7 @@ class AppService {
     String docId = query.docs[0].id;
     String card = getCard(deck);
 
-    if (_gameHost) {
+    if (this.gameHost) {
       await updateDeckHand(card, 'p1Hand', docId);
 
     } else {
@@ -312,7 +312,7 @@ class AppService {
   // Retorna verdadeira caso o oponente tenha pedido uma carta e atualiza o
   // estado local da mão do oponente
   Future<List<String>> checkOpponentCard() async {
-    if (_gameHost) {
+    if (this.gameHost) {
       return isHandBigger(_futureGameState!['p2Hand'], 'p2Hand');
 
     } else {
@@ -365,10 +365,10 @@ class AppService {
     Map p2Hand = this._futureGameState!['p2Hand'];
 
     // Checagem de WO
-    if (this._gameHost && p2Hand[0] == 'WO') {
+    if (this.gameHost && p2Hand[0] == 'WO') {
       return 'player1';
 
-    } else if(!this._gameHost && p1Hand[0] == 'WO') {
+    } else if(!this.gameHost && p1Hand[0] == 'WO') {
       return 'player2';
     }
 
@@ -411,7 +411,7 @@ class AppService {
   void cleanGameState() {
     this._gameState!.clear();
     _futureGameState!.clear();
-    _gameHost = false;
+    this.gameHost = false;
   }
 }
 
