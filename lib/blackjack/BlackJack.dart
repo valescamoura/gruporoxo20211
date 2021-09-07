@@ -189,7 +189,7 @@ class BlackJack extends Game with TapDetector {
   @override
   Future<void> onTapDown(TapDownInfo info) async {
     final buttonArea = buttonPosition & buttonSize;
-    if (buttonArea.contains(info.eventPosition.game.toOffset())) {
+    if (buttonArea.contains(info.eventPosition.game.toOffset()) && abaixar == false) {
       print('botão abaixar clicado');
       await this.context?.read<AppService>().putHandDown();
       abaixar = true;
@@ -264,11 +264,11 @@ class BlackJack extends Game with TapDetector {
 
   @override
   void onTapUp(TapUpInfo info) {
-    final buttonArea = buttonPosition & buttonSize;
+    /* final buttonArea = buttonPosition & buttonSize;
     if (buttonArea.contains(info.eventPosition.game.toOffset())) {
       print("soltar botão abaixar");
       abaixar = false;
-    }
+    } */
     final tela = Vector2(0, 0) & Vector2(SizeConfig.screenWidth, SizeConfig.screenHeight);
     if (tela.contains(info.eventPosition.game.toOffset())){
       click = false;

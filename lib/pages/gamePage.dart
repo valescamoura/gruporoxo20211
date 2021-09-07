@@ -31,7 +31,7 @@ class _GamePageState extends State<GamePage> {
       _myGame.timer = _counter;
 
       // Chamar funções que atualizam estado do jogo através de comunicação com Firestore
-      _context!.read<AppService>().fetchGameState();
+      await _context!.read<AppService>().fetchGameState();
       _context!.read<AppService>().passGameState();
       
     });
@@ -65,7 +65,7 @@ class _GamePageState extends State<GamePage> {
                     padding: EdgeInsets.only(left: 345.0),
                     child: TextButton(
 
-                      onPressed: () {
+                      onPressed: () async {
                         var s = _counter;
                         _counter = 0;
                         _timer.cancel();

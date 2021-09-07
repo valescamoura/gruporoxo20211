@@ -200,11 +200,11 @@ class Carta {
 
   // Animar cartas compradas pelo adversário
   static animarCartasAdv() {
-    // alguma comunicação com BD para saber se é necessário animar
+    print('cartas compradas');
   }
 
   // Virar cartas do adversário
   static virarCartasAdv() {
-
+    print('cartas viradas');
   }
 }

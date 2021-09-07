@@ -138,6 +138,11 @@ flutter:
     - assets/images/imageAbout.png
     - assets/images/imageNotifications.png
     - assets/images/imageProfile.png
+
+    - assets/images/lose.png
+    - assets/images/win.png
+    - assets/images/win_image1.png
+    - assets/images/win_image2.png
      
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
