@@ -27,6 +27,7 @@ class Carta {
 
   // Métodos
 
+  // Armazena a posição da carta antes de deixar ela na posição central da tela para que no zoomOut ela volte na posição correta
   void zoomIn(){
 
     xAnt = x;
@@ -36,6 +37,7 @@ class Carta {
 
   }
 
+  // Retorna todos os valores da carta para suas versões originais de quando estavam na mão do usuário
   void zoomOut(){
 
     width = width / 2;
