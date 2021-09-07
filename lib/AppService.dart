@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 
 // -----------------------------------------------------------------------------------
@@ -19,6 +20,11 @@ class AppService {
 
   AppService(this._firebaseAuth);
 
+  Future<void> setOneSignalId(String oneSignalId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('oneSignalId', oneSignalId);
+  }
+
   // *******************************
   // SERVIÇO DE AUTENTICAÇÃO
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
@@ -32,7 +38,7 @@ class AppService {
           .get();
       QueryDocumentSnapshot doc = query.docs[0];
 
-      setUserData(doc['nick'], email, doc['wins'], doc['losses']);
+      await setUserData(doc['nick'], email, doc['wins'], doc['losses']);
 
       return 'Signed In';
     } on FirebaseAuthException catch (e) {
@@ -41,6 +47,9 @@ class AppService {
   }
 
   Future<String> signUp(String nickname, String email, String password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? oneSignalId = prefs.getString('oneSignalId');
+
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       await _firebaseAuth.currentUser!.updateDisplayName(nickname);
@@ -49,9 +58,10 @@ class AppService {
         'email': email,
         'wins': 0,
         'losses': 0,
+        'oneSignal': oneSignalId
       });
 
-      setUserData(nickname, email, 0, 0);
+      await setUserData(nickname, email, 0, 0);
 
       return 'Signed Up';
     } on FirebaseAuthException catch (e) {
@@ -63,12 +73,16 @@ class AppService {
     await _firebaseAuth.signOut();
   }
 
-  void setUserData(String nickname, String email, int wins, int losses) {
+  Future<void> setUserData(String nickname, String email, int wins, int losses) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? oneSignalId = prefs.getString('oneSignalId');
+
     this._userData = {
       'nick': nickname,
       'email': email,
       'wins': 0,
-      'losses': 0
+      'losses': 0,
+      'signalId': oneSignalId
     };
   }
 

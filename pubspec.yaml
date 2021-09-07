@@ -38,6 +38,7 @@ dependencies:
   random_string: ^2.3.1
 
   flame: ^1.0.0-releasecandidate.13
+  shared_preferences: ^2.0.7
  
 
 dev_dependencies:
