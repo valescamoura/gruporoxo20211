@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/AppService.dart';
+import 'package:gruporoxo20211/pages/SalaDeEspera.dart';
 import 'package:gruporoxo20211/pages/aboutPage.dart';
+import 'package:gruporoxo20211/pages/gamePage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +63,27 @@ class HomePage extends StatelessWidget {
                       width: 40,
                       height: 40,
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      String nome =
+                          await context.read<AppService>().searchForGame();
+                      
+                      if (nome.isEmpty) {
+                        // Criar jogo
+                        await context.read<AppService>().createGame();
+
+                        // TODO: Enviar notificação convidando para jogar
+                        // enviar notificações aqui
+                        
+                        // Redirecionar para sala de espera
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => SalaDeEspera()));
+                      }
+                      else{
+                        // Redirecionar para tela de jogo
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => GamePage()));
+                      }
+                    },
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Color(0xFFAD200C)),
@@ -79,9 +101,7 @@ class HomePage extends StatelessWidget {
                         width: 40,
                         height: 40,
                       ),
-                      onPressed: () {
-                        context.read<AppService>().searchForGame();
-                      },
+                      onPressed: () {},
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
@@ -99,7 +119,7 @@ class HomePage extends StatelessWidget {
                         height: 40,
                       ),
                       onPressed: () {
-                        context.read<AppService>().createGame();
+                        print('tela de notificações');
                       },
                       style: ButtonStyle(
                           backgroundColor:

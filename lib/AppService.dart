@@ -1,8 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 
+// -----------------------------------------------------------------------------------
+// Esse arquivo dart nomeado 'AppService' tem como objetivo prover o contexto necessário
+// para que todas as telas do aplicativo consigam receber os dados referentes tanto a
+// autenticação, como aos dados referentes a jogo em si para que o gameplay funcione
+// como esperado.
 class AppService {
   final FirebaseAuth _firebaseAuth;
   final CollectionReference _users = FirebaseFirestore.instance.collection('users');
@@ -10,9 +16,14 @@ class AppService {
   Map? _userData;
   Map? _gameState;
   Map? _futureGameState;
-  bool _gameHost = false;
+  bool gameHost = false;
 
   AppService(this._firebaseAuth);
+
+  Future<void> setOneSignalId(String oneSignalId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('oneSignalId', oneSignalId);
+  }
 
   // *******************************
   // SERVIÇO DE AUTENTICAÇÃO
@@ -27,7 +38,7 @@ class AppService {
           .get();
       QueryDocumentSnapshot doc = query.docs[0];
 
-      setUserData(doc['nick'], email, doc['wins'], doc['losses']);
+      await setUserData(doc['nick'], email, doc['wins'], doc['losses']);
 
       return 'Signed In';
     } on FirebaseAuthException catch (e) {
@@ -36,6 +47,9 @@ class AppService {
   }
 
   Future<String> signUp(String nickname, String email, String password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? oneSignalId = prefs.getString('oneSignalId');
+
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       await _firebaseAuth.currentUser!.updateDisplayName(nickname);
@@ -44,9 +58,10 @@ class AppService {
         'email': email,
         'wins': 0,
         'losses': 0,
+        'oneSignal': oneSignalId
       });
 
-      setUserData(nickname, email, 0, 0);
+      await setUserData(nickname, email, 0, 0);
 
       return 'Signed Up';
     } on FirebaseAuthException catch (e) {
@@ -58,40 +73,55 @@ class AppService {
     await _firebaseAuth.signOut();
   }
 
-  void setUserData(String nickname, String email, int wins, int losses) {
-    _userData = {
+  Future<void> setUserData(String nickname, String email, int wins, int losses) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? oneSignalId = prefs.getString('oneSignalId');
+
+    this._userData = {
       'nick': nickname,
       'email': email,
       'wins': 0,
-      'losses': 0
+      'losses': 0,
+      'signalId': oneSignalId
     };
   }
 
+  // Retorna o nickname do usuário atual
   String? getNickname() {
     return _firebaseAuth.currentUser!.displayName;
   }
 
+  // Incrementa wins ou losses dependendo da String que é passada como argumento [wins|losses]
+  Future<void> incrementWinsLosses(String result) async {
+    this._userData![result] += 1;
+    QuerySnapshot query = await _users
+        .where('email', isEqualTo: _firebaseAuth.currentUser!.email)
+        .get();
+
+    _users.doc(query.docs[0].id).update({'result': this._userData![result]});
+  }
+
   int getWins() {
-    return _userData!['wins'];
+    return this._userData!['wins'];
   }
 
   int getLosses() {
-    return _userData!['losses'];
+    return this._userData!['losses'];
   }
 
   // *******************************
   // SERVIÇO DE JOGO
   Future<void> fetchGameState() async {
     QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
 
-    setGameState(query.docs[0], _futureGameState);
+    setFutureGameState(query.docs[0]);
   }
 
   // Faz o set do estado do jogo
-  void setGameState(QueryDocumentSnapshot doc, Map? gameState) {
-    gameState = {
+  void setGameState(QueryDocumentSnapshot doc) {
+    this._gameState = {
       'gameId': doc['gameId'],
       'player1': doc['player1'],
       'player2': doc['player2'],
@@ -104,9 +134,25 @@ class AppService {
     };
   }
 
+  // Faz o set do _futureGameState
+  void setFutureGameState(QueryDocumentSnapshot doc) {
+    this._futureGameState = {
+      'gameId': doc['gameId'],
+      'player1': doc['player1'],
+      'player2': doc['player2'],
+      'deck': doc['deck'],
+      'p1Hand': doc['p1Hand'],
+      'p2Hand': doc['p2Hand'],
+      'gameState': doc['gameState'],
+      'handsDown': doc['handsDown'],
+      'timeCreated': doc['timeCreated']
+    };
+  }
+
+  // Passa o estado do futureGameState para o gameState
   void passGameState() {
-    for (String key in _futureGameState!.keys) {
-      _gameState![key] = _futureGameState![key];
+    for (String key in this._futureGameState!.keys) {
+      this._gameState![key] = this._futureGameState![key];
     }
   }
 
@@ -122,7 +168,7 @@ class AppService {
       await _games.doc(query.docs[0].id)
           .update({'player2': getNickname(), 'gameState': 1});
 
-      setGameState(query.docs[0], _gameState);
+      setGameState(query.docs[0]);
 
       return query.docs[0]['player1'];
     }
@@ -136,7 +182,7 @@ class AppService {
     List<String> p1Hand = [getCard(deck), getCard(deck)];
     List<String> p2Hand = [getCard(deck), getCard(deck)];
 
-    _gameState = {
+    this._gameState = {
       'gameId': randomString(6, from: 48, to: 90),
       'player1': _firebaseAuth.currentUser!.displayName,
       'player2': '',
@@ -147,19 +193,47 @@ class AppService {
       'handsDown': 0,
       'timeCreated': FieldValue.serverTimestamp()
     };
-    _gameHost = true;
-    
+    this.gameHost = true;
+
     await _games.add({
-      'gameId': _gameState!['gameId'],
-      'player1': _gameState!['player1'],
-      'player2': _gameState!['player2'],
-      'deck': _gameState!['deck'],
-      'p1Hand': _gameState!['p1Hand'],
-      'p2Hand': _gameState!['p2Hand'],
-      'gameState': _gameState!['gameState'],
-      'handsDown': _gameState!['handsDown'],
+      'gameId': this._gameState!['gameId'],
+      'player1': this._gameState!['player1'],
+      'player2': this._gameState!['player2'],
+      'deck': this._gameState!['deck'],
+      'p1Hand': this._gameState!['p1Hand'],
+      'p2Hand': this._gameState!['p2Hand'],
+      'gameState': this._gameState!['gameState'],
+      'handsDown': this._gameState!['handsDown'],
       'timeCreated': FieldValue.serverTimestamp()
     });
+
+    //return await waitForPlayer();
+  }
+
+  // Deleta o jogo com o gameId que está atualmente no _gameState
+  Future<void> deleteGame() async {
+    QuerySnapshot query = await _games
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
+        .get();
+
+    await _games.doc(query.docs[0].id).delete();
+  }
+
+  // Desiste do jogo
+  Future<void> giveUp() async {
+    QuerySnapshot query = await _games
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
+        .get();
+
+    if (this.gameHost) {
+      await _games.doc(query.docs[0].id)
+          .update({'p1Hand': ['WO'], 'gameState': 2});
+    } else {
+      await _games.doc(query.docs[0].id)
+          .update({'p2Hand': ['WO'], 'gameState': 2});
+    }
+
+    await incrementWinsLosses('losses');
   }
 
   // Pega uma carta aleatória do deck localmente e retorna a String dela
@@ -170,53 +244,75 @@ class AppService {
     return deck.removeAt(rndCardNum);
   }
 
-  // Espera por um jogador e a cada 2 segundos busca no Firestore para ver se
-  // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
-  Future<String> waitForPlayer() async {
-    while (true) {
-      QuerySnapshot query = await _games
-          .where('gameId', isEqualTo: _gameState!['gameId'])
-          .get();
-      int gameState = query.docs[0]['gameState'];
-
-      if (gameState == 1) {
-        return query.docs[0]['player2'];
-
-      } else {
-        await Future.delayed(const Duration(seconds: 2));
-      }
+  // Retorna o nickname do oponente
+  String getOpponentNick() {
+    print('Entrou na funcão getOpponentNick');
+    print(_gameState);
+    if (this.gameHost) {
+      return this._gameState?['player2'];
     }
+
+    return this._gameState?['player1'];
+  }
+
+  // Espera por um jogador e busca no Firestore para ver se
+  // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
+  Future<bool> waitForPlayer() async {
+    //while (true) {
+    QuerySnapshot query = await _games
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
+        .get();
+    int gameState = query.docs[0]['gameState'];
+
+    if (gameState == 1) {
+      setGameState(query.docs[0]);
+      return true;
+    }
+
+    return false;
+    //}
+  }
+
+  void getListOfStrings(List<String> localDeck, List<dynamic> fireBaseDeck) {
+    fireBaseDeck.forEach((element) {
+      localDeck.add(element);
+    });
   }
 
   // Pega uma carta do deck no Firestore e atualiza o registro
-  Future<void> askForCard() async {
+  Future<String> askForCard() async {
     QuerySnapshot query = await _games
-        .where('gameId', isEqualTo: _gameState!['gameId'])
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
-    List<String> deck = query.docs[0]['deck'];
-    String docId = query.docs[0].id;
 
+    List<String> deck = [];
+    getListOfStrings(deck, query.docs[0]['deck']);
+
+    String docId = query.docs[0].id;
     String card = getCard(deck);
 
-    if (_gameHost) {
+    if (this.gameHost) {
       await updateDeckHand(card, 'p1Hand', docId);
-      return;
+
+    } else {
+      await updateDeckHand(card, 'p2Hand', docId);
     }
 
-    await updateDeckHand(card, 'p2Hand', docId);
+    await _games.doc(docId).update({'deck': deck});
+    return card;
   }
 
   // Atualiza a mão de um jogador no Firestore
   Future<void> updateDeckHand(String card, String player, String docId) async {
-    _gameState![player].add(card);
+    this._gameState![player].add(card);
 
-    await _games.doc(docId).update({player: _gameState![player]});
+    await _games.doc(docId).update({player: this._gameState![player]});
   }
 
   // Retorna verdadeira caso o oponente tenha pedido uma carta e atualiza o
   // estado local da mão do oponente
-  Future<bool> checkOpponentCard() async {
-    if (_gameHost) {
+  Future<List<String>> checkOpponentCard() async {
+    if (this.gameHost) {
       return isHandBigger(_futureGameState!['p2Hand'], 'p2Hand');
 
     } else {
@@ -226,30 +322,96 @@ class AppService {
 
   // Checa se a mão do oponente está maior do que a do estado atual, caso sim,
   // atualizar o estado e retornar verdadeiro
-  bool isHandBigger(List<String> playerHand, String player) {
-    if (playerHand.length > _gameState![player].length) {
-      _gameState![player] = playerHand;
-      return true;
+  List<String> isHandBigger(List<String> playerHand, String player) {
+    List<String> newCards = [];
+
+    if (playerHand.length > this._gameState![player].length) {
+      playerHand.forEach((element) {
+        if (!this._gameState![player].contains(element)) {
+          newCards.add(element);
+        }
+      });
+      this._gameState![player] = playerHand;
     }
 
-    return false;
+    return newCards;
+  }
+
+  // Desce a mão de cartas
+  Future<void> putHandDown() async {
+    QuerySnapshot query = await _games
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
+        .get();
+
+    this._gameState!['handsDown'] += 1;
+    await _games.doc(query.docs[0].id).update({'handsDown': this._gameState!['handsDown']});
   }
 
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou
   bool isGameOver() {
-    if (_gameState!['handsDown'] == 2) {
-      // Jogo terminado! Computar vencedor
+    if (_futureGameState!['handsDown'] >= 2 || _futureGameState!['gameState'] == 2) {
       return true;
     }
 
     return false;
   }
 
+  // Retorna uma String dizendo qual jogador venceu ou se foi empate [player1|player2|empate]
+  String whoWon() {
+    int p1Points = getPlayerPoints('p1Hand');
+    int p2Points = getPlayerPoints('p2Hand');
+
+    Map p1Hand = this._futureGameState!['p1Hand'];
+    Map p2Hand = this._futureGameState!['p2Hand'];
+
+    // Checagem de WO
+    if (this.gameHost && p2Hand[0] == 'WO') {
+      return 'player1';
+
+    } else if(!this.gameHost && p1Hand[0] == 'WO') {
+      return 'player2';
+    }
+
+    // Checagem por pontos
+    if ((p1Points > 21 && p2Points > 21) || (p1Points == p2Points)) {
+      return 'empate';
+
+    } else if (p1Points > p2Points) {
+      return 'player1';
+
+    } else {
+      return 'player2';
+    }
+  }
+
+  // Retorna o valor de pontos correspondente à mão de um jogador
+  int getPlayerPoints(String playerHand) {
+    int points = 0;
+
+    // Faz o loop dentro do array de cartas da mão de um jogador
+    for (int i = 0; i < this._futureGameState![playerHand].length; i++) {
+      // Checa se a carta começa com J, Q ou K
+      if (this._futureGameState![playerHand][i].startsWith(RegExp(r'^[JQK]'))) {
+        points += 10;
+
+      // Checa se a carta começa com A
+      } else if (this._futureGameState![playerHand][i].startsWith('A')) {
+        points += 11;
+
+      // O restante das cartas tem o
+      } else {
+        points += int.parse(this._futureGameState![playerHand][i]![0]);
+      }
+    }
+
+    return points;
+  }
+
   // Limpa os dados do jogo que acabou
   void cleanGameState() {
-    _gameState!.clear();
+    this._gameState!.clear();
     _futureGameState!.clear();
-    _gameHost = false;
+    this.gameHost = false;
   }
 }
 

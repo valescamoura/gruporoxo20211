@@ -1,60 +1,210 @@
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
-import 'package:gruporoxo20211/blackjack/Example.dart';
-import 'package:flame/sprite.dart';
+import 'package:gruporoxo20211/blackjack/BlackJack.dart';
+import 'package:gruporoxo20211/blackjack/SizeConfig.dart';
 
 class Carta {
   // Atributos
-  String naipe = "ClubsA";
+  late String naipe;
   int valor;
-  String url;
   double x;
+  double xAnt = 0;
   double y;
-  double width = 75;
-  bool isTurned = true; // true, quando carta está virada para baixo. false, caso contrário 
+  double width = BlackJack.cardWidth;
+  double height = BlackJack.cardHeight;
+  bool isTurning = false; // true, quando a carta está virando. false, caso contrário
+  bool isTurned = true; // true, quando carta está virada para baixo. false, caso contrário
+  bool zoom = false;
   late Sprite baralho;
   late Sprite cardBack;
 
+  // Atributos auxiliares
+  var metadeDaTela = ((SizeConfig.screenWidth/2)-(BlackJack.cardWidth/2));
+  var cardDivSeis= BlackJack.cardWidth/6;
+
   // Construtor
-  Carta(this.naipe, this.valor,this.url, this.x, this.y);
+  Carta(this.naipe, this.valor, this.x, this.y);
 
   // Métodos
 
-  void draw(){
-    if (x <= 150){
-      x += 1;
-      y += 1;
-    }
+  // Armazena a posição da carta antes de deixar ela na posição central da tela para que no zoomOut ela volte na posição correta
+  void zoomIn(){
+
+    xAnt = x;
+    x = ((SizeConfig.screenWidth/2) - (width/2));
+    y = ((SizeConfig.screenHeight/2) - (height/2));
+    zoom = true;
+
   }
 
-  // Virar carta: diminuir largura até 0, depois voltar até 1
+  // Retorna todos os valores da carta para suas versões originais de quando estavam na mão do usuário
+  void zoomOut(){
+
+    width = width / 2;
+    height = height / 2;
+    x = xAnt;
+    y = (SizeConfig.screenHeight/2) + (BlackJack.cardHeight/2) + (SizeConfig.blockSizeVertical*12);
+    zoom = false;
+
+  }
+
+  // Movimentar as cartas na mão no eixo x ao comprar uma nova carta
+  bool moveX(int quant){
+    if (x <= (metadeDaTela + (cardDivSeis * (quant - 1)))) {
+      // x foi velocidade escolhida na carta, quão mais rápido a carta se move
+      x += ((metadeDaTela - (SizeConfig.blockSizeHorizontal * 5)) / 55) +
+          (cardDivSeis * (quant - 1) / 55);
+      return true;
+    }
+    return false;
+  }
+
+  // Comprar a carta: Mudar a posição dos eixos x e y da carta
+  bool draw(int quant){
+
+    var yFinal = (SizeConfig.screenHeight/2) + (BlackJack.cardHeight/2) + (SizeConfig.blockSizeVertical*12);
+
+    // y é a velocidade escolhida para movimento da carta
+    y += (yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55;
+
+    if(!moveX(quant) && y >= yFinal -  ((SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55) {
+      y = yFinal;
+      BlackJack.isPressed = false;
+      return false;
+
+    }
+    return true;
+  }
+
+  // Compra de carta única para a escolha de valor do A
+  bool drawA(){
+    if (x <= (metadeDaTela + cardDivSeis )){
+      // x foi velocidade escolhida na carta, quão mais rápido a carta se move
+      x += ((metadeDaTela - (SizeConfig.blockSizeHorizontal*5))/55);
+      return true;
+    }
+    return false;
+  }
+
+  // Comprar a carta oponente: Mudar a posição dos eixos x e y da carta
+  bool drawOp(int quant){
+
+    var yFinal = (SizeConfig.screenHeight/2) - (BlackJack.cardHeight/2) - (SizeConfig.blockSizeVertical*27);
+
+    if (x <= (metadeDaTela + (cardDivSeis * (quant - 1)))){
+      // x foi velocidade escolhida na carta, quão mais rápido a carta se move
+      x += ((metadeDaTela - (SizeConfig.blockSizeHorizontal*5))/55) + (cardDivSeis * (quant - 1) / 55);
+
+      // y é a velocidade escolhida para movimento da carta
+      print((yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55);
+      y += (yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55;
+
+      if (y <= yFinal +  ((SizeConfig.blockSizeVertical*50) - (BlackJack.cardHeight/2))/55) {
+        y = yFinal;
+        BlackJack.isPressed = false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  // Movimentar no eixo X as cartas que já foram compradas
+  void move() {
+    x -= cardDivSeis/57;
+  }
+
+  // Virar carta: diminuir largura até 0, depois voltar até tamanho original da carta
   Future<void> turnCard() async {
     if (isTurned && width > 0){
-      width -= 8.5;
+      width -= 9;
     }
     else if (isTurned && width <= 0){
       isTurned = false;
     }
-    else if (width < 75){
-      width += 8.5;
+    else if (width < BlackJack.cardWidth){
+      width += 9;
     }
     else{
       isTurned = false;
-      width = 75;
+      width = BlackJack.cardWidth;
     }
-    print(width);
-    print(x);
   }
 
   // Renderizando carta
   void render(Canvas c){
     c.save();
-    //c.scale(width, width);
     if (isTurned){
-      cardBack.renderRect(c, Rect.fromLTWH(x, y, width, 95));
-    } else{
-      baralho.renderRect(c, Rect.fromLTWH(x, y, width, 95));
-    }  
+      cardBack.renderRect(c, Rect.fromLTWH(x, y, width, height));
+    }
+    else{
+      baralho.renderRect(c, Rect.fromLTWH(x, y, width, height)); 
+    }
     c.restore();
+  }
+
+  static Carta toCard(String naipe) {
+    var valor;
+
+    // Descobrir valor numérico da carta através do primeiro dígito do naipe
+    var variavelAux = naipe[0];
+    switch(variavelAux) { 
+      case 'A': { 
+          valor = 11; 
+      } 
+      break; 
+      
+      case 'J': { 
+          valor = 10;
+      } 
+      break;
+
+      case 'Q': { 
+          valor = 10;
+      } 
+      break; 
+
+      case 'K': { 
+          valor = 10;
+      } 
+      break; 
+
+      case 'D': { 
+          valor = 10;
+      } 
+      break;  
+          
+      default: { 
+         valor = int.parse(variavelAux);
+      }
+      break; 
+    }
+
+    var carta = Carta(naipe, valor, BlackJack.deckPosition.x, BlackJack.deckPosition.y);
+    carta.baralho = BlackJack.sprites[naipe];
+    carta.cardBack = BlackJack.sprites['cardBack'];
+
+    return carta;
+  }
+
+  // Comprar cartas
+  static comprarCarta(String naipe) {
+    // Criar objeto carta a partir da string do naipe
+    var carta  = toCard(naipe);
+    print(carta);
+    // Adicionar carta à mão do jogador
+    BlackJack.jogador.mao.add(carta);
+    print(BlackJack.jogador.mao);
+    // Somar pontos à mão do jogador
+    BlackJack.jogador.pontos += carta.valor;
+  }
+
+  // Animar cartas compradas pelo adversário
+  static animarCartasAdv() {
+    print('cartas compradas');
+  }
+
+  // Virar cartas do adversário
+  static virarCartasAdv() {
+    print('cartas viradas');
   }
 }
