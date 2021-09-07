@@ -1,6 +1,9 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:gruporoxo20211/AppService.dart';
+import 'package:provider/provider.dart';
 import 'package:gruporoxo20211/blackjack/BlackJack.dart';
+import 'dart:async';
 
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -10,14 +13,48 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  int _counter = 180;
+  late Timer _timer;
+  late BuildContext? _context;
+  late BlackJack _myGame;
+
+  set context(BuildContext? context) {
+    _context = context;
+  }
+
+  void startTimer(int s) {
+    _counter = s;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      (_counter > 0) ? _counter-- : _timer.cancel();
+      
+      //Atualizar contador da classe BlackJack
+      _myGame.timer = _counter;
+
+      // Chamar funções que atualizam estado do jogo através de comunicação com Firestore
+      _context!.read<AppService>().fetchGameState();
+      _context!.read<AppService>().passGameState();
+      
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer(180);
+  }
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
+
+    var myGame = BlackJack(context);
+    _myGame = myGame;
+
     return Stack(
       children: [
         Positioned.fill(
           child: GestureDetector(
-            child: GameWidget(game: BlackJack(context)),
+            child: GameWidget(game: myGame),
           ),
         ),
         Padding(
@@ -29,8 +66,11 @@ class _GamePageState extends State<GamePage> {
                     child: TextButton(
 
                       onPressed: () {
-                        print("alert");
+                        var s = _counter;
+                        _counter = 0;
+                        _timer.cancel();
                         showAlertDialog1(context);
+                        startTimer(s);
                       },
                       child: Image.asset("assets/images/exitButton.png",
                           height: 30.0, width: 23),
@@ -74,11 +114,14 @@ showAlertDialog1(BuildContext context) {
                   style: TextStyle(fontSize: 18.0),
                 ),
                 onPressed: () {
-                  //No firebase
+                  //TODO 
+                 
+                  
                   //Aumentar em 1 o número de derrotas;
                   //Dar vitória para o adversário
                   //Redireciona o perdedor para a página de derrota
                   //Redireciona o vencedor para a página de vitória
+                  //Parar contador
                 },
               )),
         ],

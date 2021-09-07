@@ -147,10 +147,6 @@ class AppService {
           .update({'player2': getNickname(), 'gameState': 1});
 
       setGameState(query.docs[0]);
-      print(_gameState);
-      print(_gameHost);
-      print(query.docs);
-      print(query.docs[0]);
 
       return query.docs[0]['player1'];
     }
@@ -198,9 +194,9 @@ class AppService {
         .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
 
-    await _users.doc(query.docs[0].id).delete();
+    await _games.doc(query.docs[0].id).delete();
   }
-
+ 
   // Desiste do jogo
   Future<void> giveUp() async {
     QuerySnapshot query = await _games
@@ -227,8 +223,6 @@ class AppService {
   }
 
   String getOpponentNick() {
-    print('Entrou na funcão getOpponentNick');
-    print(_gameState);
     if (_gameHost) {
       return this._gameState?['player2'];
     }
@@ -236,10 +230,9 @@ class AppService {
     return this._gameState?['player1'];
   }
 
-  // Espera por um jogador e a cada 2 segundos busca no Firestore para ver se
+  // Espera por um jogador e busca no Firestore para ver se
   // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
   Future<bool> waitForPlayer() async {
-    //while (true) {
     QuerySnapshot query = await _games
         .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
@@ -251,7 +244,6 @@ class AppService {
     }
 
     return false;
-    //}
   }
 
   void getListOfStrings(List<String> localDeck, List<dynamic> fireBaseDeck) {
@@ -265,21 +257,22 @@ class AppService {
     QuerySnapshot query = await _games
         .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
-
+    
     List<String> deck = [];
     getListOfStrings(deck, query.docs[0]['deck']);
-
+    
     String docId = query.docs[0].id;
     String card = getCard(deck);
-
+    
     if (_gameHost) {
       await updateDeckHand(card, 'p1Hand', docId);
 
     } else {
       await updateDeckHand(card, 'p2Hand', docId);
     }
-
+    
     await _games.doc(docId).update({'deck': deck});
+  
     return card;
   }
 
@@ -319,8 +312,11 @@ class AppService {
   }
 
   Future<void> putHandDown() async {
+    print('função putHandDown');
     this._gameState!['handsDown'] += 1;
+    print('erro aqui?');
     await _games.doc(this._gameState!['gameId']).update({'handsDown': this._gameState!['handsDown']});
+    print('erro aqui?2');
   }
 
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou

@@ -18,6 +18,8 @@ class GetGameWidget extends StatelessWidget {
 }
 
 class BlackJack extends Game with TapDetector {
+  int timer = 0; 
+
   static late Jogador jogador = Jogador([],0);
   static late Jogador adversario = Jogador([],0);
   static late Map sprites = {};
@@ -78,7 +80,7 @@ class BlackJack extends Game with TapDetector {
   // e inicialização de atributos do jogo
   @override
   Future<void> onLoad() async {
-    print('entrou no onload');
+  
     var listaDeNaipes = generateDeck();
     for (var i = 0; i < listaDeNaipes.length; i ++){
       sprites[listaDeNaipes[i]] = await loadSprite(
@@ -133,8 +135,8 @@ class BlackJack extends Game with TapDetector {
   
     nicknameJogador = this.context?.read<AppService>().getNickname() as String;
     nicknameAdversario = this.context?.read<AppService>().getOpponentNick() as String;
-    print('nick adversário ${nicknameAdversario}');
-    
+    //jogador.mao = [];
+
     nickJogador = TextPaint(
       config: TextPaintConfig(
         fontSize: 20.0,
@@ -185,20 +187,28 @@ class BlackJack extends Game with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  Future<void> onTapDown(TapDownInfo info) async {
     final buttonArea = buttonPosition & buttonSize;
     if (buttonArea.contains(info.eventPosition.game.toOffset())) {
       print('botão abaixar clicado');
+      await this.context?.read<AppService>().putHandDown();
       abaixar = true;
     }
 
     final deckArea = deckPosition & Vector2(cardWidth, cardHeight);
     if (!draw && !zoom){
       if (deckArea.contains(info.eventPosition.game.toOffset())) {
-        isPressed = true;
-        print('botão comprar clicado');
-        click = true;
-        Carta.comprarCarta();
+        // Verificar se jogador pode comprar cartas
+        if(jogador.pontos >= 21){
+          jogador.estourou = true;
+        }
+        else{
+          isPressed = true;
+          click = true;
+          var card = await this.context?.read<AppService>().askForCard() as String;
+          print('A carta retornada foi: $card');
+          Carta.comprarCarta(card);
+        }
       }
     }
 
@@ -279,9 +289,6 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-    //print("zoom $zoom");
-    //print("click $click");
-    //print("draw $draw");
 
     // Renderizar botões para escolher valor do Às.
     if (chooseValue) {
@@ -308,15 +315,15 @@ class BlackJack extends Game with TapDetector {
     nickAdversario.render(canvas, nicknameAdversario, Vector2(lineAdversarioPos.x, lineAdversarioPos.y), anchor: Anchor.bottomLeft);
 
     // Movimentação das cartas após a compra
-    if (draw){
+    if (draw && jogador.mao.length!=0){
       //print("Teste: ${this.context!.read<AppService>().getNickname()}");
-        if (jogador.mao[jogador.mao.length - 1].naipe[0] == "A" && !valueChosen){
-          if (!jogador.mao[jogador.mao.length - 1].drawA()) {
-            jogador.mao[jogador.mao.length - 1].isTurning = true;
-            pos = jogador.mao.length - 1;
-            chooseValue = true;
-          }
+      if (jogador.mao[jogador.mao.length - 1].naipe[0] == "A" && !valueChosen){
+        if (!jogador.mao[jogador.mao.length - 1].drawA()) {
+          jogador.mao[jogador.mao.length - 1].isTurning = true;
+          pos = jogador.mao.length - 1;
+          chooseValue = true;
         }
+      }
 
       else{
         for (int i = 0; i < jogador.mao.length; i++) {
@@ -349,6 +356,8 @@ class BlackJack extends Game with TapDetector {
     for (var i = 0; i < jogador.mao.length; i++){
       jogador.mao[i].render(canvas);
     } 
+
+    print('Temporizador = $timer');
   }
 
   @override

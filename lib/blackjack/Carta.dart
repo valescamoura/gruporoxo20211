@@ -143,11 +143,11 @@ class Carta {
   static Carta toCard(String naipe) {
     var valor;
 
-    // Descobrir valor numérico da carta através dos últimos dígitos do naipe
+    // Descobrir valor numérico da carta através do primeiro dígito do naipe
     var variavelAux = naipe[0];
     switch(variavelAux) { 
       case 'A': { 
-          valor = 1; 
+          valor = 11; 
       } 
       break; 
       
@@ -185,18 +185,15 @@ class Carta {
   }
 
   // Comprar cartas
-  static comprarCarta() {
-    if (BlackJack.jogador.pontos >= 21) {
-      BlackJack.jogador.estourou = true;
-    }
-    else{
-      var naipe = 'AE';
-      var carta  = toCard(naipe);
-      BlackJack.jogador.mao.add(carta);
-
-      //TODO: somar diferente quando for ás
-      BlackJack.jogador.pontos += carta.valor;
-    }
+  static comprarCarta(String naipe) {
+    // Criar objeto carta a partir da string do naipe
+    var carta  = toCard(naipe);
+    print(carta);
+    // Adicionar carta à mão do jogador
+    BlackJack.jogador.mao.add(carta);
+    print(BlackJack.jogador.mao);
+    // Somar pontos à mão do jogador
+    BlackJack.jogador.pontos += carta.valor;
   }
 
   // Animar cartas compradas pelo adversário

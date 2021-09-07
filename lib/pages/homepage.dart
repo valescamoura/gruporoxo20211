@@ -67,30 +67,22 @@ class HomePage extends StatelessWidget {
                       String nome =
                           await context.read<AppService>().searchForGame();
                       
-                      print(nome);
-                      print(nome.isEmpty);
-                      
                       if (nome.isEmpty) {
                         // Criar jogo
-                        print("entrou no if");
                         await context.read<AppService>().createGame();
-                        print('criou o jogo');
 
                         // TODO: Enviar notificação convidando para jogar
-
+                        // enviar notificações aqui
                         
                         // Redirecionar para sala de espera
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => SalaDeEspera()));
-                        print('sala de espera');
                       }
                       else{
-                        print('entrou no else');
                         // Redirecionar para tela de jogo
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => GamePage()));
                       }
-                      print('saiu do if');
                     },
                     style: ButtonStyle(
                         backgroundColor:
