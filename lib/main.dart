@@ -12,6 +12,9 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+// --------------------------------------------------------------------------
+// Classe inicial que provê o contexto para o resante das telas do aplicativo,
+// como é possível ver pelos Providers abaixo
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -34,6 +37,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// Decide, baseado na existência ou não de um usuário logado, se retorna a HomePage
+// ou a tela de Login
 class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

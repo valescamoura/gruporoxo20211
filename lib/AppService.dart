@@ -3,6 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
 import 'dart:math';
 
+// -----------------------------------------------------------------------------------
+// Esse arquivo dart nomeado 'AppService' tem como objetivo prover o contexto necessário
+// para que todas as telas do aplicativo consigam receber os dados referentes tanto a
+// autenticação, como aos dados referentes a jogo em si para que o gameplay funcione
+// como esperado.
 class AppService {
   final FirebaseAuth _firebaseAuth;
   final CollectionReference _users = FirebaseFirestore.instance.collection('users');
@@ -59,7 +64,7 @@ class AppService {
   }
 
   void setUserData(String nickname, String email, int wins, int losses) {
-    _userData = {
+    this._userData = {
       'nick': nickname,
       'email': email,
       'wins': 0,
@@ -67,25 +72,27 @@ class AppService {
     };
   }
 
+  // Retorna o nickname do usuário atual
   String? getNickname() {
     return _firebaseAuth.currentUser!.displayName;
   }
 
+  // Incrementa wins ou losses dependendo da String que é passada como argumento [wins|losses]
   Future<void> incrementWinsLosses(String result) async {
-    _userData![result] += 1;
+    this._userData![result] += 1;
     QuerySnapshot query = await _users
         .where('email', isEqualTo: _firebaseAuth.currentUser!.email)
         .get();
 
-    _users.doc(query.docs[0].id).update({'result': _userData![result]});
+    _users.doc(query.docs[0].id).update({'result': this._userData![result]});
   }
 
   int getWins() {
-    return _userData!['wins'];
+    return this._userData!['wins'];
   }
 
   int getLosses() {
-    return _userData!['losses'];
+    return this._userData!['losses'];
   }
 
   // *******************************
@@ -128,6 +135,7 @@ class AppService {
     };
   }
 
+  // Passa o estado do futureGameState para o gameState
   void passGameState() {
     for (String key in this._futureGameState!.keys) {
       this._gameState![key] = this._futureGameState![key];
@@ -226,6 +234,7 @@ class AppService {
     return deck.removeAt(rndCardNum);
   }
 
+  // Retorna o nickname do oponente
   String getOpponentNick() {
     print('Entrou na funcão getOpponentNick');
     print(_gameState);
@@ -318,6 +327,7 @@ class AppService {
     return newCards;
   }
 
+  // Desce a mão de cartas
   Future<void> putHandDown() async {
     this._gameState!['handsDown'] += 1;
     await _games.doc(this._gameState!['gameId']).update({'handsDown': this._gameState!['handsDown']});
