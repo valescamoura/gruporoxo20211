@@ -216,11 +216,14 @@ class BlackJack extends Game with TapDetector {
       valueChosen = true;
     }
 
+    // Foi feita essa condição do if para que ao comprar a carta ela continue com o tamanho menor dela e que durante a compra não seja possível fazer o zoom
     if (!zoom && !draw && !click) {
       if (jogador.mao.length > 0){
+        // Começa na última posição do vetor para que nas cartas que estão com sobreposição seja selecionada a carta mais exterior
         for (int i = jogador.mao.length - 1; i >= 0; i --) {
           Rect cardArea = Vector2(jogador.mao[i].x, jogador.mao[i].y) & Vector2(jogador.mao[i].width, jogador.mao[i].height);
           if (cardArea.contains(info.eventPosition.game.toOffset())) {
+            // O valor do width é atualizado fora da função para ser atualizada em cada frame
             jogador.mao[i].width = 175;
             jogador.mao[i].height = 237.75;
             jogador.mao[i].zoomIn();
@@ -232,6 +235,7 @@ class BlackJack extends Game with TapDetector {
       }
     }
 
+    // Realização do zoomOut
     if (zoom && !click){
       for (int i = jogador.mao.length - 1; i >= 0; i --) {
         if (jogador.mao[i].zoom){
@@ -279,9 +283,6 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-    //print("zoom $zoom");
-    //print("click $click");
-    //print("draw $draw");
 
     // Renderizar botões para escolher valor do Às.
     if (chooseValue) {
@@ -337,7 +338,7 @@ class BlackJack extends Game with TapDetector {
       }
     }
 
-    // Zoom da carta
+    // Zoom da carta, o valor é constantemente atualizado do width e do height por causa da função de virada da carta que muda o valor do width
     for (var i = 0; i < jogador.mao.length; i++){
       if (jogador.mao[i].zoom) {
         jogador.mao[i].width = 175;
