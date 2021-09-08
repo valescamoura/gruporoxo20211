@@ -28,8 +28,6 @@ class BlackJack extends Game with TapDetector {
   late Sprite deck;
   late Sprite pressedButton;
   late Sprite unpressedButton;
-  late Sprite button1;
-  late Sprite button2;
 
   static final double cardWidth = 87.5; //140 (largura do sprite) / 1.6
   static final double cardHeight = 118.75; //190 (altura do sprite)/ 1.6
@@ -87,14 +85,6 @@ class BlackJack extends Game with TapDetector {
       'cardBack.png'
     );
 
-    button1 = await loadSprite(
-        'btn_a.png'
-    );
-
-    button2 = await loadSprite(
-        'btn_a.png'
-    );
-
     unpressedButton = await loadSprite(
       'btn_out.png',
       srcPosition: Vector2.zero(),
@@ -150,7 +140,6 @@ class BlackJack extends Game with TapDetector {
       ),
     );
 
-
     labelMessage = TextPaint(
       config: TextPaintConfig(
         fontSize: 14.0,
@@ -187,7 +176,6 @@ class BlackJack extends Game with TapDetector {
         }
       }
     }
-
 
     // Foi feita essa condição do if para que ao comprar a carta ela continue com o tamanho menor dela e que durante a compra não seja possível fazer o zoom
     if (!zoom && !draw && !click) {
@@ -253,7 +241,6 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-
 
     // Renderizar botão de "abaixar a mão"
     final button = abaixar ? pressedButton : unpressedButton;
