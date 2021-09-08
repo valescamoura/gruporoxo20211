@@ -162,8 +162,8 @@ class HomePage extends StatelessWidget {
             Padding(
                 padding: EdgeInsets.only(top: 80.0),
                 child: TextButton(
-                    onPressed: () {
-                      context.read<AppService>().signOut();
+                    onPressed: () async {
+                      await context.read<AppService>().signOut();
                     },
                     child: Text("Sair",
                         style: TextStyle(
