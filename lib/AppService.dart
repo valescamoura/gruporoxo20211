@@ -92,8 +92,8 @@ class AppService {
     this._userData = {
       'nick': nickname,
       'email': email,
-      'wins': 0,
-      'losses': 0,
+      'wins': wins,
+      'losses': losses,
       'signalId': oneSignalId
     };
   }
