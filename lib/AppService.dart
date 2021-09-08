@@ -75,6 +75,15 @@ class AppService {
     await _firebaseAuth.signOut();
   }
 
+  Future<void> fetchUserData() async {
+    String? email = _firebaseAuth.currentUser!.email;
+
+    QuerySnapshot query = await _users.where('email', isEqualTo: email).get();
+    QueryDocumentSnapshot doc = query.docs[0];
+
+    await setUserData(doc['nick'], email!, doc['wins'], doc['losses']);
+  }
+
   Future<void> setUserData(
       String nickname, String email, int wins, int losses) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
