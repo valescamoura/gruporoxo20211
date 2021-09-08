@@ -68,6 +68,9 @@ class _GamePageState extends State<GamePage> {
         BlackJack.turnAdv = true;
         BlackJack.gameEnd = true;
 
+        // Parar contador
+        _timer.cancel();
+
         // 15 segundos para que os usuários vejam as cartas um do outro
         // Iniciar segundo contador
         startTimerAuxiliar();
