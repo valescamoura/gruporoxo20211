@@ -258,6 +258,7 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
+
     // Renderizar botão de "abaixar a mão"
     final button = abaixar ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
@@ -321,7 +322,12 @@ class BlackJack extends Game with TapDetector {
     // Renderizar cartas na tela
     for (var i = 0; i < jogador.mao.length; i++){
       jogador.mao[i].render(canvas);
-    } 
+    }
+
+    // Renderizar cartas na tela do oponente
+    for (var i = 0; i < adversario.mao.length; i++){
+      adversario.mao[i].render(canvas);
+    }
 
     //print('Temporizador = $timer');
   }
