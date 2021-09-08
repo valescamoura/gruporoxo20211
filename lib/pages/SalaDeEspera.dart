@@ -60,6 +60,8 @@ class _SalaDeEsperaState extends State<SalaDeEspera> {
     // Voltar à homepage
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => HomePage()));
+    // Limpar dados do game state
+    context.read<AppService>().cleanGameState();
   }
 
   @override

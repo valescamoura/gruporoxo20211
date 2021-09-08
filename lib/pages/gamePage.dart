@@ -57,6 +57,11 @@ class _GamePageState extends State<GamePage> {
         print('jogo acabou');
         BlackJack.turnAdv = true;
         BlackJack.gameEnd = true;
+
+        //
+
+        // Limpar estado do jogo
+        context.read<AppService>().cleanGameState();
       }
     });
   }
@@ -136,6 +141,9 @@ showAlertDialog1(BuildContext context, Timer timer) {
                 onPressed: () async {
                   // Desistir da partida e aumentar em 1 o número de derrotas
                   await context.read<AppService>().giveUp();
+
+                  // Limpar estado do jogo
+                  context.read<AppService>().cleanGameState();
                 
                   //Parar contador
                   timer.cancel();
