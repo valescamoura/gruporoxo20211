@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/AppService.dart';
+import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
     String? _email = context.read<AppService>().getEmail();
     int _wins = context.read<AppService>().getWins();
     int _losses = context.read<AppService>().getLosses();
+
     return Scaffold(
         backgroundColor: Color(0xFF062B06),
         appBar: AppBar(
@@ -29,7 +31,8 @@ class _ProfilePageState extends State<ProfilePage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => HomePage()));
             },
           ),
         ),

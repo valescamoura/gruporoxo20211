@@ -66,6 +66,7 @@ flutter:
     - assets/images/imageRules.png
     - assets/images/imageGoal.png
     - assets/images/imageTwoPeople.png
+    - assets/images/imageTrophy.png
      
     # cards
     - assets/images/cardBack.png

@@ -139,8 +139,9 @@ class _LoginPageState extends State<LoginPage> {
                                 .then((value) {
                               alertMessage = value;
                               if (alertMessage == "Signed In") {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => HomePage()));
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => HomePage()));
                               }
                               print(alertMessage);
                               if (alertMessage ==
@@ -179,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: Colors.blue),
                                   recognizer: new TapGestureRecognizer()
                                     ..onTap = () {
-                                      Navigator.of(context).push(
+                                      Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   SignUpPage()));
@@ -197,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: Colors.blue),
                                   recognizer: new TapGestureRecognizer()
                                     ..onTap = () {
-                                      Navigator.of(context).push(
+                                      Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ForgotPasswordPage()));
