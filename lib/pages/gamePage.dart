@@ -123,7 +123,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    startTimer(10);
+    startTimer(180);
   }
 
   @override
