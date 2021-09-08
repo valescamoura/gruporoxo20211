@@ -145,7 +145,7 @@ class GameRulesPage extends StatelessWidget {
                           ),
                           Padding(padding: EdgeInsets.only(right: 5.0)),
                           Expanded(
-                              child: Text("O Ás vale 1 ou 11 pontos de acordo com a vontade do jogador, que deverá decidir o valor da carta.",
+                              child: Text("O Ás vale 11 pontos.",
                                 style: TextStyle(
                                   color: Colors.white, fontSize: 18.0
                                 )
