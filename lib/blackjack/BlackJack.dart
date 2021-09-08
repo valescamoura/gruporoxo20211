@@ -64,6 +64,21 @@ class BlackJack extends Game with TapDetector {
 
   BlackJack(BuildContext context) {
     this.context = context;
+
+    //Reiniciar váriaveis estáticas
+    isPressed = false;
+    abaixar = false;
+    gameEnd = false;
+    draw = false;
+    zoom = false;
+    click = false;
+    //turnAdv = false;
+    //cardAdv = false;
+    jogador = Jogador([], 0);
+    adversario = Jogador([], 0);
+    sprites = {};
+
+    //
     SizeConfig().init(context);
   }
 

@@ -361,11 +361,12 @@ class AppService {
 
   // Retorna verdadeira caso o oponente tenha pedido uma carta e atualiza o
   // estado local da mão do oponente
-  Future<List<String>> checkOpponentCard() async {
+  List<String> checkOpponentCard() {
     if (this.gameHost) {
-      return isHandBigger(_futureGameState!['p2Hand'], 'p2Hand');
+      print(isHandBigger(_futureGameState!['p2Hand'].cast<String>(), 'p2Hand'));
+      return isHandBigger(_futureGameState!['p2Hand'].cast<String>(), 'p2Hand');
     } else {
-      return isHandBigger(_futureGameState!['p1Hand'], 'p1Hand');
+      return isHandBigger(_futureGameState!['p1Hand'].cast<String>(), 'p1Hand');
     }
   }
 
@@ -373,7 +374,7 @@ class AppService {
   // atualizar o estado e retornar verdadeiro
   List<String> isHandBigger(List<String> playerHand, String player) {
     List<String> newCards = [];
-
+    
     if (playerHand.length > this._gameState![player].length) {
       playerHand.forEach((element) {
         if (!this._gameState![player].contains(element)) {

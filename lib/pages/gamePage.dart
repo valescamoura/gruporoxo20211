@@ -36,13 +36,20 @@ class _GamePageState extends State<GamePage> {
       await _context!.read<AppService>().fetchGameState();
       _context!.read<AppService>().passGameState();
 
+      print('teste1');
       // Verificar se oponente comprou cartas e animar compra na tela do jogo
-      var lista = await _context!.read<AppService>().checkOpponentCard();
-      if (lista.isNotEmpty){
+      var lista = _context!.read<AppService>().checkOpponentCard();
+      print('oi');
+      print('hand = $lista');
+      print(lista.isEmpty);
+      
+      if (lista.length > 0){
         for (var i = 0; i < lista.length; i++){
           var carta = Carta.toCard(lista[i]);
           BlackJack.adversario.mao.add(carta);
         }
+        print(BlackJack.adversario.mao);
+        print('adv comprou carta');
         //BlackJack.cardAdv = true;
       }
 
@@ -52,7 +59,6 @@ class _GamePageState extends State<GamePage> {
         print('jogo acabou');
         //BlackJack.turnAdv = true;
       }
-      
     });
   }
 
