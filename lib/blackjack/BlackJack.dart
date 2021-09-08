@@ -19,6 +19,7 @@ class GetGameWidget extends StatelessWidget {
 
 class BlackJack extends Game with TapDetector {
   int timer = 0; 
+  int quant = 0;
 
   static late Jogador jogador = Jogador([],0);
   static late Jogador adversario = Jogador([],0);
@@ -27,8 +28,6 @@ class BlackJack extends Game with TapDetector {
   late Sprite deck;
   late Sprite pressedButton;
   late Sprite unpressedButton;
-  late Sprite button1;
-  late Sprite button2;
 
   static final double cardWidth = 87.5; //140 (largura do sprite) / 1.6
   static final double cardHeight = 118.75; //190 (altura do sprite)/ 1.6
@@ -37,13 +36,6 @@ class BlackJack extends Game with TapDetector {
   final Vector2 buttonSize = Vector2(138, 50);
   late final Vector2 buttonPosition;
   late TextPaint labelBtn;
-
-  final Vector2 button1Size = Vector2(50, 50);
-  final Vector2 button2Size = Vector2(50, 50);
-  late final Vector2 button1Position;
-  late final Vector2 button2Position;
-  late TextPaint labelBtn1;
-  late TextPaint labelBtn2;
   
   late final Vector2 lineSize;
   late Sprite lineJogador;
@@ -56,11 +48,8 @@ class BlackJack extends Game with TapDetector {
   static bool isPressed = false;
   static bool abaixar = false;
   static bool draw = false;
-  static bool drawUp = false;
   static bool zoom = false;
   static bool click = false;
-  static bool chooseValue = false;
-  static bool valueChosen = false;
   BuildContext? context;
 
   late String nicknameJogador;
@@ -97,14 +86,6 @@ class BlackJack extends Game with TapDetector {
       'cardBack.png'
     );
 
-    button1 = await loadSprite(
-        'btn_a.png'
-    );
-
-    button2 = await loadSprite(
-        'btn_a.png'
-    );
-
     unpressedButton = await loadSprite(
       'btn_out.png',
       srcPosition: Vector2.zero(),
@@ -119,8 +100,6 @@ class BlackJack extends Game with TapDetector {
     
     deckPosition = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.blockSizeVertical*50)-(cardHeight/2));
     buttonPosition = Vector2((SizeConfig.blockSizeHorizontal*50)-(buttonSize.x/2), (SizeConfig.screenHeight) - buttonSize.y - (SizeConfig.blockSizeVertical*3));
-    button1Position = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight) - buttonSize.y - (SizeConfig.blockSizeVertical*3));
-    button2Position = Vector2((SizeConfig.blockSizeHorizontal*95)-button2Size.x, (SizeConfig.screenHeight) - buttonSize.y - (SizeConfig.blockSizeVertical*3));
 
     lineJogador = await loadSprite(
       'sliderHorizontal.png',
@@ -189,22 +168,6 @@ class BlackJack extends Game with TapDetector {
       ),
     );
 
-    labelBtn1 = TextPaint(
-      config: TextPaintConfig(
-        fontSize: 20.0,
-        fontFamily: 'Arial',
-        color: Color(0xFFFFFFFF),
-      ),
-    );
-
-    labelBtn2 = TextPaint(
-      config: TextPaintConfig(
-        fontSize: 20.0,
-        fontFamily: 'Arial',
-        color: Color(0xFFFFFFFF),
-      ),
-    );
-
     labelMessage = TextPaint(
       config: TextPaintConfig(
         fontSize: 14.0,
@@ -236,23 +199,11 @@ class BlackJack extends Game with TapDetector {
           click = true;
           
           print('A carta retornada foi: $card');
+          draw = true;
+          quant += 1;
           Carta.comprarCarta(card);
         }
       }
-    }
-
-    final button1Area = button1Position & button1Size;
-    if (button1Area.contains(info.eventPosition.game.toOffset()) && chooseValue) {
-      jogador.mao[pos].valor = 1;
-      chooseValue = false;
-      valueChosen = true;
-    }
-
-    final button2Area = button2Position & button2Size;
-    if (button2Area.contains(info.eventPosition.game.toOffset()) && chooseValue) {
-      jogador.mao[pos].valor = 11;
-      chooseValue = false;
-      valueChosen = true;
     }
 
     // Foi feita essa condição do if para que ao comprar a carta ela continue com o tamanho menor dela e que durante a compra não seja possível fazer o zoom
@@ -313,9 +264,6 @@ class BlackJack extends Game with TapDetector {
   @override
   void update(double dt) {
     if (isPressed) {
-      if(!draw) {
-        valueChosen = false;
-      }
       draw = true;
     }
   }
@@ -323,14 +271,6 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-
-    // Renderizar botões para escolher valor do Às.
-    if (chooseValue) {
-      button1.render(canvas, position: button1Position, size: button1Size);
-      button2.render(canvas, position: button2Position, size: button2Size);
-      labelBtn1.render(canvas, "1", Vector2(button1Position.x+button1Size.x/2, button1Position.y+35), anchor: Anchor.bottomCenter);
-      labelBtn2.render(canvas, "11", Vector2(button2Position.x+button2Size.x/2, button2Position.y+35), anchor: Anchor.bottomCenter);
-    }
 
     // Renderizar botão de "abaixar a mão"
     final button = abaixar ? pressedButton : unpressedButton;
@@ -349,26 +289,15 @@ class BlackJack extends Game with TapDetector {
     nickAdversario.render(canvas, nicknameAdversario, Vector2(lineAdversarioPos.x, lineAdversarioPos.y), anchor: Anchor.bottomLeft);
 
     // Movimentação das cartas após a compra
-    if (draw && jogador.mao.length!=0){
-      //print("Teste: ${this.context!.read<AppService>().getNickname()}");
-      if (jogador.mao[jogador.mao.length - 1].naipe[0] == "A" && !valueChosen){
-        if (!jogador.mao[jogador.mao.length - 1].drawA()) {
-          jogador.mao[jogador.mao.length - 1].isTurning = true;
-          pos = jogador.mao.length - 1;
-          chooseValue = true;
+    if (draw && quant == jogador.mao.length){
+      for (int i = 0; i < jogador.mao.length; i++) {
+        if (i != jogador.mao.length - 1)
+          jogador.mao[i].move();
+        else if (!jogador.mao[i].draw(jogador.mao.length) && !isPressed) {
+          jogador.mao[i].isTurning = true;
+          draw = false;
         }
       }
-
-      else{
-        for (int i = 0; i < jogador.mao.length; i++) {
-          if (i != jogador.mao.length - 1)
-            jogador.mao[i].move();
-          else if (!jogador.mao[i].draw(jogador.mao.length) && !isPressed) {
-            jogador.mao[i].isTurning = true;
-            draw = false;
-          }
-        }
-      } 
     }
     
     // Virada da carta
