@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/AppService.dart';
+import 'package:gruporoxo20211/blackjack/Carta.dart';
 import 'package:gruporoxo20211/pages/loserPage.dart';
 import 'package:provider/provider.dart';
 import 'package:gruporoxo20211/blackjack/BlackJack.dart';
@@ -35,9 +36,22 @@ class _GamePageState extends State<GamePage> {
       await _context!.read<AppService>().fetchGameState();
       _context!.read<AppService>().passGameState();
 
-      // TODO: Verificar se oponente comprou cartas e animar compra na tela do jogo
+      // Verificar se oponente comprou cartas e animar compra na tela do jogo
+      var lista = await _context!.read<AppService>().checkOpponentCard();
+      if (lista.isNotEmpty){
+        for (var i = 0; i < lista.length; i++){
+          var carta = Carta.toCard(lista[i]);
+          BlackJack.adversario.mao.add(carta);
+        }
+        //BlackJack.cardAdv = true;
+      }
 
-      // TODO: Ver
+      // Verficar se jogo terminou
+      var isGameOver = _context!.read<AppService>().isGameOver();
+      if (isGameOver) {
+        print('jogo acabou');
+        //BlackJack.turnAdv = true;
+      }
       
     });
   }

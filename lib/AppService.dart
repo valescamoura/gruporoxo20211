@@ -126,13 +126,11 @@ class AppService {
         .where('email', isEqualTo: _firebaseAuth.currentUser!.email)
         .get();
 
-    _users.doc(query.docs[0].id).update({'result': this._userData![result]});
+    _users.doc(query.docs[0].id).update({result: this._userData![result]});
   }
 
   // Retorna o número de vitórias do usuário atual
   int getWins() {
-    print('erro aqui');
-    // TODO: Erro no _userData, está nulo.
     return this._userData!['wins'];
   }
 

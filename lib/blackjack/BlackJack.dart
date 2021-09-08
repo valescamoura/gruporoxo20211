@@ -145,7 +145,8 @@ class BlackJack extends Game with TapDetector {
   @override
   Future<void> onTapDown(TapDownInfo info) async {
     final buttonArea = buttonPosition & buttonSize;
-    if (buttonArea.contains(info.eventPosition.game.toOffset()) && abaixar == false) {
+    // // se jogador tem mais de 16 pontos, ainda não abaixou a mão e clica no botão abaixar
+    if (buttonArea.contains(info.eventPosition.game.toOffset()) && abaixar == false && jogador.pontos >= 16) {
       await this.context?.read<AppService>().putHandDown();
       abaixar = true;
     }
@@ -226,9 +227,15 @@ class BlackJack extends Game with TapDetector {
   }
 
   @override
-  void update(double dt) {
+  Future<void> update(double dt) async {
     if (isPressed) {
       draw = true;
+    }
+
+    // Se jogador tem mais de 21 pontos não pode abaixar a mão mais e é setado no firebase que ele abaixou a mão
+    if (jogador.pontos >= 21 && abaixar == false) {
+      await context?.read<AppService>().putHandDown();
+      abaixar = true;
     }
   }
 
