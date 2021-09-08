@@ -51,6 +51,7 @@ class BlackJack extends Game with TapDetector {
   late Sprite lineAdversario;
   late Vector2 lineAdversarioPos;
   
+  bool inicializando = true;
   int pos = 0;
   static bool isPressed = false;
   static bool abaixar = false;
@@ -133,9 +134,36 @@ class BlackJack extends Game with TapDetector {
     lineJogadorPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) + (cardHeight/2) + (SizeConfig.blockSizeVertical)*8);
     lineAdversarioPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) - (cardHeight/2) - (SizeConfig.blockSizeVertical)*8);
   
-    nicknameJogador = this.context?.read<AppService>().getNickname() as String;
-    nicknameAdversario = this.context?.read<AppService>().getOpponentNick() as String;
-    //jogador.mao = [];
+    // Garantir que algumas variáveis sejam inicializadas apenas uma vez
+    if (inicializando) {
+      inicializando = false;
+
+      // Inicializado nome dos jogadores
+      nicknameJogador = this.context?.read<AppService>().getNickname() as String;
+      nicknameAdversario = this.context?.read<AppService>().getOpponentNick() as String;
+      
+      // Inicializando mão de cartas do oponente
+      var cardsOponente = this.context?.read<AppService>().getOpponentCards();
+      for (var i = 0; i < cardsOponente!.length; i++){
+        // Criar objeto carta a partir da string do naipe
+        var carta  = Carta.toCard(cardsOponente[i]);
+        // Adicionar carta à mão do oponente
+        adversario.mao.add(carta);
+        // Somar pontos à mão do oponente
+        adversario.pontos += carta.valor;
+      }
+
+      // Inicializando mão de cartas do jogador
+      var cardsJogador = this.context?.read<AppService>().getOpponentCards();
+      for (var i = 0; i < cardsJogador!.length; i++){
+        // Criar objeto carta a partir da string do naipe
+        var carta  = Carta.toCard(cardsJogador[i]);
+        // Adicionar carta à mão do jogador
+        jogador.mao.add(carta);
+        // Somar pontos à mão do jogador
+        jogador.pontos += carta.valor;
+      }
+    }
 
     nickJogador = TextPaint(
       config: TextPaintConfig(
@@ -203,9 +231,10 @@ class BlackJack extends Game with TapDetector {
           jogador.estourou = true;
         }
         else{
+          var card = await this.context?.read<AppService>().askForCard() as String;
           isPressed = true;
           click = true;
-          var card = await this.context?.read<AppService>().askForCard() as String;
+          
           print('A carta retornada foi: $card');
           Carta.comprarCarta(card);
         }
@@ -269,6 +298,7 @@ class BlackJack extends Game with TapDetector {
       print("soltar botão abaixar");
       abaixar = false;
     } */
+
     final tela = Vector2(0, 0) & Vector2(SizeConfig.screenWidth, SizeConfig.screenHeight);
     if (tela.contains(info.eventPosition.game.toOffset())){
       click = false;

@@ -246,13 +246,29 @@ class AppService {
 
   // Retorna o nickname do oponente
   String getOpponentNick() {
-    print('Entrou na funcão getOpponentNick');
-    print(_gameState);
     if (this.gameHost) {
       return this._gameState?['player2'];
     }
 
     return this._gameState?['player1'];
+  }
+
+  // Obter cartas da mão do jogador
+  List<String> getCards(){
+    if (this.gameHost) {
+      return this._gameState?['p1Hand'];
+    }
+
+    return this._gameState?['p2Hand'];
+  }
+
+  // Obter cartas da mão do oponente
+  List<String> getOpponentCards(){
+    if (this.gameHost) {
+      return this._gameState?['p2Hand'];
+    }
+
+    return this._gameState?['p1Hand'];
   }
 
   // Espera por um jogador e busca no Firestore para ver se
