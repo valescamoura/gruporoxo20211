@@ -87,7 +87,7 @@ class Carta {
   }
 
   // Comprar a carta oponente: Mudar a posição dos eixos x e y da carta
-  bool drawOp(int quant){
+  bool drawAdv(int quant){
 
     var yFinal = (SizeConfig.screenHeight/2) - (BlackJack.cardHeight/2) - (SizeConfig.blockSizeVertical*27);
 
@@ -198,11 +198,23 @@ class Carta {
 
   // Animar cartas compradas pelo adversário
   static animarCartasAdv() {
-    print('cartas compradas');
+    for (int i = 0; i < BlackJack.adversario.mao.length; i++) {
+      if (i != BlackJack.adversario.mao.length - 1)
+        BlackJack.adversario.mao[i].move();
+      else if (!BlackJack.adversario.mao[i].drawAdv(BlackJack.adversario.mao.length)) {
+        BlackJack.cardAdv = false;
+      }
+    }
   }
 
   // Virar cartas do adversário
   static virarCartasAdv() {
-    print('cartas viradas');
+    BlackJack.adversario.mao[0].isTurning = true;
+    for (int i = 0; i < BlackJack.adversario.mao.length; i ++){
+      BlackJack.adversario.mao[i].isTurning = true;
+      BlackJack.adversario.mao[i].turnCard();
+      if (BlackJack.adversario.mao[i].isTurned)
+        break;
+    }
   }
 }

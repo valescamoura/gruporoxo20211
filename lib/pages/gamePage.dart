@@ -36,10 +36,8 @@ class _GamePageState extends State<GamePage> {
       await _context!.read<AppService>().fetchGameState();
       _context!.read<AppService>().passGameState();
 
-      print('teste1');
       // Verificar se oponente comprou cartas e animar compra na tela do jogo
       var lista = _context!.read<AppService>().checkOpponentCard();
-      print('oi');
       print('hand = $lista');
       print(lista.isEmpty);
       
@@ -50,14 +48,14 @@ class _GamePageState extends State<GamePage> {
         }
         print(BlackJack.adversario.mao);
         print('adv comprou carta');
-        //BlackJack.cardAdv = true;
+        BlackJack.cardAdv = true;
       }
 
       // Verficar se jogo terminou
       var isGameOver = _context!.read<AppService>().isGameOver();
       if (isGameOver) {
         print('jogo acabou');
-        //BlackJack.turnAdv = true;
+        BlackJack.turnAdv = true;
       }
     });
   }

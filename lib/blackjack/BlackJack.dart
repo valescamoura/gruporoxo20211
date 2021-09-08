@@ -50,6 +50,8 @@ class BlackJack extends Game with TapDetector {
   static bool draw = false;
   static bool zoom = false;
   static bool click = false;
+  static bool cardAdv = false;
+  static bool turnAdv = false;
   BuildContext? context;
 
   late String nicknameJogador;
@@ -72,13 +74,12 @@ class BlackJack extends Game with TapDetector {
     draw = false;
     zoom = false;
     click = false;
-    //turnAdv = false;
-    //cardAdv = false;
+    turnAdv = false;
+    cardAdv = false;
     jogador = Jogador([], 0);
     adversario = Jogador([], 0);
     sprites = {};
 
-    //
     SizeConfig().init(context);
   }
 
@@ -310,12 +311,19 @@ class BlackJack extends Game with TapDetector {
       }
     }
 
+    //Animar cartas compradas pelo adversário
+    if(!zoom && cardAdv)
+      Carta.animarCartasAdv();
+
+    if(turnAdv)
+      Carta.virarCartasAdv();
+
     // Renderizar cartas na tela
     for (var i = 0; i < jogador.mao.length; i++){
       jogador.mao[i].render(canvas);
     } 
 
-    print('Temporizador = $timer');
+    //print('Temporizador = $timer');
   }
 
   @override
