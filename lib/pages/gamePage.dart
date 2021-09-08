@@ -37,15 +37,13 @@ class _GamePageState extends State<GamePage> {
 
       // Verificar se oponente comprou cartas e animar compra na tela do jogo
       var lista = _context!.read<AppService>().checkOpponentCard();
-      print('hand = $lista');
-      print(lista.isEmpty);
       
       if (lista.length > 0){
         for (var i = 0; i < lista.length; i++){
           var carta = Carta.toCard(lista[i]);
           BlackJack.adversario.mao.add(carta);
         }
-        print(BlackJack.adversario.mao);
+        
         print('adv comprou carta');
         BlackJack.cardAdv = true;
       }
