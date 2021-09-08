@@ -71,6 +71,9 @@ class _GamePageState extends State<GamePage> {
         // Parar contador
         _timer.cancel();
 
+        // Garantir que gameState seja 2
+        _context!.read<AppService>().endGame();
+
         // 15 segundos para que os usuários vejam as cartas um do outro
         // Iniciar segundo contador
         startTimerAuxiliar();
@@ -91,7 +94,7 @@ class _GamePageState extends State<GamePage> {
         _timer_auxiliar.cancel();
 
         var winner = _context!.read<AppService>().whoWon();
-        if (winner == 'player1' && _context!.read<AppService>().gameHost) {
+        if ((winner == 'player1' && _context!.read<AppService>().gameHost) || (winner == 'player2' && !(_context!.read<AppService>().gameHost))) {
           // Ganhou
           // Atualizar número de vitórias
           await _context!.read<AppService>().incrementWinsLosses('wins');
@@ -101,7 +104,7 @@ class _GamePageState extends State<GamePage> {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => WinnerPage()));
         }
-        else if (winner == 'player2' && _context!.read<AppService>().gameHost) {
+        else if ((winner == 'player2' && _context!.read<AppService>().gameHost || (winner == 'player1' && !(_context!.read<AppService>().gameHost)))) {
           // Perdeu
           // Atualizar número de derrotas
           await _context!.read<AppService>().incrementWinsLosses('losses');
