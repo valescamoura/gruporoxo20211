@@ -5,6 +5,7 @@ import 'package:gruporoxo20211/pages/SalaDeEspera.dart';
 import 'package:gruporoxo20211/pages/aboutPage.dart';
 import 'package:gruporoxo20211/pages/gamePage.dart';
 import 'package:gruporoxo20211/pages/gameRulesPage.dart';
+import 'package:gruporoxo20211/pages/profilePage.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -55,84 +56,69 @@ class HomePage extends StatelessWidget {
             ),
             //Botões
             Column(children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: ElevatedButton(
-                    child: Image.asset(
-                      "assets/images/imagePlay.png",
-                      width: 40,
-                      height: 40,
-                    ),
-                    onPressed: () async {
-                      String nome =
-                          await context.read<AppService>().searchForGame();
-                      
-                      if (nome.isEmpty) {
-                        // Criar jogo
-                        await context.read<AppService>().createGame();
-
-                        // TODO: Enviar notificação convidando para jogar
-                        // enviar notificações aqui
-                        
-                        // Redirecionar para sala de espera
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => SalaDeEspera()));
-                      }
-                      else{
-                        // Redirecionar para tela de jogo
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => GamePage()));
-                      }
-                    },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFFAD200C)),
-                        padding: MaterialStateProperty.all(EdgeInsets.only(
-                            top: 30, bottom: 30, left: 125.0, right: 125.0)),
-                        textStyle:
-                            MaterialStateProperty.all(TextStyle(fontSize: 30))),
-                  )),
               Row(children: [
                 Padding(
-                    padding: EdgeInsets.only(top: 11.0, left: 70.0),
+                    padding: EdgeInsets.only(top: 30.0, left: 60.0),
+                    child: ElevatedButton(
+                      child: Image.asset(
+                        "assets/images/imagePlay.png",
+                        width: 40,
+                        height: 40,
+                      ),
+                      onPressed: () async {
+                        String nome =
+                            await context.read<AppService>().searchForGame();
+
+                        if (nome.isEmpty) {
+                          // Criar jogo
+                          await context.read<AppService>().createGame();
+
+                          // TODO: Enviar notificação convidando para jogar
+                          // enviar notificações aqui
+
+                          // Redirecionar para sala de espera
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => SalaDeEspera()));
+                        } else {
+                          // Redirecionar para tela de jogo
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => GamePage()));
+                        }
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Color(0xFFAD200C)),
+                          padding: MaterialStateProperty.all(EdgeInsets.only(
+                              top: 15, bottom: 15, left: 50.0, right: 50.0)),
+                          textStyle: MaterialStateProperty.all(
+                              TextStyle(fontSize: 30))),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(top: 30.0, left: 10.0),
                     child: ElevatedButton(
                       child: Image.asset(
                         "assets/images/imageProfile.png",
                         width: 40,
                         height: 40,
                       ),
-                      onPressed: () {},
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Color(0xFFAD200C)),
-                          padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 30, bottom: 30, left: 50.0, right: 50.0)),
-                          textStyle: MaterialStateProperty.all(
-                              TextStyle(fontSize: 30))),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(top: 11.0, left: 10.0),
-                    child: ElevatedButton(
-                      child: Image.asset(
-                        "assets/images/imageNotifications.png",
-                        width: 40,
-                        height: 40,
-                      ),
                       onPressed: () {
-                        print('tela de notificações');
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => ProfilePage()));
                       },
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
                           padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 30, bottom: 30, left: 50.0, right: 50.0)),
+                              top: 15, bottom: 15, left: 50.0, right: 50.0)),
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
-                    )),
+                    ))
               ]),
               Row(children: [
                 Padding(
-                    padding: EdgeInsets.only(top: 11.0, left: 70.0),
+                    padding: EdgeInsets.only(top: 10.0, left: 60.0),
                     child: ElevatedButton(
                       child: Image.asset(
                         "assets/images/imageRules.png",
@@ -147,12 +133,12 @@ class HomePage extends StatelessWidget {
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
                           padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 30, bottom: 30, left: 50.0, right: 50.0)),
+                              top: 15, bottom: 15, left: 50.0, right: 50.0)),
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
                     )),
                 Padding(
-                    padding: EdgeInsets.only(top: 11.0, left: 10.0),
+                    padding: EdgeInsets.only(top: 10.0, left: 10.0),
                     child: ElevatedButton(
                       child: Image.asset(
                         "assets/images/imageAbout.png",
@@ -167,33 +153,33 @@ class HomePage extends StatelessWidget {
                           backgroundColor:
                               MaterialStateProperty.all(Color(0xFFAD200C)),
                           padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 30, bottom: 30, left: 50.0, right: 50.0)),
+                              top: 15, bottom: 15, left: 50.0, right: 50.0)),
                           textStyle: MaterialStateProperty.all(
                               TextStyle(fontSize: 30))),
                     ))
-              ]),
-              Padding(
-                  padding: EdgeInsets.only(top: 100.0),
-                  child: TextButton(
-                      onPressed: () {
-                        context.read<AppService>().signOut();
-                      },
-                      child: Text("Sair",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'Roboto')),
-                      style: ButtonStyle(
-                          padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 15, bottom: 15, left: 50.0, right: 50.0)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      side: BorderSide(color: Colors.white))))))
+              ])
             ]),
-          ])
+            Padding(
+                padding: EdgeInsets.only(top: 80.0),
+                child: TextButton(
+                    onPressed: () {
+                      context.read<AppService>().signOut();
+                    },
+                    child: Text("Sair",
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Roboto')),
+                    style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.only(
+                            top: 15, bottom: 15, left: 50.0, right: 50.0)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    side: BorderSide(color: Colors.white))))))
+          ]),
         ]));
   }
 }

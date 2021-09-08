@@ -36,9 +36,9 @@ dependencies:
   provider: ^5.0.0
   cloud_firestore: ^2.4.0
   random_string: ^2.3.1
-
   flame: ^1.0.0-releasecandidate.13
   shared_preferences: ^2.0.7
+  onesignal_flutter: ^3.0.0
  
 
 dev_dependencies:
@@ -66,6 +66,7 @@ flutter:
     - assets/images/imageRules.png
     - assets/images/imageGoal.png
     - assets/images/imageTwoPeople.png
+    - assets/images/imageTrophy.png
      
     # cards
     - assets/images/cardBack.png

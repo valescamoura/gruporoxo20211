@@ -11,8 +11,10 @@ import 'dart:math';
 // como esperado.
 class AppService {
   final FirebaseAuth _firebaseAuth;
-  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
-  final CollectionReference _games = FirebaseFirestore.instance.collection('games');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
+  final CollectionReference _games =
+      FirebaseFirestore.instance.collection('games');
   Map? _userData;
   Map? _gameState;
   Map? _futureGameState;
@@ -31,11 +33,10 @@ class AppService {
 
   Future<String> signIn(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
 
-      QuerySnapshot query = await _users
-          .where('email', isEqualTo: email)
-          .get();
+      QuerySnapshot query = await _users.where('email', isEqualTo: email).get();
       QueryDocumentSnapshot doc = query.docs[0];
 
       await setUserData(doc['nick'], email, doc['wins'], doc['losses']);
@@ -51,7 +52,8 @@ class AppService {
     String? oneSignalId = prefs.getString('oneSignalId');
 
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
       await _firebaseAuth.currentUser!.updateDisplayName(nickname);
       await _users.add({
         'nick': nickname,
@@ -73,7 +75,8 @@ class AppService {
     await _firebaseAuth.signOut();
   }
 
-  Future<void> setUserData(String nickname, String email, int wins, int losses) async {
+  Future<void> setUserData(
+      String nickname, String email, int wins, int losses) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? oneSignalId = prefs.getString('oneSignalId');
 
@@ -86,9 +89,24 @@ class AppService {
     };
   }
 
+  //Envia o e-mail com o link para resetar a senha do usuário
+  Future<String> resetPassword(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return 'Sent';
+    } on FirebaseAuthException catch (e) {
+      return '${e.message}';
+    }
+  }
+
   // Retorna o nickname do usuário atual
   String? getNickname() {
     return _firebaseAuth.currentUser!.displayName;
+  }
+
+  // Retorna o e-mail do usuário atual
+  String? getEmail() {
+    return _firebaseAuth.currentUser!.email;
   }
 
   // Incrementa wins ou losses dependendo da String que é passada como argumento [wins|losses]
@@ -102,10 +120,12 @@ class AppService {
     _users.doc(query.docs[0].id).update({'result': this._userData![result]});
   }
 
+  // Retorna o número de vitórias do usuário atual
   int getWins() {
     return this._userData!['wins'];
   }
 
+  // Retorna o número de derrotas do usuário atual
   int getLosses() {
     return this._userData!['losses'];
   }
@@ -166,7 +186,8 @@ class AppService {
         .get();
 
     if (query.docs.isNotEmpty) {
-      await _games.doc(query.docs[0].id)
+      await _games
+          .doc(query.docs[0].id)
           .update({'player2': getNickname(), 'gameState': 1});
 
       setGameState(query.docs[0]);
@@ -227,11 +248,15 @@ class AppService {
         .get();
 
     if (this.gameHost) {
-      await _games.doc(query.docs[0].id)
-          .update({'p1Hand': ['WO'], 'gameState': 2});
+      await _games.doc(query.docs[0].id).update({
+        'p1Hand': ['WO'],
+        'gameState': 2
+      });
     } else {
-      await _games.doc(query.docs[0].id)
-          .update({'p2Hand': ['WO'], 'gameState': 2});
+      await _games.doc(query.docs[0].id).update({
+        'p2Hand': ['WO'],
+        'gameState': 2
+      });
     }
 
     await incrementWinsLosses('losses');
@@ -310,7 +335,6 @@ class AppService {
 
     if (this.gameHost) {
       await updateDeckHand(card, 'p1Hand', docId);
-
     } else {
       await updateDeckHand(card, 'p2Hand', docId);
     }
@@ -331,7 +355,6 @@ class AppService {
   Future<List<String>> checkOpponentCard() async {
     if (this.gameHost) {
       return isHandBigger(_futureGameState!['p2Hand'], 'p2Hand');
-
     } else {
       return isHandBigger(_futureGameState!['p1Hand'], 'p1Hand');
     }
@@ -361,12 +384,15 @@ class AppService {
         .get();
 
     this._gameState!['handsDown'] += 1;
-    await _games.doc(query.docs[0].id).update({'handsDown': this._gameState!['handsDown']});
+    await _games
+        .doc(query.docs[0].id)
+        .update({'handsDown': this._gameState!['handsDown']});
   }
 
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou
   bool isGameOver() {
-    if (_futureGameState!['handsDown'] >= 2 || _futureGameState!['gameState'] == 2) {
+    if (_futureGameState!['handsDown'] >= 2 ||
+        _futureGameState!['gameState'] == 2) {
       return true;
     }
 
@@ -384,18 +410,15 @@ class AppService {
     // Checagem de WO
     if (this.gameHost && p2Hand[0] == 'WO') {
       return 'player1';
-
-    } else if(!this.gameHost && p1Hand[0] == 'WO') {
+    } else if (!this.gameHost && p1Hand[0] == 'WO') {
       return 'player2';
     }
 
     // Checagem por pontos
     if ((p1Points > 21 && p2Points > 21) || (p1Points == p2Points)) {
       return 'empate';
-
     } else if (p1Points > p2Points) {
       return 'player1';
-
     } else {
       return 'player2';
     }
@@ -411,11 +434,11 @@ class AppService {
       if (this._futureGameState![playerHand][i].startsWith(RegExp(r'^[JQK]'))) {
         points += 10;
 
-      // Checa se a carta começa com A
+        // Checa se a carta começa com A
       } else if (this._futureGameState![playerHand][i].startsWith('A')) {
         points += 11;
 
-      // O restante das cartas tem o
+        // O restante das cartas tem o
       } else {
         points += int.parse(this._futureGameState![playerHand][i]![0]);
       }
@@ -434,9 +457,57 @@ class AppService {
 
 List<String> generateDeck() {
   return [
-    'AE', '2E', '3E', '4E', '5E', '6E', '7E', '8E', '9E', 'DE', 'JE', 'QE', 'KE',
-    'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'DC', 'JC', 'QC', 'KC',
-    'AO', '2O', '3O', '4O', '5O', '6O', '7O', '8O', '9O', 'DO', 'JO', 'QO', 'KO',
-    'AP', '2P', '3P', '4P', '5P', '6P', '7P', '8P', '9P', 'DP', 'JP', 'QP', 'KP'
+    'AE',
+    '2E',
+    '3E',
+    '4E',
+    '5E',
+    '6E',
+    '7E',
+    '8E',
+    '9E',
+    'DE',
+    'JE',
+    'QE',
+    'KE',
+    'AC',
+    '2C',
+    '3C',
+    '4C',
+    '5C',
+    '6C',
+    '7C',
+    '8C',
+    '9C',
+    'DC',
+    'JC',
+    'QC',
+    'KC',
+    'AO',
+    '2O',
+    '3O',
+    '4O',
+    '5O',
+    '6O',
+    '7O',
+    '8O',
+    '9O',
+    'DO',
+    'JO',
+    'QO',
+    'KO',
+    'AP',
+    '2P',
+    '3P',
+    '4P',
+    '5P',
+    '6P',
+    '7P',
+    '8P',
+    '9P',
+    'DP',
+    'JP',
+    'QP',
+    'KP'
   ];
 }
