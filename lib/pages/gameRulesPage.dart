@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gruporoxo20211/pages/homepage.dart';
 
 class GameRulesPage extends StatelessWidget {
   const GameRulesPage({Key? key}) : super(key: key);
@@ -16,7 +17,8 @@ class GameRulesPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomePage()));
             },
           ),
         ),

@@ -124,7 +124,7 @@ class HomePage extends StatelessWidget {
                         height: 40,
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => GameRulesPage()));
                       },
                       style: ButtonStyle(
@@ -144,7 +144,7 @@ class HomePage extends StatelessWidget {
                         height: 40,
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => AboutPage()));
                       },
                       style: ButtonStyle(

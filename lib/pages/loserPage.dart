@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gruporoxo20211/pages/homepage.dart';
 
 class LoserPage extends StatelessWidget {
   const LoserPage({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class LoserPage extends StatelessWidget {
         color: Color(0xFF062B06),
         child: Column(children: <Widget>[
           Padding(
-              padding: EdgeInsets.only(top: 50.0),
+              padding: EdgeInsets.only(top: 100.0),
               child: Text("Fim do Jogo!",
                   style: GoogleFonts.bungee(
                       textStyle: TextStyle(
@@ -48,6 +49,8 @@ class LoserPage extends StatelessWidget {
                     )),
                 onPressed: () {
                   //Ação ao pressionar o botão
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => HomePage()));
                 },
               )),
         ]));

@@ -200,8 +200,8 @@ class AppService {
   // Cria o jogo no FireStore
   Future<void> createGame() async {
     List<String> deck = generateDeck();
-    List<String> p1Hand = [getCard(deck), getCard(deck)];
-    List<String> p2Hand = [getCard(deck), getCard(deck)];
+    List<String> p1Hand = [];
+    List<String> p2Hand = [];
 
     this._gameState = {
       'gameId': randomString(6, from: 48, to: 90),
@@ -271,13 +271,29 @@ class AppService {
 
   // Retorna o nickname do oponente
   String getOpponentNick() {
-    print('Entrou na funcão getOpponentNick');
-    print(_gameState);
     if (this.gameHost) {
       return this._gameState?['player2'];
     }
 
     return this._gameState?['player1'];
+  }
+
+  // Obter cartas da mão do jogador
+  List<String> getCards(){
+    if (this.gameHost) {
+      return this._gameState?['p1Hand'].cast<String>();
+    }
+
+    return this._gameState?['p2Hand'].cast<String>();
+  }
+
+  // Obter cartas da mão do oponente
+  List<String> getOpponentCards(){
+    if (this.gameHost) {
+      return this._gameState?['p2Hand'].cast<String>();
+    }
+
+    return this._gameState?['p1Hand'].cast<String>();
   }
 
   // Espera por um jogador e busca no Firestore para ver se
