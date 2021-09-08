@@ -250,8 +250,8 @@ class BlackJack extends Game with TapDetector {
 
     // Se jogador tem mais de 21 pontos não pode abaixar a mão mais e é setado no firebase que ele abaixou a mão
     if (jogador.pontos >= 21 && abaixar == false) {
-      await context?.read<AppService>().putHandDown();
       abaixar = true;
+      await context?.read<AppService>().putHandDown();
     }
   }
 

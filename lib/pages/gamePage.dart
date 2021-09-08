@@ -34,7 +34,6 @@ class _GamePageState extends State<GamePage> {
 
       // Chamar funções que atualizam estado do jogo através de comunicação com Firestore
       await _context!.read<AppService>().fetchGameState();
-      _context!.read<AppService>().passGameState();
 
       // Verificar se oponente comprou cartas e animar compra na tela do jogo
       var lista = _context!.read<AppService>().checkOpponentCard();
@@ -51,11 +50,15 @@ class _GamePageState extends State<GamePage> {
         BlackJack.cardAdv = true;
       }
 
+      // Passar estado do jogo
+      _context!.read<AppService>().passGameState();
+
       // Verficar se jogo terminou
       var isGameOver = _context!.read<AppService>().isGameOver();
       if (isGameOver) {
         print('jogo acabou');
         BlackJack.turnAdv = true;
+        BlackJack.gameEnd = true;
       }
     });
   }
