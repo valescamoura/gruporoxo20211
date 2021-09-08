@@ -67,7 +67,7 @@ class BlackJack extends Game with TapDetector {
   BlackJack(BuildContext context) {
     this.context = context;
 
-    //Reiniciar váriaveis estáticas
+    //Reiniciar variáveis estáticas
     isPressed = false;
     abaixar = false;
     gameEnd = false;
@@ -144,7 +144,7 @@ class BlackJack extends Game with TapDetector {
 
     var textPaint2 = TextPaint(
       config: TextPaintConfig(
-        fontSize: 20.0,
+        fontSize: 24.0,
         fontFamily: 'Arial',
         color: Color(0xFFAD200C),
       ),
@@ -168,20 +168,18 @@ class BlackJack extends Game with TapDetector {
     }
 
     final deckArea = deckPosition & Vector2(cardWidth, cardHeight);
-    if (!draw && !zoom){
+    if (!draw && !zoom && !isPressed){
       if (deckArea.contains(info.eventPosition.game.toOffset())) {
         // Verificar se jogador pode comprar cartas
         if(jogador.pontos >= 21){
           jogador.estourou = true;
         }
         else{
-          var card = await this.context?.read<AppService>().askForCard() as String;
-          isPressed = true;
-          click = true;
-          
-          print('A carta retornada foi: $card');
           draw = true;
+          isPressed = true;
           quant += 1;
+          var card = await this.context?.read<AppService>().askForCard() as String;
+          click = true;
           Carta.comprarCarta(card);
         }
       }

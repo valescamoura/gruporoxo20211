@@ -271,6 +271,18 @@ class AppService {
     await incrementWinsLosses('losses');
   }
 
+  // Finalizar jogo devido ao fim do tempo de jogo para evitar que um jogador
+  // fique preso na partida caso outro saia inesperadamente
+  Future<void> endGame() async {
+    QuerySnapshot query = await _games
+        .where('gameId', isEqualTo: this._gameState!['gameId'])
+        .get();
+
+    await _games.doc(query.docs[0].id).update({
+        'gameState': 2
+    });
+  }
+
   // Pega uma carta aleatória do deck localmente e retorna a String dela
   String getCard(List<String> deck) {
     Random rnd = new Random();
@@ -309,7 +321,7 @@ class AppService {
   // Espera por um jogador e busca no Firestore para ver se
   // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
   Future<bool> waitForPlayer() async {
-    //while (true) {
+    
     QuerySnapshot query = await _games
         .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
@@ -321,7 +333,7 @@ class AppService {
     }
 
     return false;
-    //}
+   
   }
 
   void getListOfStrings(List<String> localDeck, List<dynamic> fireBaseDeck) {
@@ -413,9 +425,19 @@ class AppService {
     int p1Points = getPlayerPoints('p1Hand');
     int p2Points = getPlayerPoints('p2Hand');
 
-    Map p1Hand = this._futureGameState!['p1Hand'];
-    Map p2Hand = this._futureGameState!['p2Hand'];
+    List p1Hand = this._futureGameState!['p1Hand'];
+    List p2Hand = this._futureGameState!['p2Hand'];
 
+    // Verificação de mãos vazias
+    if (p1Hand.isEmpty && p2Hand.isEmpty) {
+      return 'empate';
+    } else if ((this.gameHost && p2Hand.isEmpty) || (!this.gameHost && p2Hand.isEmpty)) {
+      return 'player1';
+    }
+    else if ((this.gameHost && p1Hand.isEmpty) || (!this.gameHost && p1Hand.isEmpty)) {
+      return 'player2';
+    }
+    
     // Checagem de WO
     if (this.gameHost && p2Hand[0] == 'WO') {
       return 'player1';

@@ -38,7 +38,7 @@ class _SalaDeEsperaState extends State<SalaDeEspera> {
       setState(() {
         (_counter > 0) ? _counter-- : _timer.cancel();
       });
-      print('Contador = $_counter');
+      //print('Contador = $_counter');
       if (await hasOpponent()) {
         // Zerar contador
         _counter = 0;

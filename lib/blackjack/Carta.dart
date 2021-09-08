@@ -184,10 +184,10 @@ class Carta {
   static comprarCarta(String naipe) {
     // Criar objeto carta a partir da string do naipe
     var carta  = toCard(naipe);
-    // Adicionar carta à mão do jogador
-    BlackJack.jogador.mao.add(carta);
     // Somar pontos à mão do jogador
     BlackJack.jogador.pontos += carta.valor;
+    // Adicionar carta à mão do jogador
+    BlackJack.jogador.mao.add(carta); 
   }
 
   // Animar cartas compradas pelo adversário
@@ -203,12 +203,14 @@ class Carta {
 
   // Virar cartas do adversário
   static virarCartasAdv() {
-    BlackJack.adversario.mao[BlackJack.adversario.mao.length - 1].isTurning = true;
-    for (int i = BlackJack.adversario.mao.length - 1; i >= 0; i --){
-      BlackJack.adversario.mao[i].isTurning = true;
-      BlackJack.adversario.mao[i].turnCard();
-      if (BlackJack.adversario.mao[i].isTurned)
-        break;
+    if (BlackJack.adversario.mao.length > 0){
+      BlackJack.adversario.mao[BlackJack.adversario.mao.length - 1].isTurning = true;
+      for (int i = BlackJack.adversario.mao.length - 1; i >= 0; i --){
+        BlackJack.adversario.mao[i].isTurning = true;
+        BlackJack.adversario.mao[i].turnCard();
+        if (BlackJack.adversario.mao[i].isTurned)
+          break;
+      }
     }
   }
 }
