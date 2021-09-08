@@ -4,7 +4,7 @@ class Jogador {
   // Atributos
   List<Carta> mao; 
   int pontos;
-
+ 
   bool abaixou = false;
   bool estourou = false;
 

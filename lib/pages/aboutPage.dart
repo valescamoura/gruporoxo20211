@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gruporoxo20211/pages/homepage.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({ Key? key }) : super(key: key);
@@ -17,7 +18,8 @@ class AboutPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => HomePage()));
             },
           ),
         ),

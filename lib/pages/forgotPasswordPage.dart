@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gruporoxo20211/pages/LoginPage.dart';
+import 'package:gruporoxo20211/pages/loginPage.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   @override
@@ -17,7 +17,8 @@ class ForgotPasswordPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginPage()));
           },
         ),
       ),
@@ -77,7 +78,7 @@ class ForgotPasswordForm extends StatelessWidget {
                 onPressed: () {
                   if (_signUpKey.currentState!.validate()) {
                     //envia query para recuperar senha
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => LoginPage()));
                   }
                 },

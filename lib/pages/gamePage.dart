@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/AppService.dart';
+import 'package:gruporoxo20211/pages/loserPage.dart';
 import 'package:provider/provider.dart';
 import 'package:gruporoxo20211/blackjack/BlackJack.dart';
 import 'dart:async';
@@ -65,12 +66,8 @@ class _GamePageState extends State<GamePage> {
                     padding: EdgeInsets.only(left: 345.0),
                     child: TextButton(
 
-                      onPressed: () async {
-                        var s = _counter;
-                        _counter = 0;
-                        _timer.cancel();
-                        showAlertDialog1(context);
-                        startTimer(s);
+                      onPressed: () {
+                        showAlertDialog1(context, _timer);
                       },
                       child: Image.asset("assets/images/exitButton.png",
                           height: 30.0, width: 23),
@@ -82,7 +79,7 @@ class _GamePageState extends State<GamePage> {
   }
 }
 
-showAlertDialog1(BuildContext context) {
+showAlertDialog1(BuildContext context, Timer timer) {
   //configura o  AlertDialog se o jogador apertar o botão de sair
   AlertDialog alerta = AlertDialog(
     title: Text("Deseja mesmo desistir?"),
@@ -113,15 +110,19 @@ showAlertDialog1(BuildContext context) {
                   "Sim",
                   style: TextStyle(fontSize: 18.0),
                 ),
-                onPressed: () {
-                  //TODO 
-                 
+                onPressed: () async {
+                  // Desistir da partida
+                  await context.read<AppService>().giveUp();
                   
                   //Aumentar em 1 o número de derrotas;
-                  //Dar vitória para o adversário
-                  //Redireciona o perdedor para a página de derrota
-                  //Redireciona o vencedor para a página de vitória
+                  await context.read<AppService>().incrementWinsLosses('losses');
+                
                   //Parar contador
+                  timer.cancel();
+
+                  //Redireciona o jogador para a página de derrota
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoserPage()));
                 },
               )),
         ],

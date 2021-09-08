@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/gamePage.dart';
+import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:provider/provider.dart';
 
 class SalaDeEspera extends StatefulWidget {
@@ -44,7 +45,7 @@ class _SalaDeEsperaState extends State<SalaDeEspera> {
         _timer.cancel();
 
         // Redirecionar para tela de jogo
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => GamePage()));
       }
     });
@@ -57,7 +58,8 @@ class _SalaDeEsperaState extends State<SalaDeEspera> {
     // Deletar sala antes de sair
     context.read<AppService>().deleteGame();
     // Voltar à homepage
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => HomePage()));
   }
 
   @override

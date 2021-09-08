@@ -75,12 +75,12 @@ class HomePage extends StatelessWidget {
                         // enviar notificações aqui
                         
                         // Redirecionar para sala de espera
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) => SalaDeEspera()));
                       }
                       else{
                         // Redirecionar para tela de jogo
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) => GamePage()));
                       }
                     },
@@ -140,7 +140,7 @@ class HomePage extends StatelessWidget {
                         height: 40,
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => GameRulesPage()));
                       },
                       style: ButtonStyle(
@@ -160,7 +160,7 @@ class HomePage extends StatelessWidget {
                         height: 40,
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => AboutPage()));
                       },
                       style: ButtonStyle(

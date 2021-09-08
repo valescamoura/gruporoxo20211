@@ -21,8 +21,8 @@ class BlackJack extends Game with TapDetector {
   int timer = 0; 
   int quant = 0;
 
-  static late Jogador jogador = Jogador([],0);
-  static late Jogador adversario = Jogador([],0);
+  static late Jogador jogador = Jogador([], 0);
+  static late Jogador adversario = Jogador([], 0);
   static late Map sprites = {};
   
   late Sprite deck;
@@ -43,10 +43,10 @@ class BlackJack extends Game with TapDetector {
   late Sprite lineAdversario;
   late Vector2 lineAdversarioPos;
   
-  bool inicializando = true;
   int pos = 0;
   static bool isPressed = false;
   static bool abaixar = false;
+  static bool gameEnd = false;
   static bool draw = false;
   static bool zoom = false;
   static bool click = false;
@@ -57,9 +57,10 @@ class BlackJack extends Game with TapDetector {
   late TextPaint nickJogador;
   late TextPaint nickAdversario;
 
-  static String message = "";
-  static bool hasMessage = false;
-  late TextPaint labelMessage;
+  late TextPaint pontosJogador;
+  late TextPaint pontosAdversario;
+
+  late TextPaint labelTimer;
 
   BlackJack(BuildContext context) {
     this.context = context;
@@ -113,46 +114,11 @@ class BlackJack extends Game with TapDetector {
     lineJogadorPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) + (cardHeight/2) + (SizeConfig.blockSizeVertical)*8);
     lineAdversarioPos = Vector2(SizeConfig.blockSizeHorizontal*5, (SizeConfig.screenHeight/2) - (cardHeight/2) - (SizeConfig.blockSizeVertical)*8);
   
-    // Garantir que algumas variáveis sejam inicializadas apenas uma vez
-    if (inicializando) {
-      inicializando = false;
+    // Inicializado nick dos jogadores
+    nicknameJogador = this.context?.read<AppService>().getNickname() as String;
+    nicknameAdversario = this.context?.read<AppService>().getOpponentNick() as String;
 
-      // Inicializado nome dos jogadores
-      nicknameJogador = this.context?.read<AppService>().getNickname() as String;
-      nicknameAdversario = this.context?.read<AppService>().getOpponentNick() as String;
-      
-      // Inicializando mão de cartas do oponente
-      var cardsOponente = this.context?.read<AppService>().getOpponentCards();
-      for (var i = 0; i < cardsOponente!.length; i++){
-        // Criar objeto carta a partir da string do naipe
-        var carta  = Carta.toCard(cardsOponente[i]);
-        // Adicionar carta à mão do oponente
-        adversario.mao.add(carta);
-        // Somar pontos à mão do oponente
-        adversario.pontos += carta.valor;
-      }
-
-      // Inicializando mão de cartas do jogador
-      var cardsJogador = this.context?.read<AppService>().getOpponentCards();
-      for (var i = 0; i < cardsJogador!.length; i++){
-        // Criar objeto carta a partir da string do naipe
-        var carta  = Carta.toCard(cardsJogador[i]);
-        // Adicionar carta à mão do jogador
-        jogador.mao.add(carta);
-        // Somar pontos à mão do jogador
-        jogador.pontos += carta.valor;
-      }
-    }
-
-    nickJogador = TextPaint(
-      config: TextPaintConfig(
-        fontSize: 20.0,
-        fontFamily: 'Arial',
-        color: Color(0xFFFFFFFF),
-      ),
-    );
-  
-    nickAdversario = TextPaint(
+    var textPaint = TextPaint(
       config: TextPaintConfig(
         fontSize: 20.0,
         fontFamily: 'Arial',
@@ -160,21 +126,20 @@ class BlackJack extends Game with TapDetector {
       ),
     );
 
-    labelBtn = TextPaint(
+    var textPaint2 = TextPaint(
       config: TextPaintConfig(
         fontSize: 20.0,
         fontFamily: 'Arial',
-        color: Color(0xFFFFFFFF),
+        color: Color(0xFFAD200C),
       ),
     );
 
-    labelMessage = TextPaint(
-      config: TextPaintConfig(
-        fontSize: 14.0,
-        fontFamily: 'Arial',
-        color: Color(0xFFFDFD96),
-      ),
-    );
+    nickJogador = textPaint;
+    nickAdversario = textPaint;
+    labelBtn = textPaint;
+    labelTimer = textPaint2;
+    pontosJogador = textPaint;
+    pontosAdversario = textPaint;
   }
 
   @override
@@ -271,13 +236,11 @@ class BlackJack extends Game with TapDetector {
   // GAME LOOP AQUI
   @override
   void render(Canvas canvas) {
-
     // Renderizar botão de "abaixar a mão"
     final button = abaixar ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
     labelBtn.render(canvas, "Abaixar", Vector2(buttonPosition.x+buttonSize.x/2, buttonPosition.y+35), anchor: Anchor.bottomCenter);
     
-
     // Renderizar baralho de cartas
     deck.render(canvas, position: deckPosition, size: Vector2(cardWidth, cardHeight));
 
@@ -288,6 +251,17 @@ class BlackJack extends Game with TapDetector {
     nickJogador.render(canvas, nicknameJogador, Vector2(lineJogadorPos.x+lineSize.x, lineJogadorPos.y), anchor: Anchor.bottomRight);
     nickAdversario.render(canvas, nicknameAdversario, Vector2(lineAdversarioPos.x, lineAdversarioPos.y), anchor: Anchor.bottomLeft);
 
+    // Renderizar pontuação do jogador e do adversário
+    pontosJogador.render(canvas, jogador.pontos.toString(), Vector2(lineJogadorPos.x, lineJogadorPos.y), anchor: Anchor.bottomLeft);
+    if (gameEnd){
+      pontosAdversario.render(canvas, adversario.pontos.toString(), Vector2(lineAdversarioPos.x+lineSize.x, lineAdversarioPos.y), anchor: Anchor.bottomRight);
+    }
+
+    // Renderizar timer na tela
+    var minutos = (timer ~/ 60).toString();
+    var segundos = (timer % 60) > 9 ? (timer % 60).toString() :  '0'+(timer % 60).toString();
+    labelTimer.render(canvas, minutos+':'+segundos, Vector2(SizeConfig.screenWidth/2, SizeConfig.blockSizeVertical*7), anchor: Anchor.bottomCenter);
+    
     // Movimentação das cartas após a compra
     if (draw && quant == jogador.mao.length){
       for (int i = 0; i < jogador.mao.length; i++) {
@@ -300,7 +274,7 @@ class BlackJack extends Game with TapDetector {
       }
     }
     
-    // Virada da carta
+    // Virada da carta do jogador após a compra
     for (var i = 0; i < jogador.mao.length; i++){
       if (jogador.mao[i].isTurning) {
         jogador.mao[i].turnCard();
