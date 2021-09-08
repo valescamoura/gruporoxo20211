@@ -146,7 +146,6 @@ class BlackJack extends Game with TapDetector {
   Future<void> onTapDown(TapDownInfo info) async {
     final buttonArea = buttonPosition & buttonSize;
     if (buttonArea.contains(info.eventPosition.game.toOffset()) && abaixar == false) {
-      print('botão abaixar clicado');
       await this.context?.read<AppService>().putHandDown();
       abaixar = true;
     }

@@ -93,6 +93,7 @@ class AppService {
 
   // Incrementa wins ou losses dependendo da String que é passada como argumento [wins|losses]
   Future<void> incrementWinsLosses(String result) async {
+    print(this._userData);
     this._userData![result] += 1;
     QuerySnapshot query = await _users
         .where('email', isEqualTo: _firebaseAuth.currentUser!.email)

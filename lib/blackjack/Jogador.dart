@@ -10,9 +10,4 @@ class Jogador {
 
   // Construtor
   Jogador(this.mao, this.pontos);
-
-  //Métodos
-  void abaixarMao(Carta mao) {
-    //TODO
-  }
 }

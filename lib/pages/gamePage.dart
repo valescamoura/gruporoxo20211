@@ -34,6 +34,10 @@ class _GamePageState extends State<GamePage> {
       // Chamar funções que atualizam estado do jogo através de comunicação com Firestore
       await _context!.read<AppService>().fetchGameState();
       _context!.read<AppService>().passGameState();
+
+      // TODO: Verificar se oponente comprou cartas e animar compra na tela do jogo
+
+      // TODO: Ver
       
     });
   }
@@ -111,11 +115,8 @@ showAlertDialog1(BuildContext context, Timer timer) {
                   style: TextStyle(fontSize: 18.0),
                 ),
                 onPressed: () async {
-                  // Desistir da partida
+                  // Desistir da partida e aumentar em 1 o número de derrotas
                   await context.read<AppService>().giveUp();
-                  
-                  //Aumentar em 1 o número de derrotas;
-                  await context.read<AppService>().incrementWinsLosses('losses');
                 
                   //Parar contador
                   timer.cancel();

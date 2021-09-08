@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/pages/homepage.dart';
+import 'package:gruporoxo20211/pages/SalaDeEspera.dart';
+import 'package:gruporoxo20211/pages/GamePage.dart';
+import 'package:provider/provider.dart';
+import 'package:gruporoxo20211/AppService.dart';
 
 class LoserPage extends StatelessWidget {
   const LoserPage({Key? key}) : super(key: key);
@@ -31,9 +35,27 @@ class LoserPage extends StatelessWidget {
                     style: GoogleFonts.robotoCondensed(
                       textStyle: TextStyle(fontSize: 25.0, color: Colors.white),
                     )),
-                onPressed: () {
-                  //Ação ao pressionar o botão
-                },
+                onPressed: () async {
+                      String nome =
+                          await context.read<AppService>().searchForGame();
+                      
+                      if (nome.isEmpty) {
+                        // Criar jogo
+                        await context.read<AppService>().createGame();
+
+                        // TODO: Enviar notificação convidando para jogar
+                        // enviar notificações aqui
+                        
+                        // Redirecionar para sala de espera
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => SalaDeEspera()));
+                      }
+                      else{
+                        // Redirecionar para tela de jogo
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => GamePage()));
+                      }
+                    },
               )),
           Padding(
               padding: EdgeInsets.only(top: 20.0),
@@ -48,7 +70,7 @@ class LoserPage extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 25.0, color: Colors.white),
                     )),
                 onPressed: () {
-                  //Ação ao pressionar o botão
+                  // Voltar à homepage
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => HomePage()));
                 },
