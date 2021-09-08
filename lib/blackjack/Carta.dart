@@ -91,21 +91,15 @@ class Carta {
 
     var yFinal = (SizeConfig.screenHeight/2) - (BlackJack.cardHeight/2) - (SizeConfig.blockSizeVertical*27);
 
-    if (x <= (metadeDaTela + (cardDivSeis * (quant - 1)))){
-      // x foi velocidade escolhida na carta, quão mais rápido a carta se move
-      x += ((metadeDaTela - (SizeConfig.blockSizeHorizontal*5))/55) + (cardDivSeis * (quant - 1) / 55);
+    // y é a velocidade escolhida para movimento da carta
+    y += (yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55;
 
-      // y é a velocidade escolhida para movimento da carta
-      print((yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55);
-      y += (yFinal -  (SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55;
+    if(!moveX(quant) && y <= yFinal -  ((SizeConfig.blockSizeVertical*50) + (BlackJack.cardHeight/2))/55) {
+      y = yFinal;
+      return false;
 
-      if (y <= yFinal +  ((SizeConfig.blockSizeVertical*50) - (BlackJack.cardHeight/2))/55) {
-        y = yFinal;
-        BlackJack.isPressed = false;
-      }
-      return true;
     }
-    return false;
+    return true;
   }
 
   // Movimentar no eixo X as cartas que já foram compradas
@@ -209,8 +203,8 @@ class Carta {
 
   // Virar cartas do adversário
   static virarCartasAdv() {
-    BlackJack.adversario.mao[0].isTurning = true;
-    for (int i = 0; i < BlackJack.adversario.mao.length; i ++){
+    BlackJack.adversario.mao[BlackJack.adversario.mao.length - 1].isTurning = true;
+    for (int i = BlackJack.adversario.mao.length - 1; i >= 0; i --){
       BlackJack.adversario.mao[i].isTurning = true;
       BlackJack.adversario.mao[i].turnCard();
       if (BlackJack.adversario.mao[i].isTurned)
