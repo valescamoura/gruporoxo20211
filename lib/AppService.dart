@@ -122,6 +122,8 @@ class AppService {
 
   // Retorna o número de vitórias do usuário atual
   int getWins() {
+    print('erro aqui');
+    // TODO: Erro no _userData, está nulo.
     return this._userData!['wins'];
   }
 
