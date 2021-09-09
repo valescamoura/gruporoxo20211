@@ -431,13 +431,15 @@ class AppService {
     // Verificação de mãos vazias
     if (p1Hand.isEmpty && p2Hand.isEmpty) {
       return 'empate';
-    } else if ((this.gameHost && p2Hand.isEmpty) || (!this.gameHost && p2Hand.isEmpty)) {
+    } else if ((this.gameHost && p2Hand.isEmpty) ||
+        (!this.gameHost && p2Hand.isEmpty)) {
       return 'player1';
     }
-    else if ((this.gameHost && p1Hand.isEmpty) || (!this.gameHost && p1Hand.isEmpty)) {
+    else if ((this.gameHost && p1Hand.isEmpty) ||
+        (!this.gameHost && p1Hand.isEmpty)) {
       return 'player2';
     }
-    
+
     // Checagem de WO
     if (this.gameHost && p2Hand[0] == 'WO') {
       return 'player1';
@@ -446,8 +448,14 @@ class AppService {
     }
 
     // Checagem por pontos
-    if ((p1Points > 21 && p2Points > 21) || (p1Points == p2Points)) {
+    if ((p1Points > 21 && p2Points > 21) || (p1Points == p2Points) || (p1Points < 16 && p2Points < 16)) {
       return 'empate';
+    } else if((p1Points > 21 && p2Points < 16) || (p1Points < 16 && p2Points > 21)) {
+      return 'empate';
+    } else if(p1Points > 21 || p1Points < 16) {
+      return 'player2';
+    } else if(p2Points > 21 || p2Points < 16) {
+      return 'player1';
     } else if (p1Points > p2Points) {
       return 'player1';
     } else {
