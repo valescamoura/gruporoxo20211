@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gruporoxo20211/AppService.dart';
-import 'package:gruporoxo20211/pages/loginPage.dart';
 import 'package:provider/provider.dart';
 
 //Essa página serve para que o usuário se cadastre no sistema e faça login após
@@ -39,8 +38,7 @@ class _State extends State<SignUpPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => LoginPage()));
+            Navigator.of(context).pop();
           },
         ),
       ),

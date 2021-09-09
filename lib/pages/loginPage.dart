@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: Colors.blue),
                                   recognizer: new TapGestureRecognizer()
                                     ..onTap = () {
-                                      Navigator.of(context).pushReplacement(
+                                      Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   SignUpPage()));
@@ -196,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: Colors.blue),
                                   recognizer: new TapGestureRecognizer()
                                     ..onTap = () {
-                                      Navigator.of(context).pushReplacement(
+                                      Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ForgotPasswordPage()));

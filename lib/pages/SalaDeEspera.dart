@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/gamePage.dart';
-import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:provider/provider.dart';
 //Página onde a pessoa espera por outros jogadores até ter uma partida pronta
 //irá redirecionar para gamePage.dart
@@ -60,8 +59,7 @@ class _SalaDeEsperaState extends State<SalaDeEspera> {
     // Deletar sala antes de sair
     context.read<AppService>().deleteGame();
     // Voltar à homepage
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    Navigator.of(context).pop();
     // Limpar dados do game state
     context.read<AppService>().cleanGameState();
   }

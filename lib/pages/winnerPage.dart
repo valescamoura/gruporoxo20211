@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:gruporoxo20211/pages/SalaDeEspera.dart';
 import 'package:gruporoxo20211/pages/GamePage.dart';
 import 'package:provider/provider.dart';
@@ -85,8 +84,7 @@ class WinnerPage extends StatelessWidget {
                     )),
                 onPressed: () {
                   // Voltar à homepage
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                  Navigator.of(context).pop();
                 },
               )),
         ]));

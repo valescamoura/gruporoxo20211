@@ -81,12 +81,12 @@ class HomePage extends StatelessWidget {
                           // enviar notificações aqui
 
                           // Redirecionar para sala de espera
-                          Navigator.of(context).pushReplacement(
+                          Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => SalaDeEspera()));
                         } else {
                           // Redirecionar para tela de jogo
-                          Navigator.of(context).pushReplacement(
+                          Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => GamePage()));
                         }
