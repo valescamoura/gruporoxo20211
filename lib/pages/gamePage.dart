@@ -51,7 +51,7 @@ class _GamePageState extends State<GamePage> {
           BlackJack.adversario.pontos += carta.valor;
         }
 
-        // Animar compra da carta realizada pelo usuário
+        // Animar compra da carta realizada pelo oponente
         BlackJack.cardAdv = true;
       }
 
