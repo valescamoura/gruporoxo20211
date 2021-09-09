@@ -38,9 +38,17 @@ class AppService {
 
     QuerySnapshot query =
         await _users.where('oneSignalId', isNotEqualTo: userId).get();
-    QueryDocumentSnapshot doc = query.docs[0];
-    return await OneSignal.shared.postNotification(
-        OSCreateNotification(playerIds: [], content: content, heading: title));
+
+    List<String> playerIDs = [];
+    if (query.docs[0].exists) {
+      for (int i = 0; i < query.docs.length; i ++) {
+        playerIDs.add(query.docs[i]['oneSignalId']);
+      }
+
+      return await OneSignal.shared.postNotification(
+        OSCreateNotification(playerIds: playerIDs, content: content, heading: title));
+
+    }
   }
 
   // *******************************
