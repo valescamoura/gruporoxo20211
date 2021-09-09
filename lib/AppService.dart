@@ -470,7 +470,7 @@ class AppService {
     // Faz o loop dentro do array de cartas da mão de um jogador
     for (int i = 0; i < this._futureGameState![playerHand].length; i++) {
       // Checa se a carta começa com J, Q ou K
-      if (this._futureGameState![playerHand][i].startsWith(RegExp(r'^[JQK]'))) {
+      if (this._futureGameState![playerHand][i].startsWith(RegExp(r'^[JQKD]'))) {
         points += 10;
 
         // Checa se a carta começa com A
