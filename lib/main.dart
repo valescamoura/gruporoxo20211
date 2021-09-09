@@ -13,7 +13,7 @@ Future<void> main() async {
 }
 
 // --------------------------------------------------------------------------
-// Classe inicial que provê o contexto para o resante das telas do aplicativo,
+// Classe inicial que provê o contexto para o restante das telas do aplicativo,
 // como é possível ver pelos Providers abaixo
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
