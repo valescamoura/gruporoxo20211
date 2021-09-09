@@ -422,22 +422,15 @@ class AppService {
 
   // Retorna uma String dizendo qual jogador venceu ou se foi empate [player1|player2|empate]
   String whoWon() {
-    int p1Points = getPlayerPoints('p1Hand');
-    int p2Points = getPlayerPoints('p2Hand');
-
     List p1Hand = this._futureGameState!['p1Hand'];
     List p2Hand = this._futureGameState!['p2Hand'];
+
+    int p1Points = p1Hand.isEmpty ? 0 : getPlayerPoints('p1Hand');
+    int p2Points = p2Hand.isEmpty ? 0 : getPlayerPoints('p2Hand');
 
     // Verificação de mãos vazias
     if (p1Hand.isEmpty && p2Hand.isEmpty) {
       return 'empate';
-    } else if ((this.gameHost && p2Hand.isEmpty) ||
-        (!this.gameHost && p2Hand.isEmpty)) {
-      return 'player1';
-    }
-    else if ((this.gameHost && p1Hand.isEmpty) ||
-        (!this.gameHost && p1Hand.isEmpty)) {
-      return 'player2';
     }
 
     // Checagem de WO
@@ -470,14 +463,14 @@ class AppService {
     // Faz o loop dentro do array de cartas da mão de um jogador
     for (int i = 0; i < this._futureGameState![playerHand].length; i++) {
       // Checa se a carta começa com J, Q ou K
-      if (this._futureGameState![playerHand][i].startsWith(RegExp(r'^[JQKD]'))) {
+      if (this._futureGameState![playerHand][i].startsWith(RegExp(r'^[JQKDW]'))) {
         points += 10;
 
         // Checa se a carta começa com A
       } else if (this._futureGameState![playerHand][i].startsWith('A')) {
         points += 11;
 
-        // O restante das cartas tem o
+        // O restante das cartas tem o valor correspondente ao primeiro caracter
       } else {
         points += int.parse(this._futureGameState![playerHand][i]![0]);
       }
