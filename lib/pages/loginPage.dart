@@ -245,6 +245,5 @@ class _LoginPageState extends State<LoginPage> {
     final status = await OneSignal.shared.getDeviceState();
     final String? osUserID = status?.userId;
     userId = osUserID.toString();
-    print(userId);
   }
 }

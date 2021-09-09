@@ -75,18 +75,16 @@ class HomePage extends StatelessWidget {
                           // Criar jogo
                           await context.read<AppService>().createGame();
 
-                          // TODO: Enviar notificação convidando para jogar
                           // enviar notificações aqui
+                          await context.read<AppService>().postNotification();
 
                           // Redirecionar para sala de espera
-                          Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => SalaDeEspera()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SalaDeEspera()));
                         } else {
                           // Redirecionar para tela de jogo
-                          Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => GamePage()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => GamePage()));
                         }
                       },
                       style: ButtonStyle(
