@@ -76,16 +76,6 @@ class Carta {
     return true;
   }
 
-  // Compra de carta única para a escolha de valor do A
-  bool drawA(){
-    if (x <= (metadeDaTela + cardDivSeis )){
-      // x foi velocidade escolhida na carta, quão mais rápido a carta se move
-      x += ((metadeDaTela - (SizeConfig.blockSizeHorizontal*5))/55);
-      return true;
-    }
-    return false;
-  }
-
   // Comprar a carta oponente: Mudar a posição dos eixos x e y da carta
   bool drawAdv(int quant){
 

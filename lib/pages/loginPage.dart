@@ -6,6 +6,7 @@ import 'package:gruporoxo20211/pages/forgotPasswordPage.dart';
 import 'package:gruporoxo20211/pages/signUpPage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //Pagina utilizada para fazer o login através do email e senha
 //Também possui redirecionamento para: forgotPassword e signUp
@@ -136,8 +137,6 @@ class _LoginPageState extends State<LoginPage> {
                                   fontSize: 18.0, color: Colors.white),
                             )),
                         onPressed: () async {
-                          print('userId = $userId');
-                          await context.read<AppService>().setOneSignalId(userId);
                           if (_loginKey.currentState!.validate()) {
                             context
                                 .read<AppService>()
@@ -245,6 +244,9 @@ class _LoginPageState extends State<LoginPage> {
     // Para que possa ser usado para enviar notificações aos usuários posteriormente.̥
     final status = await OneSignal.shared.getDeviceState();
     final String? osUserID = status?.userId;
-    userId = osUserID.toString();
+    String oneSignalId = osUserID.toString();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('oneSignalId', oneSignalId);
   }
 }
