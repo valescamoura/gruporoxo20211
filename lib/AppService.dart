@@ -32,13 +32,13 @@ class AppService {
     String? userId = prefs.getString('oneSignalId');
 
     QuerySnapshot query =
-        await _users.where('oneSignalId', isNotEqualTo: userId).get();
+        await _users.where('oneSignal', isNotEqualTo: userId).get();
 
     List<String> playerIDs = [];
     if(query.docs.isNotEmpty){
       if (query.docs[0].exists) {
         for (int i = 0; i < query.docs.length; i ++) {
-          playerIDs.add(query.docs[i]['oneSignalId']);
+          playerIDs.add(query.docs[i]['oneSignal']);
         }
 
         return await OneSignal.shared.postNotification(
@@ -502,7 +502,6 @@ class AppService {
   // Limpa os dados do jogo que acabou
   void cleanGameState() {
     this._gameState!.clear();
-    _futureGameState!.clear();
     this.gameHost = false;
   }
 }
