@@ -22,10 +22,11 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
   final _textEmail = TextEditingController();
   final _textPassword = TextEditingController();
-  static final String oneSignalAppId = "77921c19-8d0d-48da-ae17-caf67a5bd4a7";
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  static final String oneSignalAppId = "77921c19-8d0d-48da-ae17-caf67a5bd4a7";
   String message = "";
   String alertMessage = "";
+  String userId = "";
 
   @override
   void initState() {
@@ -135,6 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                                   fontSize: 18.0, color: Colors.white),
                             )),
                         onPressed: () {
+                          context.read<AppService>().setOneSignalId(userId);
                           if (_loginKey.currentState!.validate()) {
                             context
                                 .read<AppService>()
@@ -238,20 +240,11 @@ class _LoginPageState extends State<LoginPage> {
     //Faz a conexão do aplicativo com o oneSignal
     await OneSignal.shared.setAppId(oneSignalAppId);
 
-    // Obtém o userId Onesignal e armazena no firebase ao fazer login
+    // Obtém o userId Onesignal
     // Para que possa ser usado para enviar notificações aos usuários posteriormente.̥
     final status = await OneSignal.shared.getDeviceState();
     final String? osUserID = status?.userId;
-    print(osUserID);
-  }
-
-  //Função para enviar notificações
-  Future postNotification() async {
-    String title = "Olá Jogador";
-    String content = "Tem um jogo disponível entre para jogar!";
-    return await OneSignal.shared.postNotification(OSCreateNotification(
-        playerIds: ['c611416a-5a3d-414f-92e4-9c65fe814b8d'],
-        content: content,
-        heading: title));
+    userId = osUserID.toString();
+    print(userId);
   }
 }
