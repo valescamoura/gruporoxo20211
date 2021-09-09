@@ -8,6 +8,10 @@ import 'package:gruporoxo20211/pages/gameRulesPage.dart';
 import 'package:gruporoxo20211/pages/profilePage.dart';
 import 'package:provider/provider.dart';
 
+//Página principal do aplicativo,
+//onde é possivel se redirecionar para as outras paginas (aboutPage, SalaDeEspera, GameRulesPage, profilePage)
+//ou sair do jogo
+
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 

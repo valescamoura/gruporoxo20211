@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:gruporoxo20211/blackjack/BlackJack.dart';
 import 'dart:async';
 
+//Página principal do jogo, aqui é onde o jogo acontece
+
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
 
@@ -32,7 +34,7 @@ class _GamePageState extends State<GamePage> {
     _counter = s;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       (_counter > 0) ? _counter-- : _timer.cancel();
-      
+
       // Atualizar contador da classe BlackJack
       _myGame.timer = _counter;
 
@@ -41,14 +43,14 @@ class _GamePageState extends State<GamePage> {
 
       // Verificar se oponente comprou cartas e animar compra na tela do jogo
       var lista = _context!.read<AppService>().checkOpponentCard();
-      if (lista.length > 0){
-        for (var i = 0; i < lista.length; i++){
+      if (lista.length > 0) {
+        for (var i = 0; i < lista.length; i++) {
           // transformar string em objeto carta
           var carta = Carta.toCard(lista[i]);
           BlackJack.adversario.mao.add(carta);
           BlackJack.adversario.pontos += carta.valor;
         }
-        
+
         // Animar compra da carta realizada pelo usuário
         BlackJack.cardAdv = true;
       }
@@ -57,12 +59,12 @@ class _GamePageState extends State<GamePage> {
       if (_counter == 1) {
         // Mudar estado do jogo no firebase
         await _context!.read<AppService>().endGame();
-      } 
+      }
 
       // Passar estado do jogo
       _context!.read<AppService>().passGameState();
 
-      // Verificar se jogo terminou 
+      // Verificar se jogo terminou
       var isGameOver = _context!.read<AppService>().isGameOver();
       if (isGameOver) {
         BlackJack.turnAdv = true;
@@ -77,7 +79,7 @@ class _GamePageState extends State<GamePage> {
         // 15 segundos para que os usuários vejam as cartas um do outro
         // Iniciar segundo contador
         startTimerAuxiliar();
-      }   
+      }
     });
   }
 
@@ -85,16 +87,17 @@ class _GamePageState extends State<GamePage> {
     _counter_auxiliar = 16;
     _timer_auxiliar = Timer.periodic(Duration(seconds: 1), (timer) async {
       (_counter_auxiliar > 0) ? _counter_auxiliar-- : _timer_auxiliar.cancel();
-      
+
       // Atualizar contador da classe BlackJack
       _myGame.timer = _counter_auxiliar;
 
-      if (_counter_auxiliar == 1){
+      if (_counter_auxiliar == 1) {
         //Parar contador
         _timer_auxiliar.cancel();
 
         var winner = _context!.read<AppService>().whoWon();
-        if ((winner == 'player1' && _context!.read<AppService>().gameHost) || (winner == 'player2' && !(_context!.read<AppService>().gameHost))) {
+        if ((winner == 'player1' && _context!.read<AppService>().gameHost) ||
+            (winner == 'player2' && !(_context!.read<AppService>().gameHost))) {
           // Ganhou
           // Atualizar número de vitórias
           await _context!.read<AppService>().incrementWinsLosses('wins');
@@ -102,9 +105,11 @@ class _GamePageState extends State<GamePage> {
           _context!.read<AppService>().cleanGameState();
           //Redireciona o jogador para a página de vitória
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => WinnerPage()));
-        }
-        else if ((winner == 'player2' && _context!.read<AppService>().gameHost || (winner == 'player1' && !(_context!.read<AppService>().gameHost)))) {
+              MaterialPageRoute(builder: (context) => WinnerPage()));
+        } else if ((winner == 'player2' &&
+                _context!.read<AppService>().gameHost ||
+            (winner == 'player1' &&
+                !(_context!.read<AppService>().gameHost)))) {
           // Perdeu
           // Atualizar número de derrotas
           await _context!.read<AppService>().incrementWinsLosses('losses');
@@ -112,15 +117,14 @@ class _GamePageState extends State<GamePage> {
           _context!.read<AppService>().cleanGameState();
           //Redireciona o jogador para a página de derrota
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => LoserPage()));
-        }
-        else {
+              MaterialPageRoute(builder: (context) => LoserPage()));
+        } else {
           // Empate
           // Limpar estado do jogo
           _context!.read<AppService>().cleanGameState();
           // Redirecionar o jogador para a página de empate
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => EmpatePage()));
+              MaterialPageRoute(builder: (context) => EmpatePage()));
         }
       }
     });
@@ -153,7 +157,6 @@ class _GamePageState extends State<GamePage> {
                 Padding(
                     padding: EdgeInsets.only(left: 345.0),
                     child: TextButton(
-
                       onPressed: () {
                         showAlertDialog1(context, _timer);
                       },
@@ -204,13 +207,13 @@ showAlertDialog1(BuildContext context, Timer timer) {
 
                   // Limpar estado do jogo
                   context.read<AppService>().cleanGameState();
-                
+
                   //Parar contador
                   timer.cancel();
 
                   //Redireciona o jogador para a página de derrota
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoserPage()));
+                      MaterialPageRoute(builder: (context) => LoserPage()));
                 },
               )),
         ],

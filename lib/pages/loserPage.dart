@@ -6,6 +6,8 @@ import 'package:gruporoxo20211/pages/GamePage.dart';
 import 'package:provider/provider.dart';
 import 'package:gruporoxo20211/AppService.dart';
 
+//Pagina pós jogo que indica a Derrota na partida
+
 class LoserPage extends StatelessWidget {
   const LoserPage({Key? key}) : super(key: key);
 
@@ -36,26 +38,25 @@ class LoserPage extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 25.0, color: Colors.white),
                     )),
                 onPressed: () async {
-                      String nome =
-                          await context.read<AppService>().searchForGame();
-                      
-                      if (nome.isEmpty) {
-                        // Criar jogo
-                        await context.read<AppService>().createGame();
+                  String nome =
+                      await context.read<AppService>().searchForGame();
 
-                        // TODO: Enviar notificação convidando para jogar
-                        // enviar notificações aqui
-                        
-                        // Redirecionar para sala de espera
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => SalaDeEspera()));
-                      }
-                      else{
-                        // Redirecionar para tela de jogo
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => GamePage()));
-                      }
-                    },
+                  if (nome.isEmpty) {
+                    // Criar jogo
+                    await context.read<AppService>().createGame();
+
+                    // TODO: Enviar notificação convidando para jogar
+                    // enviar notificações aqui
+
+                    // Redirecionar para sala de espera
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => SalaDeEspera()));
+                  } else {
+                    // Redirecionar para tela de jogo
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => GamePage()));
+                  }
+                },
               )),
           Padding(
               padding: EdgeInsets.only(top: 20.0),
@@ -72,7 +73,7 @@ class LoserPage extends StatelessWidget {
                 onPressed: () {
                   // Voltar à homepage
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 },
               )),
         ]));

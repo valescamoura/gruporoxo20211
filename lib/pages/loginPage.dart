@@ -7,6 +7,10 @@ import 'package:gruporoxo20211/pages/signUpPage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
+//Pagina utilizada para fazer o login através do email e senha
+//Também possui redirecionamento para: forgotPassword e signUp
+//caso não tenha ninguem logado, ela será a primeira a aparecer
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 

@@ -4,6 +4,8 @@ import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/loginPage.dart';
 import 'package:provider/provider.dart';
 
+//Página para recuperar a senha, enviando uma nova para o email do usuário
+
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
 
@@ -83,6 +85,7 @@ class _State extends State<ForgotPasswordPage> {
                                 TextStyle(fontSize: 18.0, color: Colors.white),
                           )),
                       onPressed: () {
+                        //Envia a nova senha para o email
                         if (_resetPasswordKey.currentState!.validate()) {
                           context
                               .read<AppService>()

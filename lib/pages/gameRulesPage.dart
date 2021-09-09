@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/pages/homepage.dart';
 
+//-----------------------------------
+//Página de Regras, usada pra mostrar ao usuário como funciona o jogo
 class GameRulesPage extends StatelessWidget {
   const GameRulesPage({Key? key}) : super(key: key);
 
@@ -18,7 +20,7 @@ class GameRulesPage extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => HomePage()));
+                  MaterialPageRoute(builder: (context) => HomePage()));
             },
           ),
         ),
@@ -35,11 +37,7 @@ class GameRulesPage extends StatelessWidget {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20.0,
-                                fontWeight: FontWeight.bold
-                            )
-                        )
-                    )
-                ),
+                                fontWeight: FontWeight.bold)))),
                 Padding(
                     padding: EdgeInsets.only(top: 20.0),
                     child: Container(
@@ -53,26 +51,21 @@ class GameRulesPage extends StatelessWidget {
                       child: Column(
                         children: [
                           Text("2",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold
-                            )
-                          ),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold)),
                           Text("Jogadores",
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold
-                              )
-                          ),
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold)),
                           Padding(
                             padding: EdgeInsets.only(top: 5.0),
                             child: Image.asset(
-                              "assets/images/imageTwoPeople.png",
-                              width: 35,
-                              height: 35
-                            ),
+                                "assets/images/imageTwoPeople.png",
+                                width: 35,
+                                height: 35),
                           )
                         ],
                       ),
@@ -85,30 +78,24 @@ class GameRulesPage extends StatelessWidget {
                   ),
                   Text("Objetivo do Jogo: ",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold
-                      )
-                    )
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold))
                 ]),
                 Padding(
                     padding: EdgeInsets.only(left: 15.0),
                     child: Text(
                         "Alcançar 21 ou chegar o mais próximo possível de 21 sem ultrapassar esse número. Caso o jogador ultrapasse 21, então ele perde a rodada.",
-                        style: TextStyle(color: Colors.white, fontSize: 18.0))
-                      ),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0))),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                         padding: EdgeInsets.only(left: 10.0, top: 20.0),
                         child: Text("Valor das cartas: ",
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold)
-                        )
-                      )
-                ),
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold)))),
                 Padding(
                     padding: EdgeInsets.only(left: 15.0, top: 10.0),
                     child: Column(children: [
@@ -123,36 +110,27 @@ class GameRulesPage extends StatelessWidget {
                             child: Text(
                                 "Cartas de 2 a 10 tem o valor correspondente.",
                                 style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0)
-                                )
-                            ),
+                                    color: Colors.white, fontSize: 18.0))),
                       ]),
                       Row(
                         children: [
                           Image.asset('assets/images/imageCardsJQK.png',
-                            width: 80, height: 80
-                          ),
+                              width: 80, height: 80),
                           Padding(padding: EdgeInsets.only(right: 10.0)),
                           Text("J, Q e K valem 10 pontos.",
-                            style: TextStyle(
-                              color: Colors.white, fontSize: 18.0
-                            )
-                          ),
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18.0)),
                         ],
                       ),
                       Row(
                         children: [
                           Image.asset('assets/images/imageCardA.png',
-                            width: 80, height: 80
-                          ),
+                              width: 80, height: 80),
                           Padding(padding: EdgeInsets.only(right: 5.0)),
                           Expanded(
                               child: Text("O Ás vale 11 pontos.",
-                                style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0
-                                )
-                              )
-                          ),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18.0))),
                         ],
                       ),
                     ])),
@@ -165,19 +143,17 @@ class GameRulesPage extends StatelessWidget {
                         height: 50,
                       ),
                       Text("Regras: ",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold
-                        )
-                      )
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold))
                     ])),
                 Padding(
-                    padding: EdgeInsets.only(left: 15.0, right: 15.0, bottom: 50.0),
-                    child: Text("Cada jogador recebe duas cartas e apenas aquele que as recebe pode ver as cartas.\n\nO jogador pode pedir quantas cartas quiser enquanto não ultrapassar 21.\n\nAssim que o jogador atinge um valor entre 16 e 20, lhe é permitido abaixar suas cartas viradas para baixo na mesa e esperar uma jogada do jogador adversário.\n\nO jogador não sabe quando o oponente abaixou as cartas, mas assim que ambos abaixam, as cartas são viradas para cima na mesa, revelando seus valores e é anunciado o vencedor que atingiu 21 ou que chegou mais próximo de 21. Caso ambos os jogadores tenham a mesma soma de valores nas cartas viradas é decretado o empate, ou caso ambos tenham valores maiores do que 21.",
-                        style: TextStyle(color: Colors.white, fontSize: 18.0)
-                    )
-                )
+                    padding:
+                        EdgeInsets.only(left: 15.0, right: 15.0, bottom: 50.0),
+                    child: Text(
+                        "Cada jogador recebe duas cartas e apenas aquele que as recebe pode ver as cartas.\n\nO jogador pode pedir quantas cartas quiser enquanto não ultrapassar 21.\n\nAssim que o jogador atinge um valor entre 16 e 20, lhe é permitido abaixar suas cartas viradas para baixo na mesa e esperar uma jogada do jogador adversário.\n\nO jogador não sabe quando o oponente abaixou as cartas, mas assim que ambos abaixam, as cartas são viradas para cima na mesa, revelando seus valores e é anunciado o vencedor que atingiu 21 ou que chegou mais próximo de 21. Caso ambos os jogadores tenham a mesma soma de valores nas cartas viradas é decretado o empate, ou caso ambos tenham valores maiores do que 21.",
+                        style: TextStyle(color: Colors.white, fontSize: 18.0)))
               ],
             ),
           ),

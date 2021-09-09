@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/pages/homepage.dart';
-
+//----------------------------------------
+//Página sobre, para fins de créditos
+//---------------------------------------
 class AboutPage extends StatelessWidget {
   const AboutPage({ Key? key }) : super(key: key);
 

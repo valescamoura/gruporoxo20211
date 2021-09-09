@@ -3,6 +3,9 @@ import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:provider/provider.dart';
 
+//Página que contém as informações do usuário
+//mostrando nome, email, quantidade de vitoria e derrota
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 

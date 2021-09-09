@@ -4,6 +4,8 @@ import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/loginPage.dart';
 import 'package:provider/provider.dart';
 
+//Essa página serve para que o usuário se cadastre no sistema e faça login após
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
