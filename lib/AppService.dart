@@ -23,11 +23,6 @@ class AppService {
 
   AppService(this._firebaseAuth);
 
-  Future<void> setOneSignalId(String oneSignalId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('oneSignalId', oneSignalId);
-  }
-
   //Função para enviar notificações
   Future postNotification() async {
     String title = "Olá Jogador";
