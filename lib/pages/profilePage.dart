@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/AppService.dart';
-import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:provider/provider.dart';
 
 //Página que contém as informações do usuário
@@ -34,8 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.of(context).pop();
             },
           ),
         ),

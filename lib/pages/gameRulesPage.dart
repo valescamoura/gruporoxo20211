@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gruporoxo20211/pages/homepage.dart';
 
 //-----------------------------------
 //Página de Regras, usada pra mostrar ao usuário como funciona o jogo
@@ -19,8 +18,7 @@ class GameRulesPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.of(context).pop();
             },
           ),
         ),
