@@ -135,8 +135,8 @@ class _LoginPageState extends State<LoginPage> {
                               textStyle: TextStyle(
                                   fontSize: 18.0, color: Colors.white),
                             )),
-                        onPressed: () {
-                          context.read<AppService>().setOneSignalId(userId);
+                        onPressed: () async {
+                          await context.read<AppService>().setOneSignalId(userId);
                           if (_loginKey.currentState!.validate()) {
                             context
                                 .read<AppService>()

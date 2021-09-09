@@ -40,14 +40,15 @@ class AppService {
         await _users.where('oneSignalId', isNotEqualTo: userId).get();
 
     List<String> playerIDs = [];
-    if (query.docs[0].exists) {
-      for (int i = 0; i < query.docs.length; i ++) {
-        playerIDs.add(query.docs[i]['oneSignalId']);
+    if(query.docs.isNotEmpty){
+      if (query.docs[0].exists) {
+        for (int i = 0; i < query.docs.length; i ++) {
+          playerIDs.add(query.docs[i]['oneSignalId']);
+        }
+
+        return await OneSignal.shared.postNotification(
+          OSCreateNotification(playerIds: playerIDs, content: content, heading: title));
       }
-
-      return await OneSignal.shared.postNotification(
-        OSCreateNotification(playerIds: playerIDs, content: content, heading: title));
-
     }
   }
 
