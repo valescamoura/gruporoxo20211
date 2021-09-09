@@ -1,18 +1,6 @@
 # gruporoxo20211
 
-A new Flutter project.
 
 Repositório utilizado no trabalho da disciplina Laboratório de Programação de Dispositivos Móveis - 2021.1
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A aplicação foi desenvolvida pelos alunos Gabriel Stofel De Souza, Karina Pereira de Lemos, Matheus Lima Romaneli, Thiago Lopes Nascimento e Valesca Moura De Sousa, fazendo a nossa versão do jogo de cartas BlackJack (também conhecido como 21) para a disciplina de Laboratório de Dispositivos Móveis, ministrada pelo professor Lauro Eduardo Kozovits no semestre de 2021.1 do curso de Ciência da Computação da Universidade Federal Fluminense.
