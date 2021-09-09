@@ -78,7 +78,6 @@ class EmpatePage extends StatelessWidget {
                     )),
                 onPressed: () {
                   // Voltar à homepage
-                  Navigator.of(context).pop(); 
                   Navigator.of(context).pop();
                 },
               )),
