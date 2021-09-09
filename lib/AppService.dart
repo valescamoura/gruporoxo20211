@@ -40,9 +40,12 @@ class AppService {
         for (int i = 0; i < query.docs.length; i ++) {
           playerIDs.add(query.docs[i]['oneSignal']);
         }
-
-        return await OneSignal.shared.postNotification(
-          OSCreateNotification(playerIds: playerIDs, content: content, heading: title));
+        try {
+          await OneSignal.shared.postNotification(
+            OSCreateNotification(playerIds: playerIDs, content: content, heading: title));
+        } catch (Error) {
+          return;
+        }
       }
     }
   }
