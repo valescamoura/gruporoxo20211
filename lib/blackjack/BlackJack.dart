@@ -9,6 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:gruporoxo20211/AppService.dart';
 import 'Carta.dart';
 
+// Classe referente ao jogo em si, configurando a partida e as animações de
+// movimentação
+
 class GetGameWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

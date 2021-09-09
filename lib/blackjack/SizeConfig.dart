@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+// Classe para redimensionar a tela para todos os tamanhos de aparelho
+
 class SizeConfig {
  static late MediaQueryData _mediaQueryData;
  static late double screenWidth;
