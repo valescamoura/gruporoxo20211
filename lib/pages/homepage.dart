@@ -17,14 +17,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? nickname = context.read<AppService>().getNickname();
-
     return Container(
         color: Color(0xFF062B06),
         child: Column(children: <Widget>[
           Padding(
               padding: EdgeInsets.only(top: 40.0),
-              child: Text("Bem-vindo, $nickname",
+              child: Text("Bem-vindo!",
                   style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontFamily: 'Roboto',
@@ -77,18 +75,16 @@ class HomePage extends StatelessWidget {
                           // Criar jogo
                           await context.read<AppService>().createGame();
 
-                          // TODO: Enviar notificação convidando para jogar
                           // enviar notificações aqui
+                          await context.read<AppService>().postNotification();
 
                           // Redirecionar para sala de espera
-                          Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => SalaDeEspera()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SalaDeEspera()));
                         } else {
                           // Redirecionar para tela de jogo
-                          Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => GamePage()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => GamePage()));
                         }
                       },
                       style: ButtonStyle(

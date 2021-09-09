@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
@@ -25,6 +26,29 @@ class AppService {
   Future<void> setOneSignalId(String oneSignalId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('oneSignalId', oneSignalId);
+  }
+
+  //Função para enviar notificações
+  Future postNotification() async {
+    String title = "Olá Jogador";
+    String content = "Tem um jogo disponível entre para jogar!";
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('oneSignalId');
+
+    QuerySnapshot query =
+        await _users.where('oneSignalId', isNotEqualTo: userId).get();
+
+    List<String> playerIDs = [];
+    if (query.docs[0].exists) {
+      for (int i = 0; i < query.docs.length; i ++) {
+        playerIDs.add(query.docs[i]['oneSignalId']);
+      }
+
+      return await OneSignal.shared.postNotification(
+        OSCreateNotification(playerIds: playerIDs, content: content, heading: title));
+
+    }
   }
 
   // *******************************
@@ -120,7 +144,6 @@ class AppService {
 
   // Incrementa wins ou losses dependendo da String que é passada como argumento [wins|losses]
   Future<void> incrementWinsLosses(String result) async {
-    
     this._userData![result] += 1;
     QuerySnapshot query = await _users
         .where('email', isEqualTo: _firebaseAuth.currentUser!.email)
@@ -278,9 +301,7 @@ class AppService {
         .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
 
-    await _games.doc(query.docs[0].id).update({
-        'gameState': 2
-    });
+    await _games.doc(query.docs[0].id).update({'gameState': 2});
   }
 
   // Pega uma carta aleatória do deck localmente e retorna a String dela
@@ -301,7 +322,7 @@ class AppService {
   }
 
   // Obter cartas da mão do jogador
-  List<String> getCards(){
+  List<String> getCards() {
     if (this.gameHost) {
       return this._gameState?['p1Hand'].cast<String>();
     }
@@ -310,7 +331,7 @@ class AppService {
   }
 
   // Obter cartas da mão do oponente
-  List<String> getOpponentCards(){
+  List<String> getOpponentCards() {
     if (this.gameHost) {
       return this._gameState?['p2Hand'].cast<String>();
     }
@@ -321,7 +342,6 @@ class AppService {
   // Espera por um jogador e busca no Firestore para ver se
   // o gameState do registro foi atualizado com 1 (significando que o jogo começou)
   Future<bool> waitForPlayer() async {
-    
     QuerySnapshot query = await _games
         .where('gameId', isEqualTo: this._gameState!['gameId'])
         .get();
@@ -333,7 +353,6 @@ class AppService {
     }
 
     return false;
-   
   }
 
   void getListOfStrings(List<String> localDeck, List<dynamic> fireBaseDeck) {
@@ -385,7 +404,7 @@ class AppService {
   // atualizar o estado e retornar verdadeiro
   List<String> isHandBigger(List<String> playerHand, String player) {
     List<String> newCards = [];
-  
+
     if (playerHand.length > this._gameState![player].length) {
       playerHand.forEach((element) {
         if (!this._gameState![player].contains(element)) {
@@ -434,20 +453,23 @@ class AppService {
     }
 
     // Checagem de WO
-    if (this.gameHost && p2Hand.isNotEmpty &&  p2Hand[0] == 'WO') {
+    if (this.gameHost && p2Hand.isNotEmpty && p2Hand[0] == 'WO') {
       return 'player1';
     } else if (!this.gameHost && p1Hand.isNotEmpty && p1Hand[0] == 'WO') {
       return 'player2';
     }
 
     // Checagem por pontos
-    if ((p1Points > 21 && p2Points > 21) || (p1Points == p2Points) || (p1Points < 16 && p2Points < 16)) {
+    if ((p1Points > 21 && p2Points > 21) ||
+        (p1Points == p2Points) ||
+        (p1Points < 16 && p2Points < 16)) {
       return 'empate';
-    } else if((p1Points > 21 && p2Points < 16) || (p1Points < 16 && p2Points > 21)) {
+    } else if ((p1Points > 21 && p2Points < 16) ||
+        (p1Points < 16 && p2Points > 21)) {
       return 'empate';
-    } else if(p1Points > 21 || p1Points < 16) {
+    } else if (p1Points > 21 || p1Points < 16) {
       return 'player2';
-    } else if(p2Points > 21 || p2Points < 16) {
+    } else if (p2Points > 21 || p2Points < 16) {
       return 'player1';
     } else if (p1Points > p2Points) {
       return 'player1';
@@ -463,7 +485,9 @@ class AppService {
     // Faz o loop dentro do array de cartas da mão de um jogador
     for (int i = 0; i < this._futureGameState![playerHand].length; i++) {
       // Checa se a carta começa com J, Q ou K
-      if (this._futureGameState![playerHand][i].startsWith(RegExp(r'^[JQKDW]'))) {
+      if (this
+          ._futureGameState![playerHand][i]
+          .startsWith(RegExp(r'^[JQKDW]'))) {
         points += 10;
 
         // Checa se a carta começa com A
