@@ -434,9 +434,9 @@ class AppService {
     }
 
     // Checagem de WO
-    if (this.gameHost && p2Hand[0] == 'WO') {
+    if (this.gameHost && p2Hand.isNotEmpty &&  p2Hand[0] == 'WO') {
       return 'player1';
-    } else if (!this.gameHost && p1Hand[0] == 'WO') {
+    } else if (!this.gameHost && p1Hand.isNotEmpty && p1Hand[0] == 'WO') {
       return 'player2';
     }
 
