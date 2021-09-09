@@ -407,7 +407,7 @@ class AppService {
     this._gameState!['handsDown'] += 1;
     await _games
         .doc(query.docs[0].id)
-        .update({'handsDown': this._gameState!['handsDown']});
+        .update({'handsDown': query.docs[0]['handsDown'] + 1});
   }
 
   // Checa para ver se handsDown é igual a 2, o que significa que o jogo acabou
