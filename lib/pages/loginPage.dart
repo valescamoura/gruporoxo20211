@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/gestures.dart';
 import 'package:gruporoxo20211/AppService.dart';
 import 'package:gruporoxo20211/pages/forgotPasswordPage.dart';
-import 'package:gruporoxo20211/pages/homepage.dart';
 import 'package:gruporoxo20211/pages/signUpPage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
@@ -138,11 +137,6 @@ class _LoginPageState extends State<LoginPage> {
                                 .signIn(_textEmail.text, _textPassword.text)
                                 .then((value) {
                               alertMessage = value;
-                              if (alertMessage == "Signed In") {
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()));
-                              }
                               print(alertMessage);
                               if (alertMessage ==
                                   "The password is invalid or the user does not have a password.") {
