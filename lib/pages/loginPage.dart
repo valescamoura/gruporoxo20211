@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: GoogleFonts.bungee(
                     textStyle: TextStyle(
                         color: Color(0xFFddb512),
-                        fontSize: 60.0,
+                        fontSize: 50.0,
                         decoration: TextDecoration.none)),
               ),
               Text(
