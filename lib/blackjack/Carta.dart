@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:gruporoxo20211/blackjack/BlackJack.dart';
 import 'package:gruporoxo20211/blackjack/SizeConfig.dart';
 
+// Classe com os atributos e métodos relacionados a carta que é utilizada
+// durante a partida
+
 class Carta {
   // Atributos
   late String naipe;
