@@ -150,7 +150,19 @@ class GameRulesPage extends StatelessWidget {
                     padding:
                         EdgeInsets.only(left: 15.0, right: 15.0, bottom: 50.0),
                     child: Text(
-                        "Cada jogador recebe duas cartas e apenas aquele que as recebe pode ver as cartas.\n\nO jogador pode pedir quantas cartas quiser enquanto não ultrapassar 21.\n\nAssim que o jogador atinge um valor entre 16 e 20, lhe é permitido abaixar suas cartas viradas para baixo na mesa e esperar uma jogada do jogador adversário.\n\nO jogador não sabe quando o oponente abaixou as cartas, mas assim que ambos abaixam, as cartas são viradas para cima na mesa, revelando seus valores e é anunciado o vencedor que atingiu 21 ou que chegou mais próximo de 21. Caso ambos os jogadores tenham a mesma soma de valores nas cartas viradas é decretado o empate, ou caso ambos tenham valores maiores do que 21.",
+                        "Cada jogador pode clicar em cima do baralho para comprar cartas, e quando clicar no botão"
+                        " 'Abaixar'\você indica que acabou suas jogadas e não pretende comprar mais nenhuma carta. "
+                        "Porém o jogador só consegue abaixar a mão se possuir no mínimo 16 pontos. "
+                        "Caso complete 21 pontos o jogador não consegue mais comprar cartas no baralho e o sistema "
+                        "do jogo 'Abaixa' automaticamente a mão do jogador. Caso ambos os jogadores tenham valores "
+                        "abaixo de 16 pontos é decretado empate, já que as regras do Blackjack não permite ganhador "
+                        "com valores abaixo de 16 pontos. Caso ambos os jogadores tenham a mesma soma de valores nas "
+                        "cartas viradas é decretado o empate também, ou caso ambos tenham valores maiores do que 21. O jogador "
+                        "não sabe quando o oponente abaixou as cartas, mas assim que ambos abaixam, as cartas são viradas "
+                        "para cima na mesa, revelando seus valores e é anunciado o vencedor que atingiu 21 ou que chegou mais próximo de 21. "
+                        "Os jogadores possuem 3 minutos para terminar a partida, caso o limite de tempo seja excedito sem os jogadores terem clicado "
+                        "no botão 'Abaixar' o sistema abaixará automaticamente as mãos e fará o calculo das pontuações para declarar a vitória ou derrota"
+                        " de um jogador ou empate.",
                         style: TextStyle(color: Colors.white, fontSize: 18.0)))
               ],
             ),

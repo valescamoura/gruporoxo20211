@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(children: <Widget>[
             /* Imagem representativa do jogo */
             Container(
-              margin: EdgeInsets.only(top: 30.0, bottom: 0.0),
+              margin: EdgeInsets.only(top: 30.0, bottom: 20.0),
               child: Image.asset(
                 'assets/images/imageFromHomePage.png',
                 width: 250,
